@@ -6,8 +6,19 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/hello")
+@WebServlet(value = "/hello",loadOnStartup = 1)
 public class Hello extends HttpServlet {
+
+    @Override
+    public void init() {
+        System.out.println("init Hello");
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println("destroy Hello");
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

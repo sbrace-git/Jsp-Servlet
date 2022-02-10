@@ -1,15 +1,16 @@
-package cc.openhome.firstservlet;
+package cc.openhome;
 
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
+@WebServlet(name = "helloServlet", value = "/hello-servlet",loadOnStartup = 0)
 public class HelloServlet extends HttpServlet {
     private String message;
 
     public void init() {
         message = "Hello World!";
+        System.out.println("init helloServlet");
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -23,5 +24,6 @@ public class HelloServlet extends HttpServlet {
     }
 
     public void destroy() {
+        System.out.println("destroy helloServlet");
     }
 }
