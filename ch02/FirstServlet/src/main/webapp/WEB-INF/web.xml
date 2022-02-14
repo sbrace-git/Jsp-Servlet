@@ -3,6 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <display-name>test-2022-02-10</display-name>
+    <display-name>test-name</display-name>
     <default-context-path>/test</default-context-path>
+    <welcome-file-list>
+        <welcome-file>test.html</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>helloServlet</servlet-name>
+        <servlet-class>cc.openhome.HelloServlet</servlet-class>
+        <load-on-startup>8</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>helloServlet</servlet-name>
+        <url-pattern>/helloServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>hello</servlet-name>
+        <servlet-class>cc.openhome.Hello</servlet-class>
+        <load-on-startup>9</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>hello</servlet-name>
+        <url-pattern>/helloUser</url-pattern>
+    </servlet-mapping>
 </web-app>

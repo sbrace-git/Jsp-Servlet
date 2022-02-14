@@ -6,7 +6,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(value = "/hello",loadOnStartup = 1)
+//@WebServlet(name = "hello",value = "/hello")
 public class Hello extends HttpServlet {
 
     @Override
