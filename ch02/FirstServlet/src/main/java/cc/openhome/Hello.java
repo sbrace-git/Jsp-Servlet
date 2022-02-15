@@ -21,6 +21,14 @@ public class Hello extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("😊😂");
+
+        StringBuffer requestURL = request.getRequestURL();
+        System.out.printf("requestURL = 【%s】%n",requestURL);
+
+        String contextPath = request.getContextPath();
+        System.out.printf("contextPath = 【%s】%n",contextPath);
+
         response.setContentType("text/html;charset=UTF-8");
         String name = request.getParameter("name");
         PrintWriter writer = response.getWriter();
