@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "0223ea58-26ec-4105-b97b-cb104b2c417b",
+		"name": "ch02",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "match",
+			"item": [
+				{
+					"name": "ContentRoot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/{{context_path}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{context_path}}"
+							]
+						},
+						"description": "## Success Response Sample\n\n``` json\n{\n    \"mappingMatch\": \"CONTEXT_ROOT\",\n    \"requestURL\": \"http://localhost:8080/FirstServlet/\",\n    \"servletPath\": \"\",\n    \"pattern\": \"\",\n    \"matchValue\": \"\",\n    \"servletName\": \"cc.openhome.match.ContentRoot\",\n    \"pathInfo\": \"/\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Default",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/{{context_path}}/testPath",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{context_path}}",
+								"testPath"
+							]
+						},
+						"description": "## Success Response Sample\n\n``` json\n{\n    \"mappingMatch\": \"DEFAULT\",\n    \"requestURL\": \"http://localhost:8080/FirstServlet/testPath\",\n    \"servletPath\": \"/testPath\",\n    \"pattern\": \"/\",\n    \"matchValue\": \"\",\n    \"servletName\": \"cc.openhome.match.Default\"\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Exact",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/{{context_path}}/path/exactMatch.ext",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{context_path}}",
+								"path",
+								"exactMatch.ext"
+							]
+						},
+						"description": "## Success Response Sample\n\n``` json\n{\n    \"mappingMatch\": \"EXACT\",\n    \"requestURL\": \"http://localhost:8080/FirstServlet/path/exactMatch.ext\",\n    \"servletPath\": \"/path/exactMatch.ext\",\n    \"pattern\": \"/path/exactMatch.ext\",\n    \"matchValue\": \"path/exactMatch.ext\",\n    \"servletName\": \"cc.openhome.match.Exact\"\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Extension",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/{{context_path}}/testPath.ext",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{context_path}}",
+								"testPath.ext"
+							]
+						},
+						"description": "## Success Response Sample\n\n``` json\n{\n    \"mappingMatch\": \"EXTENSION\",\n    \"requestURL\": \"http://localhost:8080/FirstServlet/testPath.ext\",\n    \"servletPath\": \"/testPath.ext\",\n    \"pattern\": \"*.ext\",\n    \"matchValue\": \"testPath\",\n    \"servletName\": \"cc.openhome.match.Extension\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Path",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/{{context_path}}/path/testPath",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{context_path}}",
+								"path",
+								"testPath"
+							]
+						},
+						"description": "## Success Response Sample\n\n``` json\n{\n    \"mappingMatch\": \"PATH\",\n    \"requestURL\": \"http://localhost:8080/FirstServlet/path/testPath\",\n    \"servletPath\": \"/path\",\n    \"pattern\": \"/path/*\",\n    \"matchValue\": \"testPath\",\n    \"servletName\": \"cc.openhome.match.Path\",\n    \"pathInfo\": \"/testPath\"\n}\n```"
+					},
+					"response": []
+				}
+			],
+			"description": "Servlet mapping types"
+		}
+	]
+}
