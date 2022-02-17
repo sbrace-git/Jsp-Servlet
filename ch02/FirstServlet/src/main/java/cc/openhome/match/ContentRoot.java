@@ -1,22 +1,30 @@
 package cc.openhome.match;
 
+import org.json.JSONObject;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @WebServlet("")
 public class ContentRoot extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        System.out.printf("requestURL = %s%n", req.getRequestURL());
-        System.out.printf("pathInfo = %s%n", req.getPathInfo());
-        System.out.printf("servletPath = %s%n", req.getServletPath());
-        System.out.printf("servletName = %s%n", getServletName());
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("requestURL", req.getRequestURL());
+        jsonObject.put("pathInfo", req.getPathInfo());
+        jsonObject.put("servletPath", req.getServletPath());
+        jsonObject.put("servletName", getServletName());
+
         HttpServletMapping httpServletMapping = req.getHttpServletMapping();
-        System.out.printf("MappingMatch = %s%n", httpServletMapping.getMappingMatch());
-        System.out.printf("MatchValue = %s%n", httpServletMapping.getMatchValue());
-        System.out.printf("Pattern = %s%n", httpServletMapping.getPattern());
+        jsonObject.put("mappingMatch", httpServletMapping.getMappingMatch());
+        jsonObject.put("matchValue", httpServletMapping.getMatchValue());
+        jsonObject.put("pattern", httpServletMapping.getPattern());
+
+        resp.setContentType("text/json; charset=UTF-8");
+        resp.getWriter().print(jsonObject);
     }
 }
