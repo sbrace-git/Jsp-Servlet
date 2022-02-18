@@ -1,1 +1,2 @@
-jar -cvf ..\welcome.jar META-INF
+jar cvf ..\welcome.jar META-INF
+pause
