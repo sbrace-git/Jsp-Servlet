@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment id="WebFragment_ID"
+              version="3.1"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-fragment_3_1.xsd">
+    <display-name>FirstWebFrag</display-name>
+    <name>FirstWebFrag</name>
+    <servlet>
+        <servlet-name>FragmentConfig</servlet-name>
+        <servlet-class>com.example.fragment.FragmentConfig</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FragmentConfig</servlet-name>
+        <url-pattern>/FragmentConfig</url-pattern>
+    </servlet-mapping>
+</web-fragment>
