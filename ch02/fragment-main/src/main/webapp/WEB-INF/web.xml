@@ -8,4 +8,14 @@
     <absolute-ordering>
         <name>fragment</name>
     </absolute-ordering>
+
+    <servlet>
+        <servlet-name>ConfigServlet</servlet-name>
+        <servlet-class>cc.openhome.ConfigServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConfigServlet</servlet-name>
+        <url-pattern>/configServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
