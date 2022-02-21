@@ -13,4 +13,14 @@
         <servlet-name>FragmentConfig</servlet-name>
         <url-pattern>/fragmentConfig</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FragmentMainServlet</servlet-name>
+        <servlet-class>cc.openhome.FragmentMainServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FragmentMainServlet</servlet-name>
+        <url-pattern>/fragmentMainServlet</url-pattern>
+    </servlet-mapping>
 </web-fragment>
