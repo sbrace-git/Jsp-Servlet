@@ -15,6 +15,7 @@ public class LoginServlet extends HttpServlet {
         System.out.printf("name = %s%n", name);
         String pwd = req.getParameter("pwd");
         System.out.printf("pwd = %s%n", pwd);
+        resp.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
         if ("caterpillar".equals(name) && "123456".equals(pwd)) {
             writer.append("<!DOCTYPE html>")
