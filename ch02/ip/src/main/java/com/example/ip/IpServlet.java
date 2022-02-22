@@ -21,6 +21,7 @@ public class IpServlet extends HttpServlet {
         data.put("dateTime", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         data.put("remoteAddr", req.getRemoteAddr());
         data.put("parameters", req.getParameterMap());
+        data.put("queryString", req.getQueryString());
         data.put("json", req.getReader().lines().collect(Collectors.joining()));
         resp.setContentType("text/json; charset=UTF-8");
 
