@@ -1,4 +1,4 @@
-package com.example.header;
+package com.example;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
