@@ -14,7 +14,7 @@ public class PostBody extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+//        req.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
         writer.println("<!DOCTYPE html>");
