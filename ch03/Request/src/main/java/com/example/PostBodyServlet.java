@@ -8,13 +8,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 @WebServlet("/postBody")
-public class PostBody extends HttpServlet {
+public class PostBodyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        req.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
         writer.println("<!DOCTYPE html>");
@@ -26,12 +26,10 @@ public class PostBody extends HttpServlet {
 
     }
 
-    private String bodyContent(BufferedReader reader) throws IOException {
-        String input;
-        StringBuilder requestBody = new StringBuilder();
-        while ((input = reader.readLine()) != null) {
-            requestBody.append(input).append("</br>");
-        }
-        return requestBody.toString();
+    private String bodyContent(BufferedReader reader) {
+        return reader.lines()
+                .map(line -> line.getBytes(StandardCharsets.ISO_8859_1))
+                .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+                .collect(Collectors.joining("</br>"));
     }
 }
