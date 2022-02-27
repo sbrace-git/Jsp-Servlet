@@ -61,7 +61,7 @@ public class UploadServlet extends HttpServlet {
         if (filename.contains("\\")) {
             return filename.substring(filename.lastIndexOf("\\") + 1);
         }
-        return filename;
+        return new String(filename.getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
     }
 
     // 获取文件边界范围
