@@ -52,6 +52,15 @@ public class PhotoServlet extends HttpServlet {
         Matcher matcher = fileNameRegex.matcher(header);
         matcher.find();
 
+        String name = part.getName();
+        System.out.printf("name = %s%n", name);
+
+        String submittedFileName = part.getSubmittedFileName();
+        System.out.printf("submittedFileName = %s%n", submittedFileName);
+
+        long size = part.getSize();
+        System.out.printf("size = %d Bytes%n", size);
+
         String filename = matcher.group(1);
         if (filename.contains("\\")) {
             return filename.substring(filename.lastIndexOf("\\") + 1);
