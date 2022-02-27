@@ -1,6 +1,7 @@
 package com.example;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,10 +12,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@MultipartConfig
+@MultipartConfig(
+        maxFileSize = 42753L,      //Bytes
+        maxRequestSize = 49753L,    //Bytes
+        fileSizeThreshold = 1024,
+        location = "D:\\common\\temp\\"
+)
 @WebServlet("/photo")
 public class PhotoServlet extends HttpServlet {
     private final Pattern fileNameRegex = Pattern.compile("filename=\"(.*)\"");
@@ -28,10 +35,16 @@ public class PhotoServlet extends HttpServlet {
         String passwd = req.getParameter("passwd");
         System.out.printf("passwd = %s%n", passwd);
 
+        Collection<Part> parts = req.getParts();
+        parts.forEach(part -> {
+            System.out.printf("partName = %s%n", part.getName());
+            System.out.printf("ContentType = %s%n", part.getContentType());
+        });
 
         Part photo = req.getPart("photo");
-        String filename = getSubmittedFileName(photo);
-        write(photo, filename);
+        photo.write(photo.getSubmittedFileName());
+//        String filename = getSubmittedFileName(photo);
+//        write(photo, filename);
     }
 
     private void write(Part photo, String filename) throws IOException {
