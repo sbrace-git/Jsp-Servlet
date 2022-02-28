@@ -35,6 +35,8 @@ public class SomeForward extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
         writer.println("Some do one...");
+        // writer.flush();
+        // java.lang.IllegalStateException
 
         List<Book> books = Arrays.asList(
                 new Book("《JSP & Servlet学习笔记（第3版）》", "林信良"),
