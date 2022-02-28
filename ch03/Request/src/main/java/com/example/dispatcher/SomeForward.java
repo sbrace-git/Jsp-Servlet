@@ -33,6 +33,13 @@ public class SomeForward extends HttpServlet {
 
         logger.log(Level.INFO, "\ncharacterEncoding = {0}\n", req.getCharacterEncoding());
 
+        logger.log(Level.INFO, "contextPath = {0}", req.getContextPath());
+        logger.log(Level.INFO, "requestURL = {0}", req.getRequestURL().toString());
+        logger.log(Level.INFO, "servletPath = {0}", req.getServletPath());
+        logger.log(Level.INFO, "pathInfo = {0}", req.getPathInfo());
+        logger.log(Level.INFO, "queryString = {0}", req.getQueryString());
+        logger.log(Level.INFO, "mapping = {0}", req.getHttpServletMapping().getMappingMatch().name());
+
         PrintWriter writer = resp.getWriter();
         writer.println("Some do one...");
         // writer.flush();
