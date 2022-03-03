@@ -15,6 +15,32 @@
             <encoding>Big5</encoding>
         </locale-encoding-mapping>
     </locale-encoding-mapping-list>
+    <mime-mapping>
+        <extension>pdf</extension>
+        <mime-type>application/pdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>docx</extension>
+        <mime-type>application/msword</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xlsx</extension>
+        <mime-type>application/vnd.ms-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pptx</extension>
+        <mime-type>application/vnd.ms-powerpoint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>html</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpg</extension>
+        <!--error mime-type test-->
+<!--        <mime-type>text/html</mime-type>-->
+        <mime-type>image/jpeg</mime-type>
+    </mime-mapping>
 
 <!--    <request-character-encoding>UTF-8</request-character-encoding>-->
 <!--    <response-character-encoding>UTF-8</response-character-encoding>-->
