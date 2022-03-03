@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Locale;
 
 @WebServlet("/locale")
@@ -20,7 +19,8 @@ public class LocaleServlet extends HttpServlet {
         System.out.printf("Content-Language = %s%n",resp.getHeader("Content-Language"));
         System.out.printf("CharacterEncoding = %s%n",resp.getCharacterEncoding());
         System.out.printf("ContentType = %s%n", resp.getContentType());
-        resp.setLocale(Locale.TRADITIONAL_CHINESE);
+        // locale-encoding-mapping from src/main/webapp/WEB-INF/web.xml
+        resp.setLocale(Locale.SIMPLIFIED_CHINESE);
         System.out.println();
         System.out.printf("Content-Language = %s%n",resp.getHeader("Content-Language"));
         System.out.printf("CharacterEncoding = %s%n",resp.getCharacterEncoding());
