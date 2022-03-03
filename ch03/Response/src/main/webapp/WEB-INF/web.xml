@@ -9,4 +9,10 @@
             <encoding>UTF-8</encoding>
         </locale-encoding-mapping>
     </locale-encoding-mapping-list>
+    <locale-encoding-mapping-list>
+        <locale-encoding-mapping>
+            <locale>zh_TW</locale>
+            <encoding>Big5</encoding>
+        </locale-encoding-mapping>
+    </locale-encoding-mapping-list>
 </web-app>
