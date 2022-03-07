@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 @WebServlet("/register")
@@ -86,7 +87,7 @@ public class Register extends HttpServlet {
 
     private void createUser(Path userHome, String email, String password) throws IOException {
         Files.createDirectories(userHome);
-        int salt = (int) (Math.random() * 100);
+        int salt = ThreadLocalRandom.current().nextInt();
         String encrypt = String.valueOf(salt + password.hashCode());
         Path profile = userHome.resolve("profile");
         String format = String.format("%s\t%s\t%d", email, encrypt, salt);
