@@ -27,6 +27,9 @@ public class Login extends HttpServlet {
 
     private void processCookie(HttpServletRequest req, HttpServletResponse resp) {
         Cookie cookie = new Cookie("user","caterpillar");
+        cookie.setHttpOnly(true);
+        // localhost not work
+        cookie.setSecure(true);
         String auto = req.getParameter("auto");
         System.out.printf("auto = %s%n", auto);
         if ("on".equals(auto)) {
