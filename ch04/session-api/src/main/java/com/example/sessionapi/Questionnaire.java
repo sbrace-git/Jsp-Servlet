@@ -74,5 +74,6 @@ public class Questionnaire extends HttpServlet {
         writer.println(session.getAttribute("p1q1") + "<br/>");
         writer.println(session.getAttribute("p1q2") + "<br/>");
         writer.println(request.getParameter("p2q1") + "<br/>");
+        session.invalidate();
     }
 }
