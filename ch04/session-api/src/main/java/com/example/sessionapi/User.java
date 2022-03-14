@@ -11,6 +11,7 @@ public class User extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        System.out.printf("%s : session id = %s%n", getClass().getName(), req.getSession().getId());
         Optional<Object> token = Optional.ofNullable(session.getAttribute("login"));
         if (token.isPresent()) {
             req.getRequestDispatcher("user.view")
