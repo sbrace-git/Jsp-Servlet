@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 public class UserView extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.printf("%s : session id = %s%n", getClass().getName(), req.getSession().getId());
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
         writer.println("<!DOCTYPE html>");

@@ -19,6 +19,7 @@ public class Login extends HttpServlet {
             if (null != req.getSession(false)) {
                 req.changeSessionId();
             }
+            System.out.printf("%s : session id = %s%n", getClass().getName(), req.getSession().getId());
             req.getSession().setAttribute("login", username);
             page = "user";
         } else {
