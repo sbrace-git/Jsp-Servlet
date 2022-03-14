@@ -44,6 +44,7 @@ public class Questionnaire extends HttpServlet {
         } else if ("page3".equals(page)) {
             page3(req, writer);
         }
+        writer.println("</form>");
         writer.println("</body>");
         writer.println("</html>");
     }
