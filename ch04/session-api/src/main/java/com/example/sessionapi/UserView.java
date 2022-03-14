@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -12,7 +13,11 @@ import java.io.PrintWriter;
 public class UserView extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.printf("%s : session id = %s%n", getClass().getName(), req.getSession().getId());
+        HttpSession session = req.getSession();
+        System.out.printf("%s : session id = %s%n", getClass().getName(), session.getId());
+        System.out.printf("session.getMaxInactiveInterval() = %d%n", session.getMaxInactiveInterval());
+        session.setMaxInactiveInterval(3500);
+        System.out.printf("session.getMaxInactiveInterval() = %d%n", session.getMaxInactiveInterval());
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = resp.getWriter();
         writer.println("<!DOCTYPE html>");

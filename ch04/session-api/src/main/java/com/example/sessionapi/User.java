@@ -12,6 +12,9 @@ public class User extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         System.out.printf("%s : session id = %s%n", getClass().getName(), req.getSession().getId());
+        System.out.printf("session.getMaxInactiveInterval() = %d%n", session.getMaxInactiveInterval());
+        session.setMaxInactiveInterval(2500);
+        System.out.printf("session.getMaxInactiveInterval() = %d%n", session.getMaxInactiveInterval());
         Optional<Object> token = Optional.ofNullable(session.getAttribute("login"));
         if (token.isPresent()) {
             req.getRequestDispatcher("user.view")

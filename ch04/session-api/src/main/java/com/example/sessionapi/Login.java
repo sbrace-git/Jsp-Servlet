@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/login")
@@ -25,6 +26,10 @@ public class Login extends HttpServlet {
         } else {
             page = "login.html";
         }
+        HttpSession session = req.getSession();
+        System.out.printf("session.getMaxInactiveInterval() = %d%n", session.getMaxInactiveInterval());
+        session.setMaxInactiveInterval(1500);
+        System.out.printf("session.getMaxInactiveInterval() = %d%n", session.getMaxInactiveInterval());
         resp.sendRedirect(page);
     }
 }
