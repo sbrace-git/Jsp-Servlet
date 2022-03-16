@@ -1,4 +1,4 @@
-package com.example.gossip;
+package cc.openhome.gossip;
 
 import java.io.*;
 import javax.servlet.http.*;
