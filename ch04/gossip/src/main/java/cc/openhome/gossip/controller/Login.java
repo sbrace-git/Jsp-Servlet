@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 public class Login extends HttpServlet {
     private final static String USERS = "D:\\common\\temp\\users";
 
-    private final static String SUCCESS_PATH = "member.html";
+    private final static String SUCCESS_PATH = "member";
     private final static String ERROR_PATH = "index.html";
 
 
@@ -26,7 +26,17 @@ public class Login extends HttpServlet {
         System.out.printf("username = %s%n", username);
         System.out.printf("password = %s%n", password);
 
-        resp.sendRedirect(login(username, password) ? SUCCESS_PATH : ERROR_PATH);
+        String page;
+        if (login(username, password)) {
+            if (null != req.getSession(false)) {
+                req.changeSessionId();
+            }
+            req.getSession().setAttribute("login", username);
+            page = SUCCESS_PATH;
+        } else {
+            page = ERROR_PATH;
+        }
+        resp.sendRedirect(page);
     }
 
     private boolean login(String username, String password) {
