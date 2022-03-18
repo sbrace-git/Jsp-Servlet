@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.ws.spi.http.HttpContext;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,6 +21,9 @@ public class CaptchaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String passwd = new Random().ints(0, 10)
                 .limit(4).mapToObj(String::valueOf).collect(Collectors.joining());
+        HttpSession session = req.getSession();
+        req.changeSessionId();
+        session.setAttribute("passwd",passwd);
         resp.setContentType("image/jpeg");
         ImageIO.write(
                 getPasswdImage(passwd),
