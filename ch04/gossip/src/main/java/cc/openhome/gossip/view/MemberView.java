@@ -5,7 +5,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Instant;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @WebServlet("/member.view")
 public class MemberView extends HttpServlet {
@@ -49,7 +47,7 @@ public class MemberView extends HttpServlet {
 
         writer.println("<body>");
         writer.println("<div class='leftPanel'>");
-        writer.println("<img src='images/caterpillar.jpg' alt='Gossip 微博' /> <br/>");
+        writer.println("<img src='image/caterpillar.jpg' alt='Gossip 微博' /> <br/>");
         writer.printf("<a href='logout'>注销 %s</a>", username);
         writer.println("</div>");
 
@@ -62,7 +60,8 @@ public class MemberView extends HttpServlet {
         } else {
             writer.println("讯息要在140字内<br/>");
         }
-        writer.printf("<textarea cols='60' rows='4' name='blabla'>%s</textarea>", preBlabla);
+        writer.printf("<textarea cols='60' rows='4' name='blabla'>%s</textarea><br/>", preBlabla);
+        writer.println("<button type='submit'>发送</button>");
         writer.println("</form>");
 
         Map<Long, String> messages = (Map<Long, String>) req.getAttribute("messages");
@@ -79,10 +78,17 @@ public class MemberView extends HttpServlet {
                 Long millis = message.getKey();
                 String blabla = message.getValue();
 
-                LocalDateTime localDateTime = Instant.ofEpochMilli(millis)
+                LocalDateTime dateTime = Instant.ofEpochMilli(millis)
                         .atZone(ZoneId.systemDefault()).toLocalDateTime();
                 writer.println("<tr><td style='vertical-align: top;'>");
-                writer.println("");
+                writer.printf("%s<br/>",username);
+                writer.printf("%s<br/>",blabla);
+                writer.println(dateTime);
+                writer.println("<form method='post' action='del_message'>");
+                writer.printf("<input type='hidden' name='millis' value='%s' />", millis);
+                writer.println("<button type='submit'>删除</button>");
+                writer.println("</form>");
+                writer.println("<hr/></td></tr>");
             }
 
             writer.println("</tbody>");
