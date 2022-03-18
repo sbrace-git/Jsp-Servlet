@@ -101,14 +101,6 @@ public class MemberView extends HttpServlet {
 
     }
 
-    public static void main(String[] args) {
-        String  str = null;
-        Object str1 = (Object) str;
-        String str2 = (String) str1;
-        System.out.println(str2);
-
-    }
-
     private String getLoginUsername(HttpServletRequest req) {
         return (String) Optional.ofNullable(req.getSession(false))
                 .map(session -> session.getAttribute("login")).orElse(null);
