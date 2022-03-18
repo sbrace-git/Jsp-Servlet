@@ -18,8 +18,8 @@ public class NewMessage extends HttpServlet {
 
     private static final String USER = "D:\\common\\temp\\users";
     private static final String LOGIN_PATH = "index.html";
-    private final String MEMBER_PATH = "member";
-
+    private static final String MEMBER_PATH = "member";
+    private static final String MEMBER_VIEW = "member.view";
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String username = (String) req.getSession().getAttribute("login");
@@ -28,6 +28,10 @@ public class NewMessage extends HttpServlet {
         }
         req.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String blabla = req.getParameter("blabla");
+        if (null == blabla || blabla.length() > 140 || blabla.length() == 0) {
+            req.getRequestDispatcher(MEMBER_VIEW).forward(req,resp);
+            return;
+        }
         Path path = Paths.get(USER, username,
                 String.format("%s.txt", Instant.now().toEpochMilli()));
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path)) {
