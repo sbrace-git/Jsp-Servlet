@@ -16,7 +16,7 @@ public class HelloServlet extends HttpServlet {
     private String text;
 
     public void init() {
-        System.out.printf("%s init", getClass().getName());
+        System.out.printf("%s init%n", getClass().getName());
         text = getInitParameter("param");
         message = getInitParameter("message");
         Collections.list(getInitParameterNames()).forEach(initParameterName -> {
