@@ -19,4 +19,29 @@
         <servlet-name>helloServlet</servlet-name>
         <url-pattern>/hello-servlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>com.example.servletconfig.Login</servlet-name>
+        <servlet-class>com.example.servletconfig.Login</servlet-class>
+        <init-param>
+            <param-name>SUCCESS</param-name>
+            <param-value>success.view</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ERROR</param-name>
+            <param-value>error.view</param-value>
+        </init-param>
+        <init-param>
+            <param-name>empty</param-name>
+            <param-value/>
+<!--      equals      <param-value></param-value>-->
+        </init-param>
+        <init-param>
+            <param-name>null</param-name>
+            <param-value>null</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>com.example.servletconfig.Login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
 </web-app>
