@@ -3,4 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <context-param>
+        <param-name>AVATAR</param-name>
+        <param-value>/avatar</param-value>
+    </context-param>
+    <!-- @WebListener -->
+<!--    <listener>-->
+<!--        <listener-class>com.example.listener.ContextParameterListener</listener-class>-->
+<!--    </listener>-->
+
+
+<!--    com.example.listener.CookieConfig-->
+<!--    <session-config>-->
+<!--        <cookie-config>-->
+<!--            <name>token</name>-->
+<!--        </cookie-config>-->
+<!--    </session-config>-->
 </web-app>
