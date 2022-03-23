@@ -11,6 +11,9 @@
 <!--    <listener>-->
 <!--        <listener-class>com.example.listener.ContextParameterListener</listener-class>-->
 <!--    </listener>-->
+<!--        <listener>-->
+<!--            <listener-class>com.example.listener.MyServletContextAttributeListener</listener-class>-->
+<!--        </listener>-->
 
 
 <!--    com.example.listener.CookieConfig-->
