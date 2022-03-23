@@ -10,6 +10,7 @@ public class MyServletContextAttributeListener implements ServletContextAttribut
     public void attributeAdded(ServletContextAttributeEvent event) {
         String name = event.getName();
         Object value = event.getValue();
+        // com.example.listener.ContextParameterListener 里的属性设置也会触发此方法执行
         System.out.printf("attributeAdded name = %s, value = %s%n", name, value);
     }
 
