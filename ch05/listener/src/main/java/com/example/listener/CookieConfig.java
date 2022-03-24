@@ -1,5 +1,6 @@
 package com.example.listener;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebListener;
 public class CookieConfig implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        sce.getServletContext().getSessionCookieConfig().setName("cookie-name");
+        ServletContext servletContext = sce.getServletContext();
+        servletContext.setSessionTimeout(1);
+        servletContext.getSessionCookieConfig().setName("cookie-name");
     }
 }
