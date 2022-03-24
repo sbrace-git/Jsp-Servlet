@@ -10,7 +10,7 @@ public class CookieConfig implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
-        servletContext.setSessionTimeout(1);
+        servletContext.setSessionTimeout(3);
         servletContext.getSessionCookieConfig().setName("cookie-name");
     }
 }
