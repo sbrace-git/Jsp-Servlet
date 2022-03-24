@@ -37,7 +37,6 @@ public class Login extends HttpServlet {
             }
             session.setAttribute("username", username);
         }
-        // TODO: 2022/3/23 换成html
         resp.sendRedirect("welcome.view");
 //        resp.getWriter().println("login error");
     }
