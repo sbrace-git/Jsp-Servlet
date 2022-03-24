@@ -28,7 +28,7 @@ public class MyServletContextAttributeListener implements ServletContextAttribut
         Object value = event.getValue();
         // 打印被覆盖的 name 和 value
         // 不打印覆盖后的 name 和 value
-        // 覆盖前后的 name 和 value 相同，也会执行本方法
+        // 覆盖前后的 name 和 value 与覆盖前相同，也会执行本方法
         System.out.printf("attributeReplaced name = %s, value = %s%n", name, value);
     }
 }
