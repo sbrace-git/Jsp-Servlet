@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-    <Manager className="org.apache.catalina.session.PersistentManager" maxIdleSwqp="1">
-        <Store className="org.apache.catalina.session.FileStore" directory="D:/session"/>
+    <Manager className="org.apache.catalina.session.PersistentManager"
+             maxIdleBackup="10"
+             maxIdleSwap="20">
+        <Store className="org.apache.catalina.session.FileStore" directory="d:/session"/>
     </Manager>
 </Context>
