@@ -16,8 +16,11 @@ public class MySessionServlet extends HttpServlet {
         if (null == name) {
             Person person = (Person) session.getAttribute("person");
             System.out.printf("MySessionServlet person = %s%n", person);
+            Object test = session.getAttribute("test");
+            System.out.println(test);
         } else {
             session.setAttribute("person", new Person(name));
+            session.setAttribute("test","test");
         }
     }
 }
