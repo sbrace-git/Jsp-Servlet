@@ -13,6 +13,11 @@ public class HelloServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        request.setAttribute("testName","testValue");
+        request.setAttribute("testName","testValue");
+        request.removeAttribute("testName");
+
         response.setContentType("text/html");
 
         // Hello
