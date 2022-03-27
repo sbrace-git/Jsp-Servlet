@@ -41,7 +41,7 @@ public class TimeFilter extends HttpFilter {
     public void init() {
         FilterConfig filterConfig = getFilterConfig();
         Collections.list(filterConfig.getInitParameterNames())
-                .forEach(initParameterName -> System.out.printf("【%s】 = 【%s】%n",
+                .forEach(initParameterName -> System.out.printf("TimeFilter # init 【%s】 = 【%s】%n",
                         initParameterName, filterConfig.getInitParameter(initParameterName)));
     }
 

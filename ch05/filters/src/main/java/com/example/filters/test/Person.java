@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.test;
 
 /**
  * 如果 People 没有无参构造方法， Person 编译报错

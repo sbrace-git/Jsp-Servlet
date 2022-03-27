@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.test;
 
 public class People {
     private String name;
