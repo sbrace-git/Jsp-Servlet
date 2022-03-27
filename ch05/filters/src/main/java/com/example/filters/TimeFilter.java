@@ -10,7 +10,6 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -32,6 +31,8 @@ import java.util.Collections;
                 DispatcherType.ASYNC,
                 DispatcherType.INCLUDE
         },
+        // 不可用通配符 *
+        // servletNames = "*。do"
         servletNames = "helloServlet"
 )
 
