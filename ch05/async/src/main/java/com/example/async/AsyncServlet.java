@@ -42,6 +42,10 @@ public class AsyncServlet extends HttpServlet {
             String resource = request.getParameter("resource");
             return String.format("%s back finally ... XD", resource);
         }).thenApplyAsync(String::toUpperCase).thenAcceptAsync(resource -> {
+//            if (true) {
+//                asyncContext.dispatch("/asyncNumber");
+//                return;
+//            }
             // HelloServlet current thread name = ForkJoinPool.commonPool-worker-1
             printCurrentThreadName();
             try {
