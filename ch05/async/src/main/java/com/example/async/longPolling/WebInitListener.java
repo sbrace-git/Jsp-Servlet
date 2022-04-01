@@ -21,7 +21,7 @@ public class WebInitListener implements ServletContextListener {
                 try {
 //                    int sleep = (int) (Math.random() * 5000);
                     int sleep = 5000;
-                    System.out.printf("sleep = %d%n", sleep);
+//                    System.out.printf("sleep = %d%n", sleep);
                     Thread.sleep(sleep);
                     response(Math.random());
                 } catch (InterruptedException e) {
