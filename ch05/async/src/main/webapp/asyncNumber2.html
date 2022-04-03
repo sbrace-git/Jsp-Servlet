@@ -7,11 +7,11 @@
 <body>
 实时数据:<span id="data">0</span>
 <script type="text/javascript">
-    new EventSource("asyncNumber2").addEventListener("message",
-        e => {
-            console.log("data = ", e.data);
-            document.getElementById("data").innerText = e.data;
-        });
+    new EventSource("asyncNumber2")
+        .addEventListener(
+            "message",
+            e => document.getElementById('data').innerHTML = e.data
+        );
 </script>
 </body>
 </html>
