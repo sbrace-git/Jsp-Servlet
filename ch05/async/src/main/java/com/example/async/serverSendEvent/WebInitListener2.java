@@ -21,7 +21,7 @@ public class WebInitListener2 implements ServletContextListener {
             while (true) {
                 try {
                     int sleep = 3000;
-                    System.out.println("sleep = " + sleep);
+//                    System.out.println("sleep = " + sleep);
                     Thread.sleep(sleep);
                     response();
                 } catch (Exception e) {
