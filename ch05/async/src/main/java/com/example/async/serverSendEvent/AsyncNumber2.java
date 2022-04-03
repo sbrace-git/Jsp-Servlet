@@ -23,7 +23,7 @@ public class AsyncNumber2 extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("AsyncNumber2 doGet");
+        System.out.println(Thread.currentThread().getId() + " AsyncNumber2 doGet");
         resp.setContentType("text/event-stream");
         resp.setHeader("Cache-Control", "no-cache");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -34,22 +34,25 @@ public class AsyncNumber2 extends HttpServlet {
         asyncContext.addListener(new AsyncListener() {
             @Override
             public void onComplete(AsyncEvent event) throws IOException {
+                System.out.println(Thread.currentThread().getId() + " AsyncNumber2 onComplete");
                 asyncContextQueue.remove(event.getAsyncContext());
             }
 
             @Override
             public void onTimeout(AsyncEvent event) throws IOException {
+                System.out.println(Thread.currentThread().getId() + " AsyncNumber2 onTimeout");
                 asyncContextQueue.remove(event.getAsyncContext());
             }
 
             @Override
             public void onError(AsyncEvent event) throws IOException {
+                System.out.println(Thread.currentThread().getId() + " AsyncNumber2 onError");
                 asyncContextQueue.remove(event.getAsyncContext());
             }
 
             @Override
             public void onStartAsync(AsyncEvent event) throws IOException {
-                System.out.println("onStartAsync");
+                System.out.println(Thread.currentThread().getId() + " AsyncNumber2 onStartAsync");
             }
         });
         asyncContextQueue.add(asyncContext);

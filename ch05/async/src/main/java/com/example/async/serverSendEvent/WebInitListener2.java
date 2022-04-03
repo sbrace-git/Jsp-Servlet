@@ -20,9 +20,9 @@ public class WebInitListener2 implements ServletContextListener {
         new Thread(() -> {
             while (true) {
                 try {
-                    int sleep = 5000;
-                    System.out.printf("sleep = %d%n", sleep);
-                    Thread.sleep(sleep);
+//                    int sleep = 3000;
+//                    System.out.println("sleep = " + sleep);
+//                    Thread.sleep(sleep);
                     response();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -35,9 +35,8 @@ public class WebInitListener2 implements ServletContextListener {
         asyncContextQueue.forEach(asyncContext -> {
             try {
                 PrintWriter writer = asyncContext.getResponse().getWriter();
-                writer.printf("data : %s\n\n", Math.random());
+                writer.printf("data:%s\n\n", Math.random());
                 writer.flush();
-                asyncContext.complete();
             } catch (IOException e) {
                 e.printStackTrace();
             }
