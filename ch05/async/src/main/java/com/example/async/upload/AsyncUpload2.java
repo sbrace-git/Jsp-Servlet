@@ -32,6 +32,7 @@ public class AsyncUpload2 extends HttpServlet {
             throws ServletException, IOException {
         System.out.printf("doPost thread id = %s%n", Thread.currentThread().getName());
         AsyncContext ctx = request.startAsync();
+        ctx.setTimeout(300000L);
 
         ServletInputStream in = request.getInputStream();
 
@@ -42,49 +43,49 @@ public class AsyncUpload2 extends HttpServlet {
             @Override
             public void onDataAvailable() throws IOException {
                 System.out.printf("onDataAvailable thread id = %s%n", Thread.currentThread().getName());
-                try {
-                    Thread.sleep(2000);
-                    Part photo = request.getPart("photo");
-                    InputStream inputStream = photo.getInputStream();
-                    submittedFileName = photo.getSubmittedFileName();
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = inputStream.read(buffer)) != -1) {
-                        out.write(buffer, 0, length);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-
-//                byte[] buffer = new byte[1024];
-//                int length = -1;
-//                while (in.isReady() && (length = in.read(buffer)) != -1) {
-//                    out.write(buffer, 0, length);
+//                try {
+//                    Thread.sleep(2000);
+//                    Part photo = request.getPart("photo");
+//                    InputStream inputStream = photo.getInputStream();
+//                    submittedFileName = photo.getSubmittedFileName();
+//                    byte[] buffer = new byte[1024];
+//                    int length;
+//                    while ((length = inputStream.read(buffer)) != -1) {
+//                        out.write(buffer, 0, length);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    throw new RuntimeException(e);
 //                }
+
+                byte[] buffer = new byte[1024];
+                int length = -1;
+                while (in.isReady() && (length = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, length);
+                }
             }
 
             @Override
             public void onAllDataRead() throws IOException {
-//                byte[] content = out.toByteArray();
-//                String contentAsTxt = new String(content, "ISO-8859-1");
-//
-//                String filename = filename(contentAsTxt);
-//                Range fileRange = fileRange(contentAsTxt, request.getContentType());
-//                write(content,
-//                        contentAsTxt.substring(0, fileRange.start)
-//                                .getBytes("ISO-8859-1")
-//                                .length,
-//                        contentAsTxt.substring(0, fileRange.end)
-//                                .getBytes("ISO-8859-1")
-//                                .length,
-//                        String.format("D:\\common\\temp\\test\\%s", filename)
-//                );
-                System.out.printf("onAllDataRead thread id = %s%n", Thread.currentThread().getName());
-                FileOutputStream fileOutputStream = new FileOutputStream("D:\\common\\temp\\test\\" + submittedFileName);
-                fileOutputStream.write(out.toByteArray());
-                response.getWriter().println("Upload Successfully");
-                ctx.complete();
+                byte[] content = out.toByteArray();
+                String contentAsTxt = new String(content, "ISO-8859-1");
+
+                String filename = filename(contentAsTxt);
+                Range fileRange = fileRange(contentAsTxt, request.getContentType());
+                write(content,
+                        contentAsTxt.substring(0, fileRange.start)
+                                .getBytes("ISO-8859-1")
+                                .length,
+                        contentAsTxt.substring(0, fileRange.end)
+                                .getBytes("ISO-8859-1")
+                                .length,
+                        String.format("D:\\common\\temp\\test\\%s", filename)
+                );
+//                System.out.printf("onAllDataRead thread id = %s%n", Thread.currentThread().getName());
+//                FileOutputStream fileOutputStream = new FileOutputStream("D:\\common\\temp\\test\\" + submittedFileName);
+//                fileOutputStream.write(out.toByteArray());
+//                response.getWriter().println("Upload Successfully");
+//                ctx.complete();
             }
 
             @Override
