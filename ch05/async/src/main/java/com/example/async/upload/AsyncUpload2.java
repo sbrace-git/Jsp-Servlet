@@ -84,8 +84,8 @@ public class AsyncUpload2 extends HttpServlet {
 //                System.out.printf("onAllDataRead thread id = %s%n", Thread.currentThread().getName());
 //                FileOutputStream fileOutputStream = new FileOutputStream("D:\\common\\temp\\test\\" + submittedFileName);
 //                fileOutputStream.write(out.toByteArray());
-//                response.getWriter().println("Upload Successfully");
-//                ctx.complete();
+                response.getWriter().println("Upload Successfully");
+                ctx.complete();
             }
 
             @Override
