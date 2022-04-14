@@ -1,6 +1,9 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.service.UserService;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +18,22 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-@WebServlet("/member")
+@WebServlet(urlPatterns = "/member",
+        initParams = {
+                @WebInitParam(name = "MEMBER_PATH", value = "member.view")
+        }
+)
 public class Member extends HttpServlet {
 
-    private static final String USER = "D:\\common\\temp\\users";
-    private static final String MEMBER_PATH = "member.view";
-    private static final String LOGIN_PATH = "index.html";
+    private String MEMBER_PATH;
+
+    private UserService userService;
+
+    @Override
+    public void init() {
+        MEMBER_PATH = getInitParameter("MEMBER_PATH");
+        userService = (UserService) getServletContext().getAttribute("userService");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,39 +46,9 @@ public class Member extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String username = getLoginUsername(req);
-        if (null == username) {
-            resp.sendRedirect(LOGIN_PATH);
-            return;
-        }
-        Map<Long, String> messages = messages(username);
+        String username = (String) req.getSession().getAttribute("login");
+        Map<Long, String> messages = userService.messages(username);
         req.setAttribute("messages", messages);
         req.getRequestDispatcher(MEMBER_PATH).forward(req, resp);
-    }
-
-    private Map<Long, String> messages(String username) {
-        Path userHome = Paths.get(USER, username);
-        TreeMap<Long, String> messages = new TreeMap<>(Comparator.reverseOrder());
-
-        try (DirectoryStream<Path> txts = Files.newDirectoryStream(userHome, "*.txt")) {
-            for (Path txt : txts) {
-                String millis = txt.getFileName().toString().replace(".txt", "");
-                String blabla = Files.readAllLines(txt).stream().collect(Collectors.joining(System.lineSeparator()));
-                messages.put(Long.valueOf(millis), blabla);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return messages;
-    }
-
-
-    private String getLoginUsername(HttpServletRequest req) {
-        Object login = req.getSession().getAttribute("login");
-        if (null == login) {
-            return null;
-        }
-        return (String) login;
     }
 }

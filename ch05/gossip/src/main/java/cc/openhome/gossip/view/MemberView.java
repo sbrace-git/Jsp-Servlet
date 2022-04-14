@@ -16,8 +16,6 @@ import java.util.Optional;
 @WebServlet("/member.view")
 public class MemberView extends HttpServlet {
 
-    private final static String LOGIN_PATH = "index.html";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
@@ -30,10 +28,6 @@ public class MemberView extends HttpServlet {
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String username = getLoginUsername(req);
-        if (null == username) {
-            resp.sendRedirect(LOGIN_PATH);
-            return;
-        }
 
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = resp.getWriter();

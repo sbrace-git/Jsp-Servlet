@@ -1,6 +1,9 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.service.UserService;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,30 +16,37 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 
-@WebServlet("/new_message")
+@WebServlet(urlPatterns = "/new_message",
+        initParams = {
+                @WebInitParam(name = "LOGIN_PATH", value = "index.html"),
+                @WebInitParam(name = "MEMBER_PATH", value = "member"),
+                @WebInitParam(name = "MEMBER_VIEW", value = "member.view")
+        }
+)
 public class NewMessage extends HttpServlet {
 
-    private static final String USER = "D:\\common\\temp\\users";
-    private static final String LOGIN_PATH = "index.html";
-    private static final String MEMBER_PATH = "member";
-    private static final String MEMBER_VIEW = "member.view";
+    private String MEMBER_PATH;
+    private String MEMBER_VIEW;
+
+    private UserService userService;
+
+    @Override
+    public void init() throws ServletException {
+        MEMBER_PATH = getInitParameter("MEMBER_PATH");
+        MEMBER_VIEW = getInitParameter("MEMBER_VIEW");
+        userService = (UserService) getServletContext().getAttribute("userService");
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String username = (String) req.getSession().getAttribute("login");
-        if (null == username) {
-            resp.sendRedirect(LOGIN_PATH);
-        }
         req.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String blabla = req.getParameter("blabla");
         if (null == blabla || blabla.length() > 140 || blabla.length() == 0) {
             req.getRequestDispatcher(MEMBER_VIEW).forward(req,resp);
             return;
         }
-        Path path = Paths.get(USER, username,
-                String.format("%s.txt", Instant.now().toEpochMilli()));
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path)) {
-            bufferedWriter.write(blabla);
-        }
+        userService.addMessage(username,blabla);
         resp.sendRedirect(MEMBER_PATH);
     }
 }
