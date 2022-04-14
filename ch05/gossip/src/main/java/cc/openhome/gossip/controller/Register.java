@@ -1,6 +1,9 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.service.UserService;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +18,12 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
-@WebServlet("/register")
+@WebServlet(urlPatterns = "/register",
+        initParams = {
+                @WebInitParam(name = "SUCCESS_PATH", value = "register_success.view"),
+                @WebInitParam(name = "ERROR_PATH", value = "register_error.view")
+        }
+)
 public class Register extends HttpServlet {
     private final static Pattern emailRegex = Pattern.compile(
             "^[_a-z0-9-]+([.][_a-z0-9-]+)*@[a-z0-9-]+([.][a-z0-9-]+)*$");
@@ -24,9 +32,16 @@ public class Register extends HttpServlet {
 
     private final static Pattern usernameRegex = Pattern.compile("^\\w{1,16}$");
 
-    private final static String SUCCESS_PATH = "register_success.view";
-    private final static String ERROR_PATH = "register_error.view";
-    private final static String USERS = "D:\\common\\temp\\users";
+    private String SUCCESS_PATH;
+    private String ERROR_PATH;
+    private UserService userService;
+
+    @Override
+    public void init() {
+        SUCCESS_PATH = getInitParameter("SUCCESS_PATH");
+        ERROR_PATH = getInitParameter("ERROR_PATH");
+        userService = (UserService) getServletContext().getAttribute("userService");
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,11 +49,6 @@ public class Register extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String password2 = req.getParameter("password2");
-
-        System.out.printf("email = %s%n", email);
-        System.out.printf("username = %s%n", username);
-        System.out.printf("password = %s%n", password);
-        System.out.printf("password2 = %s%n", password2);
 
         List<String> errors = new ArrayList<>();
         if (!validateEmail(email)) {
@@ -54,7 +64,7 @@ public class Register extends HttpServlet {
         String path;
         if (errors.isEmpty()) {
             path = SUCCESS_PATH;
-            tryCreateUser(email, username, password);
+            userService.tryCreateUser(email,username,password);
         } else {
             path = ERROR_PATH;
             req.setAttribute("errors", errors);
@@ -76,24 +86,5 @@ public class Register extends HttpServlet {
         return password != null &&
                 passwdRegex.matcher(password).find() &&
                 password.equals(password2);
-    }
-
-    private void tryCreateUser(String email, String username, String password) throws IOException {
-        Path userHome = Paths.get(USERS, username);
-        if (Files.notExists(userHome)) {
-            createUser(userHome, email, password);
-        }
-    }
-
-    private void createUser(Path userHome, String email, String password) throws IOException {
-        Files.createDirectories(userHome);
-        int salt = ThreadLocalRandom.current().nextInt();
-        String encrypt = String.valueOf(salt + password.hashCode());
-        Path profile = userHome.resolve("profile");
-        String format = String.format("%s\t%s\t%d", email, encrypt, salt);
-        System.out.println(format);
-        try (BufferedWriter writer = Files.newBufferedWriter(profile)) {
-            writer.write(format);
-        }
     }
 }
