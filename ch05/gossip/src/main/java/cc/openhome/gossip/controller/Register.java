@@ -69,8 +69,6 @@ public class Register extends HttpServlet {
             path = ERROR_PATH;
             req.setAttribute("errors", errors);
         }
-        System.out.println(path);
-        errors.forEach(System.out::println);
         req.getRequestDispatcher(path).forward(req, resp);
     }
 
