@@ -20,14 +20,12 @@ import java.nio.file.Paths;
 )
 public class DeleteMessage extends HttpServlet {
 
-    private String LOGIN_PATH;
     private String MEMBER_PATH;
 
     private UserService userService;
 
     @Override
     public void init() {
-        LOGIN_PATH = getInitParameter("LOGIN_PATH");
         MEMBER_PATH = getInitParameter("MEMBER_PATH");
         userService = (UserService) getServletContext().getAttribute("userService");
     }

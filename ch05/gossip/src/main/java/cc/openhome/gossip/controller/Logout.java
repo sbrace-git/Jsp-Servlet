@@ -19,7 +19,7 @@ public class Logout extends HttpServlet {
     private String LOGIN_PATH;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         LOGIN_PATH = getInitParameter("LOGIN_PATH");
     }
 
