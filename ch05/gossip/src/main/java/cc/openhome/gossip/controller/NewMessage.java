@@ -31,7 +31,7 @@ public class NewMessage extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         MEMBER_PATH = getInitParameter("MEMBER_PATH");
         MEMBER_VIEW = getInitParameter("MEMBER_VIEW");
         userService = (UserService) getServletContext().getAttribute("userService");
