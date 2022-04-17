@@ -33,6 +33,8 @@ public class LoginSessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
+        // session 不一定通过 Login 创建, 所以 LOGIN_USER_MAP.put 不能写在本方法.
+        // 写在了 login 方法
         System.out.println("LoginSessionListener # sessionCreated");
     }
 
