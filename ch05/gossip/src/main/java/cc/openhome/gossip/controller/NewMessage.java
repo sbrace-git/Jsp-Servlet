@@ -8,13 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
 
 @WebServlet(urlPatterns = "/new_message",
         initParams = {
@@ -42,6 +37,8 @@ public class NewMessage extends HttpServlet {
         String username = (String) req.getSession().getAttribute("login");
         req.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String blabla = req.getParameter("blabla");
+//        String[] blablas = req.getParameterValues("blabla");
+//        Map<String, String[]> parameterMap = req.getParameterMap();
         if (null == blabla || blabla.length() > 140 || blabla.length() == 0) {
             req.getRequestDispatcher(MEMBER_VIEW).forward(req,resp);
             return;

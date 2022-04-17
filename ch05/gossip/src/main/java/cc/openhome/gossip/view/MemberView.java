@@ -55,6 +55,7 @@ public class MemberView extends HttpServlet {
             writer.println("讯息要在140字内<br/>");
         }
         writer.printf("<textarea cols='60' rows='4' name='blabla'>%s</textarea><br/>", preBlabla);
+//        writer.printf("<textarea cols='60' rows='4' name='blabla'>%s</textarea><br/>", preBlabla);
         writer.println("<button type='submit'>发送</button>");
         writer.println("</form>");
 
