@@ -38,7 +38,7 @@ public class Welcome extends HttpServlet {
             writer.println("<a href='logout'>logout</a><br>");
         }
         writer.printf("online user count = %d<br>", LoginSessionListener.getCounter());
-        writer.println("username\tsessionId\tlastAccessedTime\tuserAgent<br>");
+        writer.println("username\tsessionId\tlastAccessedTime\tdata\tuserAgent<br>");
         LoginSessionListener.getAllLoginUser().forEach(loginUser -> writer.printf("%s<br>", loginUser.showDetail()));
 
         writer.println("</body>");
