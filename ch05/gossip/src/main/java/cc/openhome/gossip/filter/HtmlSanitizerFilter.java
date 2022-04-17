@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @WebFilter(urlPatterns = "/new_message")
@@ -20,7 +23,7 @@ public class HtmlSanitizerFilter extends HttpFilter {
     @Override
     public void init() {
         policyFactory = new HtmlPolicyBuilder()
-                .allowElements("a", "b", "i", "del", "pre", "code","big","small")
+                .allowElements("a", "b", "i", "del", "pre", "code", "big", "small")
                 .allowUrlProtocols("http", "https")
                 .allowAttributes("href").onElements("a")
                 .requireRelNofollowOnLinks()
@@ -45,6 +48,25 @@ public class HtmlSanitizerFilter extends HttpFilter {
                     .map(policyFactory::sanitize)
                     .orElse(null);
         }
+
+        @Override
+        public Map<String, String[]> getParameterMap() {
+            HashMap<String, String[]> parameterMap = new HashMap<>(super.getParameterMap());
+            parameterMap.replaceAll((k,v) -> sanitizeValues(v));
+            return parameterMap;
+        }
+
+        @Override
+        public String[] getParameterValues(String name) {
+            return Optional.ofNullable(super.getParameterValues(name))
+                    .map(this::sanitizeValues)
+                    .orElse(null);
+        }
+
+        private String[] sanitizeValues(String[] values) {
+            return Arrays.stream(values).map(policyFactory::sanitize).toArray(String[]::new);
+        }
+
     }
 
     @Override
