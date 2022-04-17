@@ -1,6 +1,6 @@
 package com.example.onlineuser.view;
 
-import com.example.onlineuser.listener.LoginUserListener;
+import com.example.onlineuser.listener.LoginSessionListener;
 import com.example.onlineuser.model.LoginUser;
 
 import javax.servlet.annotation.WebServlet;
@@ -37,9 +37,9 @@ public class Welcome extends HttpServlet {
             writer.printf("welcome %s<br>", username);
             writer.println("<a href='logout'>logout</a><br>");
         }
-        writer.printf("online user count = %d<br>", LoginUserListener.getCounter());
+        writer.printf("online user count = %d<br>", LoginSessionListener.getCounter());
         writer.println("username\tsessionId\tlastAccessedTime\tuserAgent<br>");
-        LoginUserListener.getAllLoginUser().forEach(loginUser -> writer.printf("%s<br>", loginUser));
+        LoginSessionListener.getAllLoginUser().forEach(loginUser -> writer.printf("%s<br>", loginUser.showDetail()));
 
         writer.println("</body>");
         writer.println("</html>");

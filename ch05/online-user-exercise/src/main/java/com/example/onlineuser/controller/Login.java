@@ -1,6 +1,6 @@
 package com.example.onlineuser.controller;
 
-import com.example.onlineuser.listener.LoginUserListener;
+import com.example.onlineuser.listener.LoginSessionListener;
 import com.example.onlineuser.model.LoginUser;
 
 import javax.servlet.ServletException;
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ public class Login extends HttpServlet {
             loginUser.setName(username);
             loginUser.setUserAgent(req.getHeader("user-agent"));
             loginUser.setHttpSession(session);
-            LoginUserListener.login(loginUser, oldSessionId);
+            LoginSessionListener.login(loginUser, oldSessionId);
             session.setAttribute("loginUser", loginUser);
             resp.sendRedirect("welcome.view");
             return;

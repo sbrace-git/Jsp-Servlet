@@ -7,10 +7,29 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @WebListener
 public class LoginSessionListener implements HttpSessionListener {
+
+
+    private static final Map<String, LoginUser> LOGIN_USER_MAP = new HashMap<>();
+
+    public static int getCounter() {
+        return LOGIN_USER_MAP.size();
+    }
+
+    public static Collection<LoginUser> getAllLoginUser() {
+        return LOGIN_USER_MAP.values();
+    }
+
+    public static void login(LoginUser loginUser, String oldSessionId) {
+        Optional.ofNullable(oldSessionId)
+                .ifPresent(LOGIN_USER_MAP::remove);
+        Optional.ofNullable(loginUser)
+                .map(LoginUser::getHttpSession)
+                .map(HttpSession::getId)
+                .map(id -> LOGIN_USER_MAP.put(id, loginUser));
+    }
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
@@ -20,7 +39,7 @@ public class LoginSessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         System.out.println("LoginSessionListener # sessionDestroyed");
-        LoginUser logout = LoginUserListener.logout(se.getSession().getId());
+        LoginUser logout = LOGIN_USER_MAP.remove(se.getSession().getId());
         System.out.printf("loginUser = %s%n", Optional.ofNullable(logout)
                 .map(LoginUser::showDetail).orElse(null));
     }
