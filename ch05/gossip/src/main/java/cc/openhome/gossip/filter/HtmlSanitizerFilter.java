@@ -20,7 +20,7 @@ public class HtmlSanitizerFilter extends HttpFilter {
     @Override
     public void init() {
         policyFactory = new HtmlPolicyBuilder()
-                .allowElements("a", "b", "i", "del", "pre", "code")
+                .allowElements("a", "b", "i", "del", "pre", "code","big","small")
                 .allowUrlProtocols("http", "https")
                 .allowAttributes("href").onElements("a")
                 .requireRelNofollowOnLinks()
