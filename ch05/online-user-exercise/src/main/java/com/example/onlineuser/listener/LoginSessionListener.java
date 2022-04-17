@@ -1,33 +1,27 @@
-package com.example.onlineuser.session;
+package com.example.onlineuser.listener;
+
+import com.example.onlineuser.model.LoginUser;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @WebListener
 public class LoginSessionListener implements HttpSessionListener {
 
-    private static int counter;
-
-    public static int getCounter() {
-        return counter;
-    }
-
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         System.out.println("LoginSessionListener # sessionCreated");
-        HttpSession session = se.getSession();
-        Collections.list(session.getAttributeNames())
-                .forEach(attributeName ->
-                        System.out.printf("%s = %s%n",attributeName,session.getAttribute(attributeName)));
-        counter++;
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         System.out.println("LoginSessionListener # sessionDestroyed");
-        counter--;
+        LoginUser logout = LoginUserListener.logout(se.getSession().getId());
+        System.out.printf("loginUser = %s%n", Optional.ofNullable(logout)
+                .map(LoginUser::showDetail).orElse(null));
     }
 }

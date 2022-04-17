@@ -1,4 +1,7 @@
-package com.example.onlineuser.session;
+package com.example.onlineuser.controller;
+
+import com.example.onlineuser.listener.LoginUserListener;
+import com.example.onlineuser.model.LoginUser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,20 +28,28 @@ public class Login extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
         if (users.containsKey(username) && users.get(username).equals(password)) {
             HttpSession session = req.getSession(false);
+            String oldSessionId = null;
             if (null != session) {
+                oldSessionId = session.getId();
                 req.changeSessionId();
             } else {
                 session = req.getSession();
             }
-            session.setAttribute("username", username);
+            LoginUser loginUser = new LoginUser();
+            loginUser.setName(username);
+            loginUser.setUserAgent(req.getHeader("user-agent"));
+            loginUser.setHttpSession(session);
+            LoginUserListener.login(loginUser, oldSessionId);
+            session.setAttribute("loginUser", loginUser);
+            resp.sendRedirect("welcome.view");
+            return;
         }
-        resp.sendRedirect("welcome.view");
-//        resp.getWriter().println("login error");
+        resp.sendRedirect("form.html");
     }
 }
