@@ -3,7 +3,6 @@ package com.example.onlineuser.model;
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 public class LoginUser {
     private String name;
@@ -38,9 +37,8 @@ public class LoginUser {
         String lastAccessedTimeStr = "";
         String sessionId = "";
         if (null != httpSession) {
-            long lastAccessedTime = httpSession.getLastAccessedTime();
-            lastAccessedTimeStr = Instant.ofEpochSecond(lastAccessedTime / 1000)
-                    .atZone(ZoneOffset.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            lastAccessedTimeStr = Instant.ofEpochMilli(httpSession.getLastAccessedTime())
+                    .atZone(ZoneOffset.systemDefault()).toLocalDateTime().toString();
             sessionId = httpSession.getId();
         }
         return String.format("%s\t%s\t%s\t%s",
