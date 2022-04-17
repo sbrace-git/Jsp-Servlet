@@ -57,16 +57,16 @@ public class LoginUser implements HttpSessionBindingListener {
                 name, sessionId, lastAccessedTimeStr, data, userAgent);
     }
 
-    @Override
-    public void valueBound(HttpSessionBindingEvent event) {
-        LoginUser value = (LoginUser) event.getValue();
-        value.setData(String.valueOf(System.currentTimeMillis()));
-        System.out.printf("valueBound detail = %s%n", value.showDetail());
-    }
-
-    @Override
-    public void valueUnbound(HttpSessionBindingEvent event) {
-        LoginUser value = (LoginUser) event.getValue();
-        System.out.printf("valueUnbound detail = %s%n", value.showDetail());
-    }
+//    @Override
+//    public void valueBound(HttpSessionBindingEvent event) {
+//        LoginUser value = (LoginUser) event.getValue();
+//        value.setData(String.valueOf(System.currentTimeMillis()));
+//        System.out.printf("valueBound detail = %s%n", value.showDetail());
+//    }
+//
+//    @Override
+//    public void valueUnbound(HttpSessionBindingEvent event) {
+//        LoginUser value = (LoginUser) event.getValue();
+//        System.out.printf("valueUnbound detail = %s%n", value.showDetail());
+//    }
 }
