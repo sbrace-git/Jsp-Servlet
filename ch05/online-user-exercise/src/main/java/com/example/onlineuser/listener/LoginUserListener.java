@@ -36,12 +36,4 @@ public class LoginUserListener implements ServletContextListener {
     public static LoginUser logout(String sessionId) {
         return LOGIN_USER_MAP.remove(sessionId);
     }
-
-    public static LoginUser changeId(String newId, String oldId) {
-        LoginUser remove = LOGIN_USER_MAP.remove(oldId);
-        if (null == remove) {
-            return null;
-        }
-        return LOGIN_USER_MAP.put(newId, remove);
-    }
 }
