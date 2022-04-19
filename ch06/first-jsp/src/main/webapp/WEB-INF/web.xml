@@ -9,5 +9,10 @@
             <page-encoding>UTF-8</page-encoding>
             <default-content-type>text/html</default-content-type>
         </jsp-property-group>
+<!--        <jsp-property-group>-->
+<!--            <url-pattern>*.jsp</url-pattern>-->
+<!--            <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>-->
+<!--            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>-->
+<!--        </jsp-property-group>-->
     </jsp-config>
 </web-app>
