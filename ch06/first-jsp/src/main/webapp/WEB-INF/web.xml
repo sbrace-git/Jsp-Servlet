@@ -15,6 +15,10 @@
         </jsp-property-group>
 <!--        <jsp-property-group>-->
 <!--            <url-pattern>*.jsp</url-pattern>-->
+<!--            <scripting-invalid>true</scripting-invalid>-->
+<!--        </jsp-property-group>-->
+<!--        <jsp-property-group>-->
+<!--            <url-pattern>*.jsp</url-pattern>-->
 <!--            <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>-->
 <!--            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>-->
 <!--        </jsp-property-group>-->
