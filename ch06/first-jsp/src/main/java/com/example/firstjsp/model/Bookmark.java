@@ -1,6 +1,6 @@
 package com.example.firstjsp.model;
 
-public class Bookmark {
+public class Bookmark extends BookmarkBase{
     private String url;
     private String title;
     private String category;
