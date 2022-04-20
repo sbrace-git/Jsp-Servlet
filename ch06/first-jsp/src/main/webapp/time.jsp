@@ -6,6 +6,15 @@
         <title>time</title>
     </head>
     <body>
-        <%= LocalDateTime.now()%>
+        <%=
+            // 单行注释
+            LocalDateTime.now()
+            /*
+             * 多行
+             * 注释
+             */
+        %>
+        <!-- 网页注释 -->
+        <%--   jsp 注释    --%>
     </body>
 </html>
