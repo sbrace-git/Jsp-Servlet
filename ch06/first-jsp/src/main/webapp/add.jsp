@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page errorPage="/WEB-INF/error/error.jsp" %>
+<%--<%@ page errorPage="/WEB-INF/error/500.jsp" %>--%>
 <!doctype html>
 <html>
     <head>
