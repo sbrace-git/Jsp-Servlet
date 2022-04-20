@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>error</title>
+        <title>500</title>
     </head>
     <body>
         <h1>error page</h1>
