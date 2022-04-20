@@ -15,6 +15,9 @@
                     <td style="background-color: rgb(51,255,255);">分类</td>
                 </tr>
                 <%
+                    pageContext.setAttribute("key","value",PageContext.SESSION_SCOPE);
+                    Object key = pageContext.getAttribute("key", PageContext.SESSION_SCOPE);
+                    Object key1 = pageContext.findAttribute("key");
                     BookmarkService bookmarkService = (BookmarkService) application.getAttribute("bookmarkService");
                     for (Bookmark bookmark : bookmarkService.getBookmarkList()) {
                 %>
