@@ -7,12 +7,10 @@
         <title>add</title>
     </head>
     <body>
-        <div>
-            <%
-                int a = Integer.parseInt(request.getParameter("a"));
-                int b = Integer.parseInt(request.getParameter("b"));
-            %>
-        </div>
+        <%
+            int a = Integer.parseInt(request.getParameter("a"));
+            int b = Integer.parseInt(request.getParameter("b"));
+        %>
         <div>
             <%= a%> + <%= b%> = <%= a + b %>
         </div>
