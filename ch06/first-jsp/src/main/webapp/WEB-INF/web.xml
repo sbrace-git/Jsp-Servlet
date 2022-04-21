@@ -15,6 +15,11 @@
         </jsp-property-group>
 <!--        <jsp-property-group>-->
 <!--            <url-pattern>*.jsp</url-pattern>-->
+<!--            <url-pattern>*.jspx</url-pattern>-->
+<!--            <el-ignored>true</el-ignored>-->
+<!--        </jsp-property-group>-->
+<!--        <jsp-property-group>-->
+<!--            <url-pattern>*.jsp</url-pattern>-->
 <!--            <scripting-invalid>true</scripting-invalid>-->
 <!--        </jsp-property-group>-->
 <!--        <jsp-property-group>-->
