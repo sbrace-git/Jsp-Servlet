@@ -3,6 +3,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="utils" uri="https://openhome.cc/utils" %>
 <jsp:useBean id="bookmark"
              class="com.example.firstjsp.model.Bookmark"
              type="com.example.firstjsp.model.BookmarkBase"
@@ -102,6 +103,10 @@
         <br>
         <div>
             datas : ${map[names[param.index]]}
+        </div>
+        <br>
+        <div>
+            names length = ${utils:length(strings)}
         </div>
     </body>
 </html>
