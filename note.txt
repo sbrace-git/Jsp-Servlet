@@ -1,0 +1,33 @@
+jsp 元素
+1.指示元素 Directive <%@ 指示类型 [属性="值"] %>
+	常用指示类型 page include taglib
+2.声明元素 Declaration <%! 类成员声明或方法声明 %>
+3.Srciptlet 元素 <% Java语句 %>
+	<% int i = 1; %>
+4.表达式元素 <%= Java 表达式%>
+	<%= "text" %>
+5.注释元素 <%-- JSP 注释 -->
+
+JSP 隐式对象
+1.out
+2.request
+3.response
+4.config
+5.application
+6.session
+7.pageContext
+8.exception
+9.page
+
+EL 隐式对象
+1.pageContext
+2.pageScope
+3.requestScope
+4.sessionScope
+5.applicationScope
+6.param
+7.paramValues
+8.header
+9.headerValues
+10.cookie
+11.initParam
