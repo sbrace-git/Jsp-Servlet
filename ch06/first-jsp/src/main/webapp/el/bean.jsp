@@ -108,5 +108,8 @@
         <div>
             names length = ${utils:length(strings)}
         </div>
+        <div>
+            length = ${utils:length(["1","2","3"])}
+        </div>
     </body>
 </html>
