@@ -1,3 +1,7 @@
+<%@ page import="java.util.Arrays" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="bookmark"
              class="com.example.firstjsp.model.Bookmark"
@@ -22,7 +26,82 @@
             标题：${bookmark.title}
         </div>
         <div>
+            标题：${bookmark["title"]}
+        </div>
+        <br>
+        <div>
             分类：${bookmark.category}
+        </div>
+        <div>
+            分类：${bookmark["category"]}
+        </div>
+        <br>
+        <%
+            String[] names = {"a","b","c"};
+            pageContext.setAttribute("names",names,PageContext.PAGE_SCOPE);
+        %>
+        <div>
+            name1 = ${names[0]}
+        </div>
+        <div>
+            name2 = ${names[1]}
+        </div>
+        <div>
+            name3 = ${names[2]}
+        </div>
+        <br>
+        <div>
+            name1 = ${names["0"]}
+        </div>
+        <div>
+            name2 = ${names["1"]}
+        </div>
+        <div>
+            name3 = ${names["2"]}
+        </div>
+        <br>
+        <%
+            List<String> strings = Arrays.asList("a", "b", "c");
+            pageContext.setAttribute("strings",strings,PageContext.PAGE_SCOPE);
+        %>
+        <div>
+            string1 = ${strings[0]}
+        </div>
+        <div>
+            string2 = ${strings[1]}
+        </div>
+        <div>
+            string3 = ${strings[2]}
+        </div>
+        <br>
+        <div>
+            string4 = ${strings[param.index]}
+        </div>
+        <br>
+        <%
+            Map<String,String> map = new HashMap<>();
+            map.put("a.b","a.b");
+            map.put("c d","c d");
+            map.put("a","a.data");
+            map.put("b","b.data");
+            map.put("c","c.data");
+            pageContext.setAttribute("map",map);
+        %>
+        <div>
+            a.b = ${map["a.b"]}
+        </div>
+        <div>
+            a.b = ${map.get("a.b")}
+        </div>
+        <div>
+            c d = ${map["c d"]}
+        </div>
+        <div>
+            c d = ${map.get("c d")}
+        </div>
+        <br>
+        <div>
+            datas : ${map[names[param.index]]}
         </div>
     </body>
 </html>
