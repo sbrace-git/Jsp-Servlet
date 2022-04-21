@@ -38,8 +38,8 @@
         </div>
         <br>
         <%
-            String[] names = {"a","b","c"};
-            pageContext.setAttribute("names",names,PageContext.PAGE_SCOPE);
+            String[] names = {"a", "b", "c"};
+            pageContext.setAttribute("names", names, PageContext.PAGE_SCOPE);
         %>
         <div>
             name1 = ${names[0]}
@@ -63,7 +63,7 @@
         <br>
         <%
             List<String> strings = Arrays.asList("a", "b", "c");
-            pageContext.setAttribute("strings",strings,PageContext.PAGE_SCOPE);
+            pageContext.setAttribute("strings", strings, PageContext.PAGE_SCOPE);
         %>
         <div>
             string1 = ${strings[0]}
@@ -80,13 +80,13 @@
         </div>
         <br>
         <%
-            Map<String,String> map = new HashMap<>();
-            map.put("a.b","a.b");
-            map.put("c d","c d");
-            map.put("a","a.data");
-            map.put("b","b.data");
-            map.put("c","c.data");
-            pageContext.setAttribute("map",map);
+            Map<String, String> map = new HashMap<>();
+            map.put("a.b", "a.b");
+            map.put("c d", "c d");
+            map.put("a", "a.data");
+            map.put("b", "b.data");
+            map.put("c", "c.data");
+            pageContext.setAttribute("map", map);
         %>
         <div>
             a.b = ${map["a.b"]}
@@ -110,6 +110,46 @@
         </div>
         <div>
             length = ${utils:length(["1","2","3"])}
+        </div>
+        <br>
+        <div>
+            <div>
+                ${x = 10}
+            </div>
+            <div>
+                ${y = 20}
+            </div>
+            <div>
+                ${x1 = 10; y1 = 20}
+            </div>
+            <div>
+                ${x1 = 10; y1 = 20; 0}
+            </div>
+            <div>
+                list = ${list = [1,2,3,3]}
+            </div>
+            <div>
+                set = ${set = {1,2,3,3}}
+            </div>
+            <div>
+                map = ${map = {"username":"name","password":"123456","username":"name"}}
+            </div>
+        </div>
+        <br>
+        <div>
+            <div>
+                firstName = ${firstName = "firstName"}
+            </div>
+            <div>
+                lastName = ${lastName = "lastName"}
+            </div>
+            <div>
+                <%-- 注意运算符号是 += --%>
+                firstName + lastName = ${firstName += lastName}
+            </div>
+            <div>
+                firstName toUpperCase ${firstName.toUpperCase()}
+            </div>
         </div>
     </body>
 </html>
