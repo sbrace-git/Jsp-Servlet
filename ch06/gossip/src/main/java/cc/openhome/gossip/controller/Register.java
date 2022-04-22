@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 @WebServlet(urlPatterns = "/register",
         initParams = {
                 @WebInitParam(name = "SUCCESS_PATH", value = "/WEB-INF/jsp/register_success.jsp"),
-                @WebInitParam(name = "ERROR_PATH", value = "/WEB-INF/jsp/register_error.jsp")
+                @WebInitParam(name = "FORM_PATH", value = "/WEB-INF/jsp/register.jsp")
         }
 )
 public class Register extends HttpServlet {
@@ -34,14 +34,19 @@ public class Register extends HttpServlet {
     private final static Pattern usernameRegex = Pattern.compile("^\\w{1,16}$");
 
     private String SUCCESS_PATH;
-    private String ERROR_PATH;
+    private String FORM_PATH;
     private UserService userService;
 
     @Override
     public void init() {
         SUCCESS_PATH = getInitParameter("SUCCESS_PATH");
-        ERROR_PATH = getInitParameter("ERROR_PATH");
+        FORM_PATH = getInitParameter("FORM_PATH");
         userService = (UserService) getServletContext().getAttribute("userService");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher(FORM_PATH).forward(req,resp);
     }
 
     @Override
@@ -67,7 +72,7 @@ public class Register extends HttpServlet {
             path = SUCCESS_PATH;
             userService.tryCreateUser(email,username,password);
         } else {
-            path = ERROR_PATH;
+            path = FORM_PATH;
             req.setAttribute("errors", errors);
         }
         req.getRequestDispatcher(path).forward(req, resp);
