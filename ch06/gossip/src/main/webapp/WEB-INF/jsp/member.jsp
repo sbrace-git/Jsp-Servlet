@@ -3,6 +3,8 @@
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.time.Instant" %>
 <%@ page import="java.time.ZoneId" %>
+<%@ page import="cc.openhome.gossip.model.Message" %>
+<%@ page import="java.util.List" %>
 <%!
     private String getLoginUsername(HttpServletRequest req) {
         return (String) Optional.ofNullable(req.getSession(false))
@@ -42,7 +44,7 @@
             <button type='submit'>发送</button>
         </form>
         <%
-            Map<Long, String> messages = (Map<Long, String>) request.getAttribute("messages");
+            List<Message> messages = (List<Message>) request.getAttribute("messages");
             if (null == messages || messages.size() == 0) {
         %>
         写点什么吧...
@@ -60,19 +62,15 @@
             </thead>
             <tbody>
             <%
-                for (Map.Entry<Long, String> message : messages.entrySet()) {
-                    Long millis = message.getKey();
-                    String blabla = message.getValue();
-                    LocalDateTime dateTime = Instant.ofEpochMilli(millis)
-                            .atZone(ZoneId.systemDefault()).toLocalDateTime();
+                for (Message message : messages) {
             %>
             <tr>
                 <td style='vertical-align: top;'>
-                    <%= username %><br>
-                    <%= blabla %><br>
-                    <%= dateTime %>
+                    <%= message.getUsername() %><br>
+                    <%= message.getBlabla() %><br>
+                    <%= message.getLocalDateTime() %>
                     <form method='post' action='del_message'>
-                        <input type="hidden" name="millis" value="<%= millis %>">
+                        <input type="hidden" name="millis" value="<%= message.getMillis() %>">
                         <button type="submit">删除</button>
                     </form>
                     <hr>

@@ -1,5 +1,6 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/member",
@@ -40,7 +42,7 @@ public class Member extends HttpServlet {
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String username = (String) req.getSession().getAttribute("login");
-        Map<Long, String> messages = userService.messages(username);
+        List<Message> messages = userService.messages(username);
         req.setAttribute("messages", messages);
         req.getRequestDispatcher(MEMBER_PATH).forward(req, resp);
     }
