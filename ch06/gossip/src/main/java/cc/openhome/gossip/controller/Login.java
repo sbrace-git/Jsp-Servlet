@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 @WebServlet(urlPatterns = "/login",
         initParams = {
                 @WebInitParam(name = "SUCCESS_PATH", value = "member"),
-                @WebInitParam(name = "ERROR_PATH", value = "index.html")
+                @WebInitParam(name = "ERROR_PATH", value = "/gossip")
         }
 )
 public class Login extends HttpServlet {

@@ -6,6 +6,6 @@
     </head>
     <body>
         <h1>${param.username} 会员注册成功</h1>
-        <a href="index.html">回首页</a>
+        <a href="/gossip">回首页</a>
     </body>
 </html>

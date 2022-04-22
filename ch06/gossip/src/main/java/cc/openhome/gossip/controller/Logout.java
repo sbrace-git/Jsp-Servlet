@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/logout",
         initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "index.html")
+                @WebInitParam(name = "LOGIN_PATH", value = "/gossip")
         }
 )
 public class Logout extends HttpServlet {
