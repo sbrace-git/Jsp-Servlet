@@ -13,7 +13,7 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "/member",
         initParams = {
-                @WebInitParam(name = "MEMBER_PATH", value = "member.view")
+                @WebInitParam(name = "MEMBER_PATH", value = "/WEB-INF/jsp/member.jsp")
         }
 )
 public class Member extends HttpServlet {
@@ -34,7 +34,7 @@ public class Member extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
     }
 

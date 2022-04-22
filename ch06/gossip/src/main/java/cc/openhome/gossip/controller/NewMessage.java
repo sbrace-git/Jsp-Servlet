@@ -14,21 +14,18 @@ import java.nio.charset.StandardCharsets;
 @WebServlet(urlPatterns = "/new_message",
         initParams = {
                 @WebInitParam(name = "LOGIN_PATH", value = "index.html"),
-                @WebInitParam(name = "MEMBER_PATH", value = "member"),
-                @WebInitParam(name = "MEMBER_VIEW", value = "member.view")
+                @WebInitParam(name = "MEMBER_PATH", value = "member")
         }
 )
 public class NewMessage extends HttpServlet {
 
     private String MEMBER_PATH;
-    private String MEMBER_VIEW;
 
     private UserService userService;
 
     @Override
     public void init() {
         MEMBER_PATH = getInitParameter("MEMBER_PATH");
-        MEMBER_VIEW = getInitParameter("MEMBER_VIEW");
         userService = (UserService) getServletContext().getAttribute("userService");
     }
 
@@ -40,10 +37,10 @@ public class NewMessage extends HttpServlet {
 //        String[] blablas = req.getParameterValues("blabla");
 //        Map<String, String[]> parameterMap = req.getParameterMap();
         if (null == blabla || blabla.length() > 140 || blabla.length() == 0) {
-            req.getRequestDispatcher(MEMBER_VIEW).forward(req,resp);
+            req.getRequestDispatcher(MEMBER_PATH).forward(req,resp);
             return;
         }
-        userService.addMessage(username,blabla);
+        userService.addMessage(username, blabla);
         resp.sendRedirect(MEMBER_PATH);
     }
 }

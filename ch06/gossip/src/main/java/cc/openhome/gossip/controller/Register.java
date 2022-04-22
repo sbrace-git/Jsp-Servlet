@@ -18,10 +18,11 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
+
 @WebServlet(urlPatterns = "/register",
         initParams = {
-                @WebInitParam(name = "SUCCESS_PATH", value = "register_success.view"),
-                @WebInitParam(name = "ERROR_PATH", value = "register_error.view")
+                @WebInitParam(name = "SUCCESS_PATH", value = "/WEB-INF/jsp/register_success.jsp"),
+                @WebInitParam(name = "ERROR_PATH", value = "/WEB-INF/jsp/register_error.jsp")
         }
 )
 public class Register extends HttpServlet {
