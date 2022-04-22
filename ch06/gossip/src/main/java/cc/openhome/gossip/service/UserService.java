@@ -1,5 +1,7 @@
 package cc.openhome.gossip.service;
 
+import cc.openhome.gossip.model.Message;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,9 +9,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -55,16 +55,16 @@ public class UserService {
         }
     }
 
-    public Map<Long, String> messages(String username) {
+    public List<Message> messages(String username) {
         Path userHome = Paths.get(USERS, username);
-        Map<Long, String> messages = new TreeMap<>(Comparator.reverseOrder());
-
+        List<Message> messages = new ArrayList<>();
         try (DirectoryStream<Path> txts = Files.newDirectoryStream(userHome, "*.txt")) {
             for (Path txt : txts) {
                 String millis = txt.getFileName().toString().replace(".txt", "");
                 String blabla = Files.readAllLines(txt).stream().collect(Collectors.joining(System.lineSeparator()));
-                messages.put(Long.parseLong(millis), blabla);
+                messages.add(new Message(username, Long.valueOf(millis), blabla));
             }
+            messages.sort(Comparator.comparing(Message::getMillis).reversed());
         } catch (Exception e) {
             e.printStackTrace();
         }
