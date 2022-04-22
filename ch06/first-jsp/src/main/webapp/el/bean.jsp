@@ -151,5 +151,55 @@
                 firstName toUpperCase ${firstName.toUpperCase()}
             </div>
         </div>
+        <br>
+        <div>
+            pageContext.setAttribute ${pageContext.setAttribute("token","123")}
+        </div>
+        <div>
+            Integer.parseInt ${Integer.parseInt("123")}
+        </div>
+        <div>
+            Math.round ${Math.round(1.6)}
+        </div>
+        <div>
+            Math.PI ${Math.PI}
+        </div>
+        <br>
+        <div>
+            <div>
+                <%-- importClass importPackage importStatic --%>
+                ${pageContext.ELContext.importHandler.importClass("java.time.LocalTime")}
+            </div>
+            <div>
+                ${LocalTime.now()}
+            </div>
+        </div>
+        <br>
+        <div>
+            new String ${String("new String")}
+        </div>
+        <br>
+        <div>
+            <div>lambda</div>
+            <div>
+                ${plus = (x,y) -> x + y}
+            </div>
+            <div>
+                ${plus(1,2)}
+            </div>
+            <div>
+                ${() -> plus(10,20) + plus(30,40)}
+            </div>
+        </div>
+        <br>
+        <div>
+            <div>lambda stream</div>
+            <div>
+                ${names = ["Justin","monica","Irene"]}
+            </div>
+            <div>
+                ${names.stream().filter(name -> name.length() == 5).toList()}
+            </div>
+        </div>
     </body>
 </html>
