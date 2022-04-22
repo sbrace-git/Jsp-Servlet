@@ -1,0 +1,26 @@
+body {
+    font-size: 13px;
+}
+
+li, td {
+    font-size: 13px;
+}
+
+hr {
+    color: #3333cc;
+    width: 300px;
+    text-align: left;
+}
+
+a {
+    color: #000000;
+}
+
+table {
+    background-color: #cccccc;
+}
+
+#login {
+    width: 250px;
+    float: left;
+}
