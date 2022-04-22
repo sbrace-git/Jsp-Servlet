@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = "/del_message",
         initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "index.html"),
+                @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
                 @WebInitParam(name = "MEMBER_PATH", value = "member")
         }
 )

@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 @WebServlet(urlPatterns = "/new_message",
         initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "index.html"),
+                @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
                 @WebInitParam(name = "MEMBER_PATH", value = "member")
         }
 )

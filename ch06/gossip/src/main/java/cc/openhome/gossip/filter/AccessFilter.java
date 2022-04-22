@@ -12,7 +12,7 @@ import java.io.IOException;
 @WebFilter(
         urlPatterns = {"/member", "/member.view", "/new_message", "/del_message", "/logout"},
         initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "index.html")
+                @WebInitParam(name = "LOGIN_PATH", value = "/gossip")
         }
 )
 public class AccessFilter extends HttpFilter {

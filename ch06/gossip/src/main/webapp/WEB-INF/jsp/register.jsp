@@ -48,6 +48,6 @@
                 </tr>
             </table>
         </form>
-        <a href='index.html'>返回首面</a>
+        <a href='/gossip'>返回首面</a>
     </body>
 </html>
