@@ -95,4 +95,20 @@
         <servlet-name>new_message</servlet-name>
         <url-pattern>/new_message</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>del_message</servlet-name>
+        <jsp-file>/WEB-INF/controller/del_message.jsp</jsp-file>
+        <init-param>
+            <param-name>LOGIN_PATH</param-name>
+            <param-value>/gossip</param-value>
+        </init-param>
+        <init-param>
+            <param-name>MEMBER_PATH</param-name>
+            <param-value>member</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>del_message</servlet-name>
+        <url-pattern>/del_message</url-pattern>
+    </servlet-mapping>
 </web-app>
