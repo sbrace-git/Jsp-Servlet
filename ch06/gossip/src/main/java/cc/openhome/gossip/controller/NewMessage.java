@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(urlPatterns = "/new_message",
-        initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
-                @WebInitParam(name = "MEMBER_PATH", value = "member")
-        }
-)
+//@WebServlet(urlPatterns = "/new_message",
+//        initParams = {
+//                @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
+//                @WebInitParam(name = "MEMBER_PATH", value = "member")
+//        }
+//)
 public class NewMessage extends HttpServlet {
 
     private String MEMBER_PATH;
