@@ -12,12 +12,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@WebServlet(urlPatterns = "/del_message",
-        initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
-                @WebInitParam(name = "MEMBER_PATH", value = "member")
-        }
-)
+//@WebServlet(urlPatterns = "/del_message",
+//        initParams = {
+//                @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
+//                @WebInitParam(name = "MEMBER_PATH", value = "member")
+//        }
+//)
 public class DeleteMessage extends HttpServlet {
 
     private String MEMBER_PATH;
