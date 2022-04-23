@@ -111,4 +111,16 @@
         <servlet-name>del_message</servlet-name>
         <url-pattern>/del_message</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>user</servlet-name>
+        <jsp-file>/WEB-INF/controller/user.jsp</jsp-file>
+        <init-param>
+            <param-name>USER_PATH</param-name>
+            <param-value>/WEB-INF/jsp/user.jsp</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>user</servlet-name>
+        <url-pattern>/user/*</url-pattern>
+    </servlet-mapping>
 </web-app>
