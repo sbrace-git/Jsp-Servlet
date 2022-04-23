@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet(urlPatterns = "/login",
-        initParams = {
-                @WebInitParam(name = "SUCCESS_PATH", value = "member"),
-                @WebInitParam(name = "LOGIN_PATH", value = "/WEB-INF/jsp/index.jsp")
-        }
-)
+//@WebServlet(urlPatterns = "/login",
+//        initParams = {
+//                @WebInitParam(name = "SUCCESS_PATH", value = "member"),
+//                @WebInitParam(name = "LOGIN_PATH", value = "/WEB-INF/jsp/index.jsp")
+//        }
+//)
 public class Login extends HttpServlet {
 
     private String SUCCESS_PATH;

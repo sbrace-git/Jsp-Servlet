@@ -75,5 +75,7 @@
         doGet(request,response);
     } else if ("POST".equals(method)) {
         doPost(request,response);
+    } else {
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 %>
