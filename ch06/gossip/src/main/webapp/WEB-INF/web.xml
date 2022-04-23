@@ -14,6 +14,7 @@
             <default-content-type>text/html</default-content-type>
         </jsp-property-group>
     </jsp-config>
+
     <servlet>
         <servlet-name>index</servlet-name>
         <jsp-file>/WEB-INF/controller/index.jsp</jsp-file>
@@ -21,5 +22,21 @@
     <servlet-mapping>
         <servlet-name>index</servlet-name>
         <url-pattern/>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>register</servlet-name>
+        <jsp-file>/WEB-INF/controller/register.jsp</jsp-file>
+        <init-param>
+            <param-name>SUCCESS_PATH</param-name>
+            <param-value>/WEB-INF/jsp/register_success.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>FORM_PATH</param-name>
+            <param-value>/WEB-INF/jsp/register.jsp</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>register</servlet-name>
+        <url-pattern>/register</url-pattern>
     </servlet-mapping>
 </web-app>

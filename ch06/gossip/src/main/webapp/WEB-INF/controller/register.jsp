@@ -1,31 +1,8 @@
-package cc.openhome.gossip.controller;
-
-import cc.openhome.gossip.service.UserService;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Pattern;
-
-
-//@WebServlet(urlPatterns = "/register",
-//        initParams = {
-//                @WebInitParam(name = "SUCCESS_PATH", value = "/WEB-INF/jsp/register_success.jsp"),
-//                @WebInitParam(name = "FORM_PATH", value = "/WEB-INF/jsp/register.jsp")
-//        }
-//)
-public class Register extends HttpServlet {
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="cc.openhome.gossip.service.UserService" %>
+<%@ page import="java.io.IOException" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %><%!
     private final static Pattern emailRegex = Pattern.compile(
             "^[_a-z0-9-]+([.][_a-z0-9-]+)*@[a-z0-9-]+([.][a-z0-9-]+)*$");
 
@@ -38,18 +15,30 @@ public class Register extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() {
-        SUCCESS_PATH = getInitParameter("SUCCESS_PATH");
-        FORM_PATH = getInitParameter("FORM_PATH");
-        userService = (UserService) getServletContext().getAttribute("userService");
+    public void jspInit() {
+        ServletConfig servletConfig = getServletConfig();
+        SUCCESS_PATH = servletConfig.getInitParameter("SUCCESS_PATH");
+        FORM_PATH = servletConfig.getInitParameter("FORM_PATH");
+        userService = (UserService) servletConfig.getServletContext().getAttribute("userService");
+    }
+    private boolean validateEmail(String email) {
+        return email != null && emailRegex.matcher(email).find();
     }
 
-    @Override
+    private boolean validateUsername(String username) {
+        return username != null && usernameRegex.matcher(username).find();
+    }
+
+    private boolean validatePassword(String password, String password2) {
+        return password != null &&
+                passwdRegex.matcher(password).find() &&
+                password.equals(password2);
+    }
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher(FORM_PATH).forward(req,resp);
     }
 
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String username = req.getParameter("username");
@@ -78,17 +67,13 @@ public class Register extends HttpServlet {
         req.getRequestDispatcher(path).forward(req, resp);
     }
 
-    private boolean validateEmail(String email) {
-        return email != null && emailRegex.matcher(email).find();
-    }
+%>
 
-    private boolean validateUsername(String username) {
-        return username != null && usernameRegex.matcher(username).find();
+<%
+    String method = request.getMethod();
+    if ("GET".equals(method)) {
+        doGet(request,response);
+    } else if ("POST".equals(method)) {
+        doPost(request,response);
     }
-
-    private boolean validatePassword(String password, String password2) {
-        return password != null &&
-                passwdRegex.matcher(password).find() &&
-                password.equals(password2);
-    }
-}
+%>
