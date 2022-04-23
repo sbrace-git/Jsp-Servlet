@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/member",
-        initParams = {
-                @WebInitParam(name = "MEMBER_PATH", value = "/WEB-INF/jsp/member.jsp")
-        }
-)
+//@WebServlet(urlPatterns = "/member",
+//        initParams = {
+//                @WebInitParam(name = "MEMBER_PATH", value = "/WEB-INF/jsp/member.jsp")
+//        }
+//)
 public class Member extends HttpServlet {
 
     private String MEMBER_PATH;
