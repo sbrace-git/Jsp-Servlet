@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/logout",
-        initParams = {
-                @WebInitParam(name = "LOGIN_PATH", value = "/gossip")
-        }
-)
+//@WebServlet(urlPatterns = "/logout",
+//        initParams = {
+//                @WebInitParam(name = "LOGIN_PATH", value = "/gossip")
+//        }
+//)
 public class Logout extends HttpServlet {
 
     private String LOGIN_PATH;
