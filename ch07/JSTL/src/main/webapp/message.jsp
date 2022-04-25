@@ -42,8 +42,8 @@
             ${lang}<br>
         </c:forEach>
         <hr>
-<%--        <c:forEach items="Java:C++:C:JavaScript" var="lang" delims=":">--%>
-<%--            ${lang}<br>--%>
-<%--        </c:forEach>--%>
+        <c:forTokens items="Java:C++:C:JavaScript" var="lang" delims=":">
+            ${lang}<br>
+        </c:forTokens>
     </body>
 </html>
