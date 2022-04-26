@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 public class Hello {
     public static void main(String[] args) {
         // native2ascii -encoding UTF-8 .\messages.properties .\1.properties
+        // native2ascii -reverse -encoding UTF-8 .\1.properties 2.properties
         ResourceBundle messages = ResourceBundle.getBundle("messages");
         String welcome = messages.getString("cc.openhome.welcome");
         String name = messages.getString("cc.openhome.name");
