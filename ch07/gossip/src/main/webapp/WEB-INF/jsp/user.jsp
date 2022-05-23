@@ -1,5 +1,4 @@
-<%@ page import="cc.openhome.gossip.model.Message" %>
-<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -22,21 +21,16 @@
             </tr>
             </thead>
             <tbody>
-            <%
-                List<Message> messages = (List<Message>) request.getAttribute("messages");
-                for (Message message : messages) {
-            %>
-            <tr>
-                <td style="vertical-align: top;">
-                    <%= message.getUsername()%><br>
-                    <%= message.getBlabla()%><br>
-                    <%= message.getLocalDateTime()%>
-                    <hr>
-                </td>
-            </tr>
-            <%
-                }
-            %>
+                <c:forEach var="message" items="${requestScope.messages}">
+                    <tr>
+                        <td style="vertical-align: top;">
+                                ${message.username}<br>
+                                ${message.blabla}<br>
+                                ${message.localDateTime}
+                            <hr>
+                        </td>
+                    </tr>
+                </c:forEach>
             </tbody>
         </table>
     </body>
