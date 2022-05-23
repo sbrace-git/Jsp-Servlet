@@ -1,10 +1,10 @@
-<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>首页</title>
+        <title>Gossip 微博</title>
         <link ref="stylesheet" href="css/gossip.css" type="text/css">
     </head>
     <body>
@@ -13,22 +13,13 @@
                 <img src="image/caterpillar.jpg" alt="gossip">
             </div>
             <a href="register">还不是会员？</a>
-            <%
-                List<String> errors = (List<String>) request.getAttribute("errors");
-                if (null != errors) {
-            %>
-            <ul style="color:rgb(255,0,0);">
-                <%
-                    for (String error : errors) {
-                %>
-                <li><%= error%></li>
-                <%
-                    }
-                %>
-            </ul>
-            <%
-                }
-            %>
+            <c:if test="${not empty requestScope.errors}">
+                <ul style="color:rgb(255,0,0);">
+                    <c:forEach var="error" items="${requestScope.errors}">
+                        <li>${error}</li>
+                    </c:forEach>
+                </ul>
+            </c:if>
             <form action="login" method="post">
                 <table>
                     <tr>
