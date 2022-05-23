@@ -1,4 +1,4 @@
-<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <html>
@@ -9,22 +9,13 @@
     </head>
     <body>
         <h1>会员申请</h1>
-        <%
-            List<String> errors = (List<String>) request.getAttribute("errors");
-            if (null != errors) {
-        %>
-        <ul style="color:rgb(255,0,0);">
-            <%
-                for (String error : errors) {
-            %>
-            <li><%= error%></li>
-            <%
-                }
-            %>
-        </ul>
-        <%
-            }
-        %>
+        <c:if test="${not empty requestScope.errors}">
+            <c:forEach var="error" items="${requestScope.errors}">
+                <ul style="color:rgb(255,0,0);">
+                    <li> ${error} </li>
+                </ul>
+            </c:forEach>
+        </c:if>
         <form action="register" method="post">
             <table>
                 <tr>
