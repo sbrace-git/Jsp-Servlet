@@ -1,87 +1,73 @@
 package cc.openhome.gossip.service;
 
+import cc.openhome.gossip.dao.AccountDao;
+import cc.openhome.gossip.dao.MessageDao;
+import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.model.Message;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 public class UserService {
-    private final String USERS;
 
-    public UserService(String users) {
-        this.USERS = users;
+    private final AccountDao accountDao;
+    private final MessageDao messageDao;
+
+    public UserService(AccountDao accountDao, MessageDao messageDao) {
+        this.accountDao = accountDao;
+        this.messageDao = messageDao;
+    }
+
+    public boolean userExist(String username) {
+        return accountDao.getAccountByName(username).isPresent();
     }
 
     public void tryCreateUser(String email, String username, String password) throws IOException {
-        Path userHome = Paths.get(USERS, username);
-        if (Files.notExists(userHome)) {
-            createUser(userHome, email, password);
+        if (!accountDao.getAccountByName(username).isPresent()) {
+            createUser(username, email, password);
         }
     }
 
-    private void createUser(Path userHome, String email, String password) throws IOException {
-        Files.createDirectories(userHome);
+    private void createUser(String username, String email, String password) throws IOException {
         int salt = ThreadLocalRandom.current().nextInt();
         String encrypt = String.valueOf(salt + password.hashCode());
-        Path profile = userHome.resolve("profile");
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(profile);) {
-            bufferedWriter.write(String.format("%s\t%s\t%d", email, encrypt, salt));
-        }
+        Account account = new Account();
+        account.setName(username);
+        account.setEmail(email);
+        account.setSalt(String.valueOf(salt));
+        account.setPassword(encrypt);
+        accountDao.createAccount(account);
     }
 
     public boolean login(String username, String password) throws IOException {
-        if (username != null && username.trim().length() != 0) {
-            Path userHome = Paths.get(USERS, username);
-            return Files.exists(userHome) && isCorrectPassword(password, userHome);
+        if (username == null || username.trim().length() == 0) {
+            return false;
+        }
+        Optional<Account> accountByName = accountDao.getAccountByName(username);
+        if (accountByName.isPresent()) {
+            Account account = accountByName.get();
+            int encrypt = Integer.parseInt(account.getPassword());
+            int salt = Integer.parseInt(account.getSalt());
+            return password.hashCode() + salt == encrypt;
         }
         return false;
     }
 
-    private boolean isCorrectPassword(String password, Path userHome) throws IOException {
-        Path profile = userHome.resolve("profile");
-        try (BufferedReader bufferedReader = Files.newBufferedReader(profile)) {
-            String[] data = bufferedReader.readLine().split("\t");
-            int encrypt = Integer.parseInt(data[1]);
-            int salt = Integer.parseInt(data[2]);
-            return password.hashCode() + salt == encrypt;
-        }
-    }
 
     public List<Message> messages(String username) {
-        Path userHome = Paths.get(USERS, username);
-        List<Message> messages = new ArrayList<>();
-        try (DirectoryStream<Path> txts = Files.newDirectoryStream(userHome, "*.txt")) {
-            for (Path txt : txts) {
-                String millis = txt.getFileName().toString().replace(".txt", "");
-                String blabla = Files.readAllLines(txt).stream().collect(Collectors.joining(System.lineSeparator()));
-                messages.add(new Message(username, Long.valueOf(millis), blabla));
-            }
-            messages.sort(Comparator.comparing(Message::getMillis).reversed());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return messages;
+        return messageDao.getMessageByUsername(username);
     }
 
     public void addMessage(String username, String blabla) {
-        Path txt = Paths.get(USERS, username, String.format("%s.txt", System.currentTimeMillis()));
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(txt)) {
-            bufferedWriter.write(blabla);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Message message = new Message();
+        message.setUsername(username);
+        message.setBlabla(blabla);
+        messageDao.createMessage(message);
     }
 
     public void deleteMessage(String username, String millis) throws IOException {
-        Path txt = Paths.get(USERS, username, String.format("%s.txt", millis));
-        Files.delete(txt);
+        messageDao.deleteMessage(username, Long.valueOf(millis));
     }
 }
