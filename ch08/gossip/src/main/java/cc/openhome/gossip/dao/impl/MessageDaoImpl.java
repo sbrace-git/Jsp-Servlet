@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.Paths;import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +43,7 @@ public class MessageDaoImpl implements MessageDao {
     public void createMessage(Message message) {
         String username = message.getUsername();
         String blabla = message.getBlabla();
-        Path txt = Paths.get(USERS, username, String.format("%s.txt", System.currentTimeMillis()));
+        Path txt = Paths.get(USERS, username, String.format("%s.txt", Instant.now().toEpochMilli()));
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(txt)) {
             bufferedWriter.write(blabla);
         } catch (Exception e) {

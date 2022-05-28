@@ -42,9 +42,6 @@ public class UserService {
     }
 
     public boolean login(String username, String password) throws IOException {
-        if (username == null || username.trim().length() == 0) {
-            return false;
-        }
         Optional<Account> accountByName = accountDao.getAccountByName(username);
         if (accountByName.isPresent()) {
             Account account = accountByName.get();
