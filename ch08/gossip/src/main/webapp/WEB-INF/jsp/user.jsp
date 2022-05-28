@@ -21,16 +21,37 @@
             </tr>
             </thead>
             <tbody>
-                <c:forEach var="message" items="${requestScope.messages}">
-                    <tr>
-                        <td style="vertical-align: top;">
-                                ${message.username}<br>
-                                ${message.blabla}<br>
-                                ${message.localDateTime}
-                            <hr>
-                        </td>
-                    </tr>
-                </c:forEach>
+            <c:choose>
+                <c:when test="${not empty requestScope.errors}">
+                    <ul>
+                        <c:forEach var="error" items="${requestScope.errors}">
+                            <li>${error}</li>
+                        </c:forEach>
+                    </ul>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="message" items="${requestScope.messages}">
+                        <tr>
+                            <td style="vertical-align: top;">
+                                    ${message.username}<br>
+                                    ${message.blabla}<br>
+                                    ${message.localDateTime}
+                                <hr>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+            <c:forEach var="message" items="${requestScope.messages}">
+                <tr>
+                    <td style="vertical-align: top;">
+                            ${message.username}<br>
+                            ${message.blabla}<br>
+                            ${message.localDateTime}
+                        <hr>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
     </body>
