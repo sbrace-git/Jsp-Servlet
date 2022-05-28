@@ -37,6 +37,9 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Optional<Account> getAccountByName(String name) {
+        if (name == null || name.length() == 0) {
+            return Optional.empty();
+        }
         Path userHome = Paths.get(USERS, name);
         if (Files.notExists(userHome)) {
             return Optional.empty();
