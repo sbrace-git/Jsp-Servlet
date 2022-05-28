@@ -23,7 +23,7 @@
             List<Message> messages = userService.messages(username);
             req.setAttribute("messages", messages);
         } else {
-            req.setAttribute("errors", Collections.singletonList("%s, 还没有发表信息"));
+            req.setAttribute("errors", Collections.singletonList(String.format("%s, 还没有发表信息", username)));
         }
         req.getRequestDispatcher(USER_PATH).forward(req, resp);
     }

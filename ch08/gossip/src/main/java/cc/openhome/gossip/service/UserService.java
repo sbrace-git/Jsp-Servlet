@@ -67,7 +67,7 @@ public class UserService {
         messageDao.createMessage(message);
     }
 
-    public void deleteMessage(String username, String millis) throws IOException {
+    public void deleteMessage(String username, String millis) {
         messageDao.deleteMessage(username, Long.valueOf(millis));
     }
 }
