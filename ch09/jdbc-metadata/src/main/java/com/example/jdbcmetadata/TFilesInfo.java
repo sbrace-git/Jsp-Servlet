@@ -14,7 +14,7 @@ public class TFilesInfo {
         String user = "sa";
         String password = "";
         String querySql = "select * from t_message";
-        String insert = "insert into t_message values (4,'justin','justin@mail.com','message...')";
+        String insert = "insert into t_message(name,email,msg) values ('justin','justin@mail.com','message...')";
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement statement = connection.createStatement()) {
             if (statement.execute(insert)) {
