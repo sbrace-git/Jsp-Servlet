@@ -1,10 +1,7 @@
 package com.example.jdbcmetadata;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +18,17 @@ public class GuestBookBean implements Serializable {
     private String url = "jdbc:h2:D:\\server\\H2\\data\\test";
     private String user = "sa";
     private String password = "";
+    private static final String insertSql =
+            "insert into t_message(name,email,msg) values (?,?,?)";
 
     public void addMessage(Message message) {
         try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate("insert into t_message(name,email,msg) values (" +
-                    "'" + message.getName() +
-                    "','" + message.getEmail() +
-                    "','" + message.getMsg() +
-                    "'" +
-                    ")");
+             PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
+            preparedStatement.setString(1, message.getName());
+            preparedStatement.setString(2, message.getEmail());
+            preparedStatement.setString(3, message.getMsg());
+            int update = preparedStatement.executeUpdate();
+            System.out.println("update = " + update);
         } catch (Exception e) {
             e.printStackTrace();
         }
