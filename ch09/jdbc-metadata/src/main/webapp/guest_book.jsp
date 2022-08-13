@@ -16,7 +16,7 @@
     <body>
         <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
             <tbody>
-            <c:forEach var="message" items="${guestbook.messages}">
+            <c:forEach var="message" items="${guestbook.messageList(param.searchName)}">
                 <tr>
                     <td>${message.name}</td>
                     <td>${message.email}</td>

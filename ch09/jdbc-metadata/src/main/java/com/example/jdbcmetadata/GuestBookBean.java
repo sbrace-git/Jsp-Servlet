@@ -1,5 +1,7 @@
 package com.example.jdbcmetadata;
 
+import org.h2.util.StringUtils;
+
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class GuestBookBean implements Serializable {
     private String password = "";
     private static final String insertSql =
             "insert into t_message(name,email,msg) values (?,?,?)";
+    private static final String querySql = "select * from t_message";
 
     public void addMessage(Message message) {
         try (Connection connection = DriverManager.getConnection(url, user, password);
@@ -27,6 +30,7 @@ public class GuestBookBean implements Serializable {
             preparedStatement.setString(1, message.getName());
             preparedStatement.setString(2, message.getEmail());
             preparedStatement.setString(3, message.getMsg());
+            System.out.println(preparedStatement);
             int update = preparedStatement.executeUpdate();
             System.out.println("update = " + update);
         } catch (Exception e) {
@@ -34,10 +38,19 @@ public class GuestBookBean implements Serializable {
         }
     }
 
-    public List<Message> getMessages() {
+
+    public List<Message> messageList(String searchName) {
+        String sql = querySql;
+        if (!StringUtils.isNullOrEmpty(searchName)) {
+            sql = querySql + " where name = ?";
+        }
         try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement();) {
-            ResultSet resultSet = statement.executeQuery("select * from t_message");
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+            if (!StringUtils.isNullOrEmpty(searchName)) {
+                preparedStatement.setString(1,searchName);
+            }
+            System.out.println(preparedStatement);
+            ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Message> messages = new ArrayList<>();
             while (resultSet.next()) {
                 Message message = new Message();
