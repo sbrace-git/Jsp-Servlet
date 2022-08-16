@@ -11,6 +11,7 @@ public class GuestBookBean implements Serializable {
 
     public GuestBookBean() {
         try {
+            System.out.println("class load");
             Class.forName("org.h2.Driver");
         } catch (Exception e) {
             e.printStackTrace();
