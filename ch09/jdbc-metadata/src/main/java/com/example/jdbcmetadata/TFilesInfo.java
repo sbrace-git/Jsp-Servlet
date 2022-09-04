@@ -23,32 +23,64 @@ public class TFilesInfo {
                 "    msg   varchar(256) not null\n" +
                 ");";
         try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement()) {
-            if (statement.execute(insert)) {
-                System.out.println("execute return true");
-            } else {
-                int updateCount = statement.getUpdateCount();
-                System.out.printf("updateCount = %d\n", updateCount);
-            }
+             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+//            if (statement.execute(insert)) {
+//                System.out.println("execute return true");
+//            } else {
+//                int updateCount = statement.getUpdateCount();
+//                System.out.printf("updateCount = %d\n", updateCount);
+//            }
 
-            if (statement.execute(querySql)) {
-                try (ResultSet resultSet = statement.getResultSet()) {
-                    while (resultSet.next()) {
-                        int id = resultSet.getInt("id");
-                        String name = resultSet.getString("name");
-                        String email = resultSet.getString("email");
-                        String msg = resultSet.getString("msg");
-                        System.out.printf("id = %d\n", id);
-                        System.out.printf("name = %s\n", name);
-                        System.out.printf("email = %s\n", email);
-                        System.out.printf("msg = %s\n", msg);
-                    }
-                }
-            } else {
-                int updateCount = statement.getUpdateCount();
-                System.out.printf("updateCount = %d\n", updateCount);
+            try (ResultSet resultSet = statement.executeQuery(querySql)) {
+                /**
+                 * query
+                 */
+//                    while (resultSet.next()) {
+//                        try {
+//                            Thread.sleep(1000);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        int id = resultSet.getInt("id");
+//                        String name = resultSet.getString("name");
+//                        String email = resultSet.getString("email");
+//                        String msg = resultSet.getString("msg");
+//                        System.out.printf("id = %d\t", id);
+//                        System.out.printf("name = %s\t", name);
+//                        System.out.printf("email = %s\t", email);
+//                        System.out.printf("msg = %s\n", msg);
+//                    }
+
+                /**
+                 * cursor
+                 */
+//                resultSet.first();
+//                int lastRowNumber = resultSet.getRow();
+//                System.out.printf("lastRowNumber = %d%n", lastRowNumber);
+
+//                    resultSet.absolute(2);
+//                    resultSet.next();
+//                    resultSet.relative(-1);
+
+//                boolean first = resultSet.isFirst();
+//                System.out.printf("first = %b%n", first);
+//                boolean last = resultSet.isLast();
+//                System.out.printf("last = %b%n", last);
+//                boolean beforeFirst = resultSet.isBeforeFirst();
+//                System.out.printf("beforeFirst = %b%n", beforeFirst);
+//                boolean afterLast = resultSet.isAfterLast();
+//                System.out.printf("afterLast = %b%n", afterLast);
+//
+//                int id = resultSet.getInt("id");
+//                String name = resultSet.getString("name");
+//                String email = resultSet.getString("email");
+//                String msg = resultSet.getString("msg");
+//                System.out.printf("id = %d\t", id);
+//                System.out.printf("name = %s\t", name);
+//                System.out.printf("email = %s\t", email);
+//                System.out.printf("msg = %s\n", msg);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
