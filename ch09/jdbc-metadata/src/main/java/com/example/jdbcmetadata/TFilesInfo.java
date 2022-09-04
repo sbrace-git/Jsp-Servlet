@@ -10,7 +10,12 @@ public class TFilesInfo {
             e.printStackTrace();
         }
 
-        String url = "jdbc:h2:D:\\server\\H2\\data\\test";
+        // java -jar h2-2.1.214.jar -webAllowOthers -tcpAllowOthers
+        // -tcpPort change port
+        // Web Console server running at http://a.b.c.d:8082 (others can connect)
+        // TCP server running at tcp://a.b.c.d:9092 (others can connect)
+        // PG server running at pg://a.b.c.d:5435 (only local connections)
+        String url = "jdbc:h2:tcp://localhost:9092/D:/server/H2/data/test";
         String user = "sa";
         String password = "";
         String querySql = "select * from t_message";
