@@ -29,6 +29,17 @@ public class TFilesInfo {
                 ");";
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+
+            DatabaseMetaData metaData = connection.getMetaData();
+            boolean supportsResultSetTypeScrollSensitive = metaData.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+            System.out.printf("supportsResultSetTypeScrollSensitive = %b%n", supportsResultSetTypeScrollSensitive);
+
+            boolean supportsResultSetTypeScrollInSensitive = metaData.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+            System.out.printf("supportsResultSetTypeScrollInSensitive = %b%n", supportsResultSetTypeScrollInSensitive);
+
+            boolean supportsResultSetConcurrency = metaData.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            System.out.printf("supportsResultSetConcurrency = %b%n", supportsResultSetConcurrency);
+
 //            if (statement.execute(insert)) {
 //                System.out.println("execute return true");
 //            } else {

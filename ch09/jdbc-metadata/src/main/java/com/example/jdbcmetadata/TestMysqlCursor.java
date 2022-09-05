@@ -1,9 +1,6 @@
 package com.example.jdbcmetadata;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class TestMysqlCursor {
     public static void main(String[] args) {
@@ -27,6 +24,15 @@ public class TestMysqlCursor {
                 ");";
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            DatabaseMetaData metaData = connection.getMetaData();
+            boolean supportsResultSetTypeScrollSensitive = metaData.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+            System.out.printf("supportsResultSetTypeScrollSensitive = %b%n", supportsResultSetTypeScrollSensitive);
+
+            boolean supportsResultSetTypeScrollInSensitive = metaData.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+            System.out.printf("supportsResultSetTypeScrollInSensitive = %b%n", supportsResultSetTypeScrollInSensitive);
+
+            boolean supportsResultSetConcurrency = metaData.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            System.out.printf("supportsResultSetConcurrency = %b%n", supportsResultSetConcurrency);
 
             System.out.printf("statementFetchSize = %d%n", statement.getFetchSize());
             statement.setFetchSize(10);
