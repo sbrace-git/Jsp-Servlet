@@ -1,11 +1,11 @@
 package com.example.jdbcmetadata;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class BlobTest {
     public static void main(String[] args) {
@@ -20,6 +20,8 @@ public class BlobTest {
         String insert = "insert into image (file_name, create_time, bytes) values(?, now(), ?)";
         Path path = Paths.get("D:\\common\\temp\\text.txt");
         String fileName = path.getFileName().toString();
+        String query = "select * from image";
+        Path outPutPath = Paths.get("D:\\common\\temp\\files");
 
         /**
          * CREATE TABLE `image` (
@@ -31,12 +33,19 @@ public class BlobTest {
          * )
          */
         try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
-            preparedStatement.setString(1, fileName);
-            preparedStatement.setBlob(2, Files.newInputStream(path));
-            int updateCount = preparedStatement.executeUpdate();
+             PreparedStatement insertPreparedStatement = connection.prepareStatement(insert);
+             PreparedStatement queryPreparedStatement = connection.prepareStatement(query)) {
+            insertPreparedStatement.setString(1, fileName);
+            insertPreparedStatement.setBlob(2, Files.newInputStream(path));
+            int updateCount = insertPreparedStatement.executeUpdate();
             System.out.printf("updateCount = %d%n", updateCount);
             // updateCount = 1
+            ResultSet resultSet = queryPreparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String fileNameItem = resultSet.getString("file_name");
+                InputStream bytes = resultSet.getBinaryStream("bytes");
+                Files.copy(bytes, outPutPath.resolve(fileNameItem), StandardCopyOption.REPLACE_EXISTING);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
