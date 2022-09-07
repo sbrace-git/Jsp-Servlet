@@ -34,6 +34,9 @@ public class UpdateResultSet {
             System.out.printf("supportsResultSetConcurrency = %b%n", supportsResultSetConcurrency);
 
             try (ResultSet resultSet = statement.executeQuery(querySql)) {
+                /**
+                 * insert
+                 */
                 resultSet.moveToInsertRow();
                 resultSet.updateString("name","insert_name");
                 resultSet.updateString("email","insert_email");
@@ -49,9 +52,18 @@ public class UpdateResultSet {
                     System.out.printf("name = %s\t", name);
                     System.out.printf("email = %s\t", email);
                     System.out.printf("msg = %s\n", msg);
+                    /**
+                     * update
+                     */
                     if (6 == id) {
                         resultSet.updateString("email", "new_email");
                         resultSet.updateRow();
+                    }
+                    /**
+                     * delete
+                     */
+                    if (3 == id) {
+                        resultSet.deleteRow();
                     }
                 }
             }
