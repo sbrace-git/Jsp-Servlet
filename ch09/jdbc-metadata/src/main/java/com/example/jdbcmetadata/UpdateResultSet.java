@@ -34,6 +34,12 @@ public class UpdateResultSet {
             System.out.printf("supportsResultSetConcurrency = %b%n", supportsResultSetConcurrency);
 
             try (ResultSet resultSet = statement.executeQuery(querySql)) {
+                resultSet.moveToInsertRow();
+                resultSet.updateString("name","insert_name");
+                resultSet.updateString("email","insert_email");
+                resultSet.updateString("msg","insert_msg");
+                resultSet.insertRow();
+                resultSet.moveToCurrentRow();
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
                     String name = resultSet.getString("name");
