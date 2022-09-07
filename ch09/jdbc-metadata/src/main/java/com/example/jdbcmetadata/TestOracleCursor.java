@@ -23,7 +23,7 @@ public class TestOracleCursor {
          * NOCYCLE
          * NOCACHE;
          */
-        String sequenceDml = "CREATE SEQUENCE T_MESSAGE_ID_SEQ\n" +
+        String sequenceDdl = "CREATE SEQUENCE T_MESSAGE_ID_SEQ\n" +
                 "INCREMENT BY 1\n" +
                 "START WITH 1\n" +
                 "MAXVALUE 999999999\n" +
@@ -38,11 +38,11 @@ public class TestOracleCursor {
          *     msg   varchar(256) not null
          * );
          */
-        String createTableDml = "create table t_message\n" +
+        String createTableDdl = "create table t_message\n" +
                 "(\n" +
                 "    id    int          not null primary key,\n" +
-                "    name  char(20)     not null,\n" +
-                "    email char(40),\n" +
+                "    name  varchar(20)     not null,\n" +
+                "    email varchar(40),\n" +
                 "    msg   varchar(256) not null\n" +
                 ")";
 
@@ -63,18 +63,18 @@ public class TestOracleCursor {
             statement.setFetchSize(1);
             System.out.printf("statementFetchSize = %d%n", statement.getFetchSize());
 
-//            if (statement.execute(sequenceDml)) {
-//                System.out.println("execute sequenceDml return true");
+//            if (statement.execute(sequenceDdl)) {
+//                System.out.println("execute sequenceDdl return true");
 //            } else {
 //                int updateCount = statement.getUpdateCount();
-//                System.out.printf("sequenceDml updateCount = %d\n", updateCount);
+//                System.out.printf("sequenceDdl updateCount = %d\n", updateCount);
 //            }
 //
-//            if (statement.execute(createTableDml)) {
-//                System.out.println("execute createTableDml return true");
+//            if (statement.execute(createTableDdl)) {
+//                System.out.println("execute createTableDdl return true");
 //            } else {
 //                int updateCount = statement.getUpdateCount();
-//                System.out.printf("createTableDml updateCount = %d\n", updateCount);
+//                System.out.printf("createTableDdl updateCount = %d\n", updateCount);
 //            }
 
 //            if (statement.execute(insert)) {

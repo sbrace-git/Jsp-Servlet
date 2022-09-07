@@ -15,11 +15,11 @@ public class TestMysqlCursor {
         String password = "1111";
         String querySql = "select * from t_message";
         String insert = "insert into t_message(name,email,msg) values ('justin','justin@mail.com','message...')";
-        String dml = "create table t_message\n" +
+        String ddl = "create table t_message\n" +
                 "(\n" +
                 "    id    int          not null auto_increment primary key,\n" +
-                "    name  char(20)     not null,\n" +
-                "    email char(40),\n" +
+                "    name  varchar(20)     not null,\n" +
+                "    email varchar(40),\n" +
                 "    msg   varchar(256) not null\n" +
                 ");";
         try (Connection connection = DriverManager.getConnection(url, user, password);
