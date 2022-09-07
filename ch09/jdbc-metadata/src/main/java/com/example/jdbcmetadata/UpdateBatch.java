@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 public class UpdateBatch {
     public static void main(String[] args) {
         try {
-            Class.forName("org.h2.Driver");
+//            Class.forName("org.h2.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
             e.printStackTrace();
         }
