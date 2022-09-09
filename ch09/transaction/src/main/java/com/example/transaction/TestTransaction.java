@@ -57,15 +57,19 @@ public class TestTransaction {
                 throw new RuntimeException(e);
             }
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (Exception e) {
             e.printStackTrace();
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                ex.printStackTrace();
             }
         } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             try {
                 connection.close();
             } catch (SQLException e) {
