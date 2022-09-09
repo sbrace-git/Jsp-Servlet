@@ -1,9 +1,6 @@
 package com.example.transaction;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class TestTransaction {
     public static void main(String[] args) {
@@ -19,6 +16,7 @@ public class TestTransaction {
 
         String insert = "insert into t_message (name,email,msg) values ('name','email','msg....')";
         Connection connection;
+        Savepoint savepoint = null;
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
@@ -50,9 +48,11 @@ public class TestTransaction {
 
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(insert);
+                savepoint = connection.setSavepoint();
+
                 statement.executeUpdate(insert);
                 statement.executeUpdate(insert);
-//                int test = 1 / 0;
+                int test = 1 / 0;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -60,7 +60,12 @@ public class TestTransaction {
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                connection.rollback();
+                if (null == savepoint) {
+                    connection.rollback();
+                } else {
+                    connection.rollback(savepoint);
+                    connection.releaseSavepoint(savepoint);
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
