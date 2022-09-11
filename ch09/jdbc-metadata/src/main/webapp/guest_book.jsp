@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set target="${pageContext.request}" property="characterEncoding" value="UTF-8"/>
-<jsp:useBean id="guestbook" class="com.example.jdbcmetadata.GuestBookBean" scope="application"/>
+<jsp:useBean id="guestbook" class="com.example.jdbcmetadata.GuestBookBeanRowSet" scope="application"/>
 <c:if test="${param.msg != null}">
     <jsp:useBean id="newMessage" class="com.example.jdbcmetadata.Message"/>
     <jsp:setProperty name="newMessage" property="*"/>
