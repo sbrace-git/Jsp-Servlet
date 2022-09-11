@@ -37,4 +37,14 @@ public class Message {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", msg='" + msg + '\'' +
+                '}';
+    }
 }
