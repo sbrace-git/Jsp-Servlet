@@ -3,9 +3,7 @@ package cc.openhome.gossip.listener;
 import cc.openhome.gossip.dao.AccountDao;
 import cc.openhome.gossip.dao.MessageDao;
 import cc.openhome.gossip.dao.impl.AccountDaoImpl;
-import cc.openhome.gossip.dao.impl.AccountDaoJdbcImpl;
 import cc.openhome.gossip.dao.impl.MessageDaoImpl;
-import cc.openhome.gossip.dao.impl.MessageDaoJdbcImpl;
 import cc.openhome.gossip.service.UserService;
 
 import javax.naming.Context;
@@ -31,12 +29,8 @@ public class ServiceContainer implements ServletContextListener {
             throw new RuntimeException(e);
         }
 
-//        final String USERS = servletContext.getInitParameter("USERS");
-//        AccountDaoImpl accountDao = new AccountDaoImpl(USERS);
-//        MessageDaoImpl messageDao = new MessageDaoImpl(USERS);
-
-        AccountDao accountDao = new AccountDaoJdbcImpl(dataSource);
-        MessageDao messageDao = new MessageDaoJdbcImpl(dataSource);
+        AccountDao accountDao = new AccountDaoImpl(dataSource);
+        MessageDao messageDao = new MessageDaoImpl(dataSource);
 
         servletContext.setAttribute("userService", new UserService(accountDao, messageDao));
     }

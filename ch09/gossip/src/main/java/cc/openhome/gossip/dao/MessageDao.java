@@ -12,4 +12,6 @@ public interface MessageDao {
 
     void deleteMessage(String username, Long millis);
 
+    List<Message> newMessageList();
+
 }

@@ -3,21 +3,23 @@ package cc.openhome.gossip.dao.impl;
 import cc.openhome.gossip.dao.AccountDao;
 import cc.openhome.gossip.model.Account;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Optional;
 
 public class AccountDaoImpl implements AccountDao {
 
-    private final String USERS;
+    private DataSource dataSource;
 
-    public AccountDaoImpl(String USERS) {
-        this.USERS = USERS;
+    public AccountDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
+
+    private static final String INSERT_ACCOUNT_SQL =
+            "insert into T_ACCOUNT (name, email, password, salt) values ( ?,?,?,? ) ";
 
     @Override
     public void createAccount(Account account) throws IOException {
@@ -25,39 +27,47 @@ public class AccountDaoImpl implements AccountDao {
         String email = account.getEmail();
         String password = account.getPassword();
         String salt = account.getSalt();
-        Path userHome = Paths.get(USERS, name);
-        Files.createDirectories(userHome);
-        Path profile = userHome.resolve("profile");
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(profile);) {
-            bufferedWriter.write(String.format("%s\t%s\t%s", email, password, salt));
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ACCOUNT_SQL)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, email);
+            preparedStatement.setString(3, password);
+            preparedStatement.setString(4, salt);
+            int i = preparedStatement.executeUpdate();
+            System.out.println("AccountDaoJdbcImpl createAccount executeUpdate result = " + i);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-
+    private static final String SELECT_ACCOUNT_BY_NAME_SQL =
+            "select name, email, password, salt from T_ACCOUNT where NAME = ? ";
 
     @Override
-    public Optional<Account> getAccountByName(String name) {
-        if (name == null || name.length() == 0) {
+    public Optional<Account> getAccountByName(String paramName) {
+        if (paramName == null || paramName.length() == 0) {
             return Optional.empty();
         }
-        Path userHome = Paths.get(USERS, name);
-        if (Files.notExists(userHome)) {
-            return Optional.empty();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACCOUNT_BY_NAME_SQL)) {
+            preparedStatement.setString(1, paramName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                String salt = resultSet.getString("salt");
+                Account account = new Account();
+                account.setName(name);
+                account.setEmail(email);
+                account.setPassword(password);
+                account.setSalt(salt);
+                return Optional.of(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Path profile = userHome.resolve("profile");
-        try (BufferedReader bufferedReader = Files.newBufferedReader(profile)) {
-            String[] data = bufferedReader.readLine().split("\t");
-            String email = data[0];
-            String password = data[1];
-            String salt = data[2];
-            Account account = new Account();
-            account.setName(name);
-            account.setEmail(email);
-            account.setPassword(password);
-            account.setSalt(salt);
-            return Optional.of(account);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Optional.empty();
     }
 }

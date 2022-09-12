@@ -3,61 +3,96 @@ package cc.openhome.gossip.dao.impl;
 import cc.openhome.gossip.dao.MessageDao;
 import cc.openhome.gossip.model.Message;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;import java.time.Instant;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MessageDaoImpl implements MessageDao {
 
-    private final String USERS;
+    private DataSource dataSource;
 
-    public MessageDaoImpl(String USERS) {
-        this.USERS = USERS;
+    public MessageDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
+
+    private static final String SELECT_MESSAGE_LIST = "select username, millis, blabla from T_MESSAGE where USERNAME = ? order by millis desc ";
 
     @Override
-    public List<Message> getMessageByUsername(String username) {
-        Path userHome = Paths.get(USERS, username);
-        List<Message> messages = new ArrayList<>();
-        try (DirectoryStream<Path> txts = Files.newDirectoryStream(userHome, "*.txt")) {
-            for (Path txt : txts) {
-                String millis = txt.getFileName().toString().replace(".txt", "");
-                String blabla = Files.readAllLines(txt).stream().collect(Collectors.joining(System.lineSeparator()));
-                messages.add(new Message(username, Long.valueOf(millis), blabla));
+    public List<Message> getMessageByUsername(String paramUsername) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MESSAGE_LIST)) {
+            preparedStatement.setString(1, paramUsername);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Message> messages = new ArrayList<>();
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                long millis = resultSet.getLong("millis");
+                String blabla = resultSet.getString("blabla");
+                messages.add(new Message(username, millis, blabla));
             }
-            messages.sort(Comparator.comparing(Message::getMillis).reversed());
+            return messages;
         } catch (Exception e) {
             e.printStackTrace();
+            return Collections.emptyList();
         }
-        return messages;
     }
+
+    private static final String INSERT_MESSAGE_SQL = "insert into T_MESSAGE (USERNAME, MILLIS, BLABLA) values ( ?,?,? )";
 
     @Override
     public void createMessage(Message message) {
         String username = message.getUsername();
         String blabla = message.getBlabla();
-        Path txt = Paths.get(USERS, username, String.format("%s.txt", Instant.now().toEpochMilli()));
-        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(txt)) {
-            bufferedWriter.write(blabla);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_MESSAGE_SQL)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setLong(2, System.currentTimeMillis());
+            preparedStatement.setString(3, blabla);
+            int i = preparedStatement.executeUpdate();
+            System.out.println("MessageDaoJdbcImpl createMessage insert result = " + i);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
+    private static final String DELETE_MESSAGE_SQL = "delete from T_MESSAGE where USERNAME = ? and MILLIS = ?";
+
     @Override
     public void deleteMessage(String username, Long millis) {
-        Path txt = Paths.get(USERS, username, String.format("%s.txt", millis));
-        try {
-            Files.delete(txt);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_MESSAGE_SQL)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setLong(2, millis);
+            int i = preparedStatement.executeUpdate();
+            System.out.println("MessageDaoJdbcImpl deleteMessage delete result = " + i);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String SELECT_NEW_MESSAGE_LIST = "select username, millis, blabla from T_MESSAGE order by millis desc limit 5";
+
+    @Override
+    public List<Message> newMessageList() {
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SELECT_NEW_MESSAGE_LIST);
+            ArrayList<Message> messages = new ArrayList<>();
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                long millis = resultSet.getLong("millis");
+                String blabla = resultSet.getString("blabla");
+                messages.add(new Message(username, millis, blabla));
+            }
+            return messages;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 }
