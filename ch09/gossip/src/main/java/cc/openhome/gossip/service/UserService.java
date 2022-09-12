@@ -67,4 +67,8 @@ public class UserService {
     public void deleteMessage(String username, String millis) {
         messageDao.deleteMessage(username, Long.valueOf(millis));
     }
+
+    public List<Message> newMessageList() {
+        return messageDao.newMessageList();
+    }
 }

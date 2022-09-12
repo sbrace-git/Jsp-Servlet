@@ -22,14 +22,6 @@
     </jsp-config>
 
     <servlet>
-        <servlet-name>index</servlet-name>
-        <jsp-file>/WEB-INF/controller/index.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>index</servlet-name>
-        <url-pattern/>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>register</servlet-name>
         <jsp-file>/WEB-INF/controller/register.jsp</jsp-file>
         <init-param>

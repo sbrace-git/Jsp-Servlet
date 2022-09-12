@@ -50,5 +50,26 @@
                 <li>随意谢谢表心情</li>
             </ul>
         </div>
+        <table style="background-color: #ffffff">
+            <thead>
+            <tr>
+                <th>
+                    <hr>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="message" items="${requestScope.newMessageList}">
+                <tr>
+                    <td style="vertical-align: top;">
+                            ${message.username}<br>
+                            ${message.blabla}<br>
+                            ${message.localDateTime}
+                        <hr>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </body>
 </html>
