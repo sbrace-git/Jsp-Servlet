@@ -21,18 +21,6 @@
         </jsp-property-group>
     </jsp-config>
     <servlet>
-        <servlet-name>member</servlet-name>
-        <jsp-file>/WEB-INF/controller/member.jsp</jsp-file>
-        <init-param>
-            <param-name>MEMBER_PATH</param-name>
-            <param-value>/WEB-INF/jsp/member.jsp</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>member</servlet-name>
-        <url-pattern>/member</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>new_message</servlet-name>
         <jsp-file>/WEB-INF/controller/new_message.jsp</jsp-file>
         <init-param>
