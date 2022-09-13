@@ -21,22 +21,6 @@
         </jsp-property-group>
     </jsp-config>
     <servlet>
-        <servlet-name>new_message</servlet-name>
-        <jsp-file>/WEB-INF/controller/new_message.jsp</jsp-file>
-        <init-param>
-            <param-name>LOGIN_PATH</param-name>
-            <param-value>/gossip</param-value>
-        </init-param>
-        <init-param>
-            <param-name>MEMBER_PATH</param-name>
-            <param-value>member</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>new_message</servlet-name>
-        <url-pattern>/new_message</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>user</servlet-name>
         <jsp-file>/WEB-INF/controller/user.jsp</jsp-file>
         <init-param>
