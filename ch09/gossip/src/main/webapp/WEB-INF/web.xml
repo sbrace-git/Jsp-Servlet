@@ -38,18 +38,6 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>logout</servlet-name>
-        <jsp-file>/WEB-INF/controller/loginout.jsp</jsp-file>
-        <init-param>
-            <param-name>LOGIN_PATH</param-name>
-            <param-value>/gossip</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>logout</servlet-name>
-        <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>member</servlet-name>
         <jsp-file>/WEB-INF/controller/member.jsp</jsp-file>
         <init-param>
