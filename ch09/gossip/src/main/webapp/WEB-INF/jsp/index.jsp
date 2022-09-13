@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Gossip 微博</title>
-        <link ref="stylesheet" href="css/gossip.css" type="text/css">
+        <link href="css/gossip.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         <div id="login">
