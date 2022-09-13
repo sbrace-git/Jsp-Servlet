@@ -6,6 +6,16 @@ public class Account {
     private String password;
     private String salt;
 
+    public Account() {
+    }
+
+    public Account(String name, String email, String password, String salt) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.salt = salt;
+    }
+
     public String getSalt() {
         return salt;
     }

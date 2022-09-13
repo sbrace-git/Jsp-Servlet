@@ -5,6 +5,8 @@ import cc.openhome.gossip.dao.MessageDao;
 import cc.openhome.gossip.dao.impl.AccountDaoImpl;
 import cc.openhome.gossip.dao.impl.MessageDaoImpl;
 import cc.openhome.gossip.service.UserService;
+import cc.openhome.gossip.template.JdbcTemplate;
+import cc.openhome.gossip.template.impl.JdbcTemplateImpl;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -29,8 +31,9 @@ public class ServiceContainer implements ServletContextListener {
             throw new RuntimeException(e);
         }
 
-        AccountDao accountDao = new AccountDaoImpl(dataSource);
-        MessageDao messageDao = new MessageDaoImpl(dataSource);
+        JdbcTemplate jdbcTemplate = new JdbcTemplateImpl(dataSource);
+        AccountDao accountDao = new AccountDaoImpl(jdbcTemplate);
+        MessageDao messageDao = new MessageDaoImpl(jdbcTemplate);
 
         servletContext.setAttribute("userService", new UserService(accountDao, messageDao));
     }
