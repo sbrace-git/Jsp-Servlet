@@ -28,4 +28,14 @@
         <servlet-name>hello</servlet-name>
         <url-pattern>/helloUser</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>hello2</servlet-name>
+        <servlet-class>cc.openhome.Hello</servlet-class>
+        <load-on-startup>9</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>hello2</servlet-name>
+        <url-pattern>/helloUser2</url-pattern>
+    </servlet-mapping>
 </web-app>
