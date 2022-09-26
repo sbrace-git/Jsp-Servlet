@@ -62,4 +62,9 @@ forward 前后两个 servlet path 不一致
 转发后的 servlet 可以获取到转发前的 servlet 参数和本 servlet 的参数
 转发前的 servlet 获取不到转发后的 servlet 参数
 
+五.attribute
+1.include
+在前后两个 servlet 中设置都有效，会互相传递
+2.forward
+在前后两个 servlet 中设置都有效，会互相传递
 
