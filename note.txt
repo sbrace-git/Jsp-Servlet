@@ -35,7 +35,7 @@ EL 隐式对象
 servlet dispatcher
 一.response header:
 1.include
-在被 include 的 servlet 中设置 response header 无效
+在被包含的 servlet 中设置 response header 无效
 在原 servlet 中设置 response header 有效
 2.forward
 在 forward 前后两个 servlet 中设置 response header 都有效
@@ -48,5 +48,18 @@ include 前后两个 servlet path 一致
 forward 前后两个 servlet path 不一致
 想要在转发后的 servlet 中取得转发前的 servlet 的 servlet path 需要用 httpRequest.getAttribute(RequestDispatcher.FORWARD_SERVLET_PATH)
 
+三.characterEncoding
+1.include
+在前后两个 servlet 中设置都有效，会互相传递
+2.forward
+在前后两个 servlet 中设置都有效，会互相传递
+
+四.param
+1.include
+被包含的 servlet 可以获取到原 servlet 的参数和本 servlet 的参数
+原 servlet 获取不到 被包含的 servlet 参数
+2.forward
+转发后的 servlet 可以获取到转发前的 servlet 参数和本 servlet 的参数
+转发前的 servlet 获取不到转发后的 servlet 参数
 
 
