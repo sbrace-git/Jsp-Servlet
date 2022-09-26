@@ -31,6 +31,9 @@ public class SomeInclude extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher("other-param?key=value");
         dispatcher.include(req, resp);
 
+        req.getParameterMap().forEach((k, v) ->
+                logger.log(Level.INFO, "{0} = {1}", new Object[]{k, Arrays.toString(v)}));
+
         writer.println("Some do two...");
     }
 }
