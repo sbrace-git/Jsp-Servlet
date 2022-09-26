@@ -31,3 +31,22 @@ EL 隐式对象
 9.headerValues
 10.cookie
 11.initParam
+
+servlet dispatcher
+一.response header:
+1.include
+在被 include 的 servlet 中设置 response header 无效
+在原 servlet 中设置 response header 有效
+2.forward
+在 forward 前后两个 servlet 中设置 response header 都有效
+
+二.servlet path
+1.include
+include 前后两个 servlet path 一致
+想要在被包含的 servlet 中取得本 servlet 的 servlet path 需要用 httpRequest.getAttribute(RequestDispatcher.INCLUDE_SERVLET_PATH)
+2.forward
+forward 前后两个 servlet path 不一致
+想要在转发后的 servlet 中取得转发前的 servlet 的 servlet path 需要用 httpRequest.getAttribute(RequestDispatcher.FORWARD_SERVLET_PATH)
+
+
+
