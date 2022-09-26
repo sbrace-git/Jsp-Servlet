@@ -1,4 +1,4 @@
-package com.example.dispatcher.url;
+package com.example.dispatcher.path;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.annotation.WebServlet;
