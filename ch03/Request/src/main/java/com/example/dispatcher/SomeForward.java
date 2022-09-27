@@ -16,7 +16,8 @@ public class SomeForward extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter writer = resp.getWriter();
         writer.println("Some do one...");
-        // writer.flush();
+//        writer.println("Some do one...Some do one...Some do one...Some do one...Some do one...Some do one...");
+//        writer.flush();
         // java.lang.IllegalStateException
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("other");
