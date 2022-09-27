@@ -1,0 +1,10 @@
+p70
+ch03
+3.2.6 使用_RequestDispatcher 调派请求
+3.使用 forward() 方法
+
+在转发前后的两个 servlet 中分别调用 httpServletRequest.getRequestURI() 返回值不一致
+想要在转发后的 servlet 中取得转发前 servlet 的 requestURI 需要调用 httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI)
+
+example:
+ch03/Request # com.example.dispatcher.path
