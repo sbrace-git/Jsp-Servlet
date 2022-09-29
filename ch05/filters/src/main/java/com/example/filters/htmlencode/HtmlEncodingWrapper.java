@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.htmlencode;
 
 import org.owasp.encoder.Encode;
 

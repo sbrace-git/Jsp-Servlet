@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.compression;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

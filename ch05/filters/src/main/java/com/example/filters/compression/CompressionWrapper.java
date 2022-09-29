@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.compression;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Optional;
 
 public class CompressionWrapper extends HttpServletResponseWrapper {
     private GzipServiceOutputStream gzipServiceOutputStream;

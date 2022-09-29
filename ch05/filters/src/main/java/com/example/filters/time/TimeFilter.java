@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.time;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterChain;
@@ -32,7 +32,7 @@ import java.util.Collections;
                 DispatcherType.INCLUDE
         },
         // 不可用通配符 *
-        // servletNames = "*。do"
+        // servletNames = "*.do"
         servletNames = "helloServlet"
 )
 

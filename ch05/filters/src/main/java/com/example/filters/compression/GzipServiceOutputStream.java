@@ -1,4 +1,4 @@
-package com.example.filters;
+package com.example.filters.compression;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
