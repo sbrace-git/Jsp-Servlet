@@ -1,3 +1,24 @@
+MappingMatch
+1.CONTEXT_ROOT
+环境路径
+{{host}}:{{port}}/{{context_path}} 
+{{host}}:{{port}}/{{context_path}}/
+This is used when the mapping was achieved with an exact match to the application's context root.
+2.DEFAULT
+默认
+找不到合适的 URI 模式时，使用默认模式
+{{host}}:{{port}}/{{context_path}}/error-path
+This is used when the mapping was achieved with an exact match to the default servlet of the application, the '/' character.
+3.EXACT
+完全匹配，严格对应
+This is used when the mapping was achieved with an exact match to the incoming request.
+4.EXTENSION
+扩展映射
+This is used when the mapping was achieved using an extension, such as "*.xhtml"
+5.PATH
+路径映射
+This is used when the mapping was achieved using a path, such as "/faces/*"
+
 jsp 元素
 1.指示元素 Directive <%@ 指示类型 [属性="值"] %>
 	常用指示类型 page include taglib
