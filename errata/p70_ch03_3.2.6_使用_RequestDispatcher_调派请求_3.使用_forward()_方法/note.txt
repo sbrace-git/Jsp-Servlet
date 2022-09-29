@@ -5,6 +5,13 @@ ch03
 
 在转发前后的两个 servlet 中分别调用 httpServletRequest.getRequestURI() 返回值不一致
 想要在转发后的 servlet 中取得转发前 servlet 的 requestURI 需要调用 httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI)
+以下六个 attribute name 同种用法
+javax.servlet.forward.request_uri
+javax.servlet.forward.context_path
+javax.servlet.forward.mapping
+javax.servlet.forward.path_info
+javax.servlet.forward.servlet_path
+javax.servlet.forward.query_string
 
 example:
 ch03/Request # com.example.dispatcher.path
