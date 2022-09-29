@@ -1,0 +1,6 @@
+p70
+ch03
+3.2.6 使用_RequestDispatcher 调派请求
+3.使用 forward() 方法
+
+"请求标头" 应是 "响应标头"

@@ -35,6 +35,7 @@ public class Avatar extends HttpServlet {
         writer.println("</head>");
         writer.println("<body>");
 
+        getServletContext().getResourcePaths("/").forEach(System.out::println);
         getServletContext().getResourcePaths(AVATAR_DIR).forEach(image ->
                 writer.printf("<img src='%s'>%n", image.replaceFirst("/", "")));
 
