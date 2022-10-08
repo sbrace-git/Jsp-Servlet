@@ -1,13 +1,15 @@
 package com.example.async;
 
-import java.io.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.concurrent.CompletableFuture;
 
 @WebServlet(name = "asyncServlet", value = "/asyncServlet",
         // 在 service 方法执行完成之后，释放容器所分配的线程
@@ -15,11 +17,11 @@ import javax.servlet.annotation.*;
 public class AsyncServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // HelloServlet current thread name = http-nio-8080-exec-1
+        // AsyncServlet current thread name = http-nio-8080-exec-1
         printCurrentThreadName();
         response.setContentType("text/html; charset=UTF-8");
         AsyncContext asyncContext = request.startAsync();
-        // HelloServlet current thread name = http-nio-8080-exec-1
+        // AsyncServlet current thread name = http-nio-8080-exec-1
         printCurrentThreadName();
 
         printServletRequest(request);
@@ -35,7 +37,7 @@ public class AsyncServlet extends HttpServlet {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // HelloServlet current thread name = ForkJoinPool.commonPool-worker-1
+            // AsyncServlet current thread name = ForkJoinPool.commonPool-worker-1
             printCurrentThreadName();
             ServletRequest request = asyncContext.getRequest();
             printServletRequest(request);
@@ -46,7 +48,7 @@ public class AsyncServlet extends HttpServlet {
 //                asyncContext.dispatch("/asyncNumber");
 //                return;
 //            }
-            // HelloServlet current thread name = ForkJoinPool.commonPool-worker-1
+            // AsyncServlet current thread name = ForkJoinPool.commonPool-worker-1
             printCurrentThreadName();
             try {
                 ServletResponse response = asyncContext.getResponse();
@@ -63,15 +65,15 @@ public class AsyncServlet extends HttpServlet {
     }
 
     private void printServletRequest(ServletRequest servletRequest) {
-        System.out.printf("HelloServlet servletRequest = %s%n", servletRequest);
+        System.out.printf("AsyncServlet servletRequest = %s%n", servletRequest);
     }
 
     private void printServletResponse(ServletResponse servletResponse) {
-        System.out.printf("HelloServletServletResponse = %s%n", servletResponse);
+        System.out.printf("AsyncServletServletResponse = %s%n", servletResponse);
 
     }
 
     private void printCurrentThreadName() {
-        System.out.printf("HelloServlet current thread name = %s%n", Thread.currentThread().getName());
+        System.out.printf("AsyncServlet current thread name = %s%n", Thread.currentThread().getName());
     }
 }
