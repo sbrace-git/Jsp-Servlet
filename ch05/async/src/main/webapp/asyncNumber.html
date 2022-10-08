@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <title>asyncNumber</title>
-</head>
-<body>
-    即时资料：<span id="data">0</span>
-    <script type="text/javascript">
-        function asyncUpdate() {
-            let xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.onload = function () {
-                if (xmlHttpRequest.status === 200) {
-                    document.getElementById("data").innerText = xmlHttpRequest.responseText;
-                    asyncUpdate();
-                }
-            };
-            xmlHttpRequest.open("GET","asyncNumber?timestamp=" + new Date().getTime());
-            xmlHttpRequest.send(null);
-        }
-        asyncUpdate();
-    </script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>asyncNumber</title>
+    </head>
+    <body>
+        即时资料：<span id="data">0</span>
+        <script type="text/javascript">
+            function asyncUpdate() {
+                let xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.onload = function () {
+                    if (xmlHttpRequest.status === 200) {
+                        document.getElementById("data").innerText = xmlHttpRequest.responseText;
+                        asyncUpdate();
+                    }
+                };
+                let timestamp = new Date().getTime();
+                let params = "timestamp=" + timestamp + "&key=value";
+                xmlHttpRequest.open("GET", "asyncNumber?" + params);
+                xmlHttpRequest.send(null);
+            }
+
+            asyncUpdate();
+        </script>
+    </body>
 </html>

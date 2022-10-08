@@ -1,20 +1,20 @@
 package com.example.async.longPolling;
 
-import com.example.async.AsyncServlet;
-
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(urlPatterns = "/asyncNumber", asyncSupported = true)
 public class AsyncNumber extends HttpServlet {
+
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     private List<AsyncContext> asyncList;
 
@@ -25,41 +25,29 @@ public class AsyncNumber extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-
-        Object asyncContextPath = req.getAttribute(AsyncContext.ASYNC_CONTEXT_PATH);
-        System.out.printf("asyncContextPath = %s%n", asyncContextPath);
-        Object asyncMapping = req.getAttribute(AsyncContext.ASYNC_MAPPING);
-        System.out.printf("asyncMapping = %s%n", asyncMapping);
-        Object asyncPathInfo = req.getAttribute(AsyncContext.ASYNC_PATH_INFO);
-        System.out.printf("asyncPathInfo = %s%n", asyncPathInfo);
-        Object asyncRequestUri = req.getAttribute(AsyncContext.ASYNC_REQUEST_URI);
-        System.out.printf("asyncRequestUri = %s%n", asyncRequestUri);
-        Object asyncQueryString = req.getAttribute(AsyncContext.ASYNC_QUERY_STRING);
-        System.out.printf("asyncQueryString = %s%n", asyncQueryString);
-        Object asyncServletPath = req.getAttribute(AsyncContext.ASYNC_SERVLET_PATH);
-        System.out.printf("asyncServletPath = %s%n", asyncServletPath);
-
         synchronized (asyncList) {
             AsyncContext asyncContext = req.startAsync();
+//            asyncContext.setTimeout(20000L);
             asyncContext.addListener(new AsyncListener() {
                 @Override
                 public void onComplete(AsyncEvent event) {
-                    System.out.println("AsyncEvent onComplete");
+                    logger.log(Level.INFO, "AsyncEvent onComplete");
                 }
 
                 @Override
                 public void onTimeout(AsyncEvent event) {
-                    System.out.println("AsyncEvent onTimeout");
+                    // TODO: 超时 从 asyncList 移除？
+                    logger.log(Level.INFO, "AsyncEvent onTimeout");
                 }
 
                 @Override
                 public void onError(AsyncEvent event) {
-                    System.out.println("AsyncEvent onError");
+                    logger.log(Level.INFO, "AsyncEvent onError");
                 }
 
                 @Override
                 public void onStartAsync(AsyncEvent event) {
-                    System.out.println("AsyncEvent onStartAsync");
+                    logger.log(Level.INFO, "AsyncEvent onStartAsync");
                 }
             });
             asyncList.add(asyncContext);
