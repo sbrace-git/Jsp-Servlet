@@ -16,6 +16,8 @@ public class AsyncServlet1 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         logger.log(Level.INFO, " doGet");
+        logger.log(Level.INFO, " RequestURI = {0}", req.getRequestURI());
+
         AsyncContext asyncContext = req.startAsync();
         String dispatch = req.getParameter("dispatch");
         asyncContext.dispatch(dispatch);

@@ -19,6 +19,7 @@ public class AsyncServlet2 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         logger.log(Level.INFO, "doGet");
+        logger.log(Level.INFO, " RequestURI = {0}", req.getRequestURI());
 
         Collections.list(req.getAttributeNames()).forEach(attributeName -> logger.log(Level.INFO, "{0} = {1}",
                 new Object[]{attributeName, req.getAttribute(attributeName)}));
