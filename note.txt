@@ -19,6 +19,7 @@ This is used when the mapping was achieved using an extension, such as "*.xhtml"
 路径映射
 This is used when the mapping was achieved using a path, such as "/faces/*"
 
+
 jsp 元素
 1.指示元素 Directive <%@ 指示类型 [属性="值"] %>
 	常用指示类型 page include taglib
@@ -28,6 +29,7 @@ jsp 元素
 4.表达式元素 <%= Java 表达式%>
 	<%= "text" %>
 5.注释元素 <%-- JSP 注释 -->
+
 
 JSP 隐式对象
 1.out
@@ -39,6 +41,7 @@ JSP 隐式对象
 7.pageContext
 8.exception
 9.page
+
 
 EL 隐式对象
 1.pageContext
@@ -52,6 +55,7 @@ EL 隐式对象
 9.headerValues
 10.cookie
 11.initParam
+
 
 servlet dispatcher
 一.response header:
@@ -88,4 +92,22 @@ forward 前后两个 servlet path 不一致
 在前后两个 servlet 中设置都有效，会互相传递
 2.forward
 在前后两个 servlet 中设置都有效，会互相传递
+
+
+Server Push
+HTTP2.0 支持服务器推送(Server Push)
+在一次请求中，允许服务器主动推送必要的 CSS、JavaScript、图片等资源到浏览器
+httpServletRequest.newPushBuilder()
+
+
+异步 Long Polling
+javaScript: 递归发送请求
+java:
+httpServletRequest.startAsync()
+List<AsyncContext> foreach
+
+
+异步 Server-Sent Event
+
+
 
