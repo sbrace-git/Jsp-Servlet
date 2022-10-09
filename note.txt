@@ -108,6 +108,18 @@ List<AsyncContext> foreach
 
 
 异步 Server-Sent Event
-
-
+javaScript:EventSource
+ContentType 必须 text/event-stream
+CharacterEncoding 必须 UTF_8
+java:
+resp.setContentType("text/event-stream");
+resp.setHeader("Cache-Control", "no-cache");
+resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+httpServletRequest.startAsync()
+List<AsyncContext> foreach{
+	PrintWriter writer = asyncContext.getResponse().getWriter();
+	// 响应必须包含 data: 
+	// 必须以 \n\n 结尾
+	writer.printf("data:%s\n\n", Math.random());
+}
 
