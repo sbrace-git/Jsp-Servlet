@@ -8,9 +8,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebListener
 public class WebInitListener2 implements ServletContextListener {
+
+    private final Logger logger = Logger.getLogger(WebInitListener2.class.getName());
 
     private Queue<AsyncContext> asyncContextQueue = new ConcurrentLinkedDeque<>();
 
@@ -32,9 +36,10 @@ public class WebInitListener2 implements ServletContextListener {
     }
 
     private void response() {
+        logger.log(Level.INFO, "asyncContextQueue.size = {0}", asyncContextQueue.size());
         asyncContextQueue.forEach(asyncContext -> {
             try {
-                System.out.printf("asyncContext = %s%n", asyncContext);
+                logger.log(Level.INFO, "asyncContext = {0}", asyncContext);
                 PrintWriter writer = asyncContext.getResponse().getWriter();
                 writer.printf("data:%s\n\n", Math.random());
                 writer.flush();

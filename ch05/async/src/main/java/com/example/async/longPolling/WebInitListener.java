@@ -38,7 +38,7 @@ public class WebInitListener implements ServletContextListener {
 
     private void response(double num) {
         synchronized (asyncList) {
-            logger.log(Level.INFO, "asyncList size = {0}", asyncList.size());
+//            logger.log(Level.INFO, "asyncList size = {0}", asyncList.size());
             asyncList.forEach(ctx -> {
                 try {
                     // 超时 getRequest 报错 java.lang.IllegalStateException: AsyncContext关联的请求已经完成处理
