@@ -1,0 +1,9 @@
+p163
+ch05
+5.4.3 更多 AsyncContext 细节
+
+AsyncContext 没有 forward() 方法
+请求转发使用 dispatch() 方法
+
+example:
+ch05/async # com.example.async.dispatch

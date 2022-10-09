@@ -1,0 +1,8 @@
+p164
+ch05
+5.4.3 更多 AsyncContext 细节
+
+在使用 AsyncContext.dispatch() 转发请求前后两个 servlet 中，执行 getRequestURI() 返回值不一样
+
+example:
+ch05/async # com.example.async.dispatch
