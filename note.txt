@@ -100,14 +100,20 @@ HTTP2.0 支持服务器推送(Server Push)
 httpServletRequest.newPushBuilder()
 
 
-异步 Long Polling
+异步
+一.AsyncContext
+AsyncContext asyncContext = httpRequest.startAsync();
+CompletableFuture.runAsync(() -> {
+	asyncContext.complete();
+});
+
+二.Long Polling
 javaScript: 递归发送请求
 java:
 httpServletRequest.startAsync()
 List<AsyncContext> foreach
 
-
-异步 Server-Sent Event
+三.Server-Sent Event
 javaScript:EventSource
 ContentType 必须 text/event-stream
 CharacterEncoding 必须 UTF_8
@@ -122,4 +128,16 @@ List<AsyncContext> foreach{
 	// 必须以 \n\n 结尾
 	writer.printf("data:%s\n\n", Math.random());
 }
+
+四.异步读写
+WriteListener
+AsyncContext asyncContext = httpServletRequest.startAsync();
+ServletOutputStream outputStream = httpServletResponse.getOutputStream();
+outputStream.setWriteListener(new WriteListener() {});
+
+ReadListener
+AsyncContext asyncContext = httpServletRequest.startAsync();
+ServletInputStream servletInputStream = httpServletRequest.getInputStream();
+servletInputStream.setReadListener(new ReadListener() {});
+
 
