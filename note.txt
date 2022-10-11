@@ -34,6 +34,29 @@ taglib 	指示类型告知容器如何转译这个页面中的标签库(Tag Libr
 5.注释元素 <%-- JSP 注释 -->
 
 
+标准标签
+<jsp:forward>
+<jsp:include>
+<jsp:useBean>
+<jsp:setProperty>
+<jsp:getProperty>
+JSP 的 XML 格式标签
+<jsp:directive.page import="java.util.*"/> 				指示元素 Directive <%@ 指示类型 [属性="值"] %>
+<jsp:declaration> String name; </jsp:declaration> 		声明元素 Declaration <%! 类成员声明或方法声明 %>
+<jsp:scriptlet> name = "test-name"; </jsp:scriptlet> 	Srciptlet 元素 <% Java语句 %>
+<jsp:expression> name </jsp:expression> 				表达式元素 <%= Java 表达式%>
+<jsp:text> 网页文字 </jsp:text> 						网页文字
+
+tips:
+一:如果在属性范围内找到 user, 会新建一个对象并设置其属性值；如果可以找到对象,就直接使用,不设置其属性值
+<jsp:useBean id="user" class="cc.openhome.User" scope="session">
+	<jsp:setProperty name="user" property="*"/>
+</jsp:userBean>
+二:不管在属性范围内找到 user,还是新建一个 user,都会设置其属性值
+<jsp:useBean id="user" class="cc.openhome.User" scope="session"/>
+<jsp:setProperty name="user" property="*"/>
+
+
 JSP 隐式对象
 1.out			JspWriter
 2.request		HttpServletRequest
