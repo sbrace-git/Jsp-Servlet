@@ -22,7 +22,10 @@ This is used when the mapping was achieved using a path, such as "/faces/*"
 
 jsp 元素
 1.指示元素 Directive <%@ 指示类型 [属性="值"] %>
-	常用指示类型 page include taglib
+常用指示类型 
+page 	指示类型告知容器如何转译目前的 JSP 网页
+include 指示类型告知容器，将指定的 JSP 页面包括进来转译
+taglib 	指示类型告知容器如何转译这个页面中的标签库(Tag Library)
 2.声明元素 Declaration <%! 类成员声明或方法声明 %>
 3.Srciptlet 元素 <% Java语句 %>
 	<% int i = 1; %>
