@@ -83,6 +83,93 @@ EL 隐式对象
 11.initParam
 
 
+JSTL 标签库五大类
+1.核心标签库：提供条件判断、属性访问、URI 处理及错误处理等标签
+2.I18N 兼容格式标签库：提供数字、日期等的格式化功能，以及区域(Local)、信息、编码处理等国际化功能的标签
+3.SQL 标签库：提供基本的数据库查询、更新、设置数据源(DataSource)等功能的标签
+4.XML 标签库：提供 XML 解析、流程控制、转换等功能的标签
+5.函数标签库：提供常用字符处理的自定义 EL 函数标签库
+
+
+JSP 文件最后还是会被容器转译为 Servlet 源代码,编译为 .class 文件,加载 .class 文件,生成 Servlet 对象
+JSP 指示(Driective)元素的主要目的在于指示容器将 JSP 转译为 Servlet 源代码时，必须遵守的一些信息
+<%@ 指示类型 [属性="值"] %> 				import contentType charset pageEncoding include
+JSP 转移后的 Servlet 应该包含哪些类成员、哪种方法声明,使用声明(Declaration)元素
+<%! 类成员声明或方法声明 %>
+Scriptlet 元素 <% %> 之间的内容将被转译为 Servlet 源代码 _jspService() 方法中的内容
+在表达式(Expression)元素中编写 Java 表达式的运算结果将直接输出为网页的一部分
+<%= "text" %>
+为减少使用 Scriptlet, JSP 规范提供了标准标签(Standard Tag),标准标签都以<jsp:> 作为前缀
+<jsp:forward> 	<jsp:include> 	<jsp:useBean> 	<jsp:setProperty> 	<jsp:getProperty>
+后来提出的 JSTL(JavaServer Pages Standard Tag Library) 与表达式语言 (Expression Language) 在许多功能上可以取代原有的标准标签
+可以将业务逻辑编写在 JavaBean 中,然后搭配 <jsp:userBean> <jsp:setProperty> <jsp:getProperty> 来取得、生成 JavaBean 对象,设置或取得 JavaBean 的值,这样有助于减少页面上的 Scriptlet 的分量
+对于 JSP 中一些简单的属性、请求参数、标头与 Cookie 等信息的取得,一些简单的运算或判断,可以使用表达式语言 (EL) 来处理,也可以将一些常用的公用函数编写为 EL 函数
+减少网页上的 Scriptlet 			${param.name} 	${1 + 1}
+在 JavaEE 7 之后,发布了 Expression Language 3.0, 成为一个独立的规格(JSR 341)
+在 EL 3.0 之后,允许指定变量
+${a = "10"} 	${b = "20"}
+被指定值之后, EL 3.0 会将 a、b 的值输出至页面
+相当与
+<% pageContext.setAttribute("a","10")>  <%= pageContext.getAttribute("a")%>
+<% pageContext.setAttribute("b","20")>  <%= pageContext.getAttribute("b")%>
+可以直接调用静态方法、静态成员 ${Integer.parseInt("123")} 	${Math.PI}
+使用 JSP 标准标签、EL 表达,仍不能表达页面显示逻辑,还是需要使用 Scriptlet 编写 Java 代码
+例如需要按照某个条件来决定显示某个网页片段,或者需要使用循环来显示表格内容
+JSTL 提供跟页面显示相关的逻辑判断标签
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:if test="${ EL表达式 }"> text </c:if>
+<c:choose>
+	<c:when test=" EL表达式1 "> text1 </c:when>
+	<c:when test=" EL表达式2 "> text2 </c:when>
+	<c:otherwise> text </c:otherwise>
+</c:choose>
+items 属性值可以是 数组、Collection、Iterator、Enumeration、Map、字符串
+<c:forEach var="message" items="${messageService.messages}">
+	<tr>
+		<td> ${message.name} </td>
+		<td> ${message.text} </td>
+	</tr>
+</c:forEach>
+异常
+<c:catch var="error">
+	...
+</c:catch>
+<c:if test="${error != null}">
+	${error}
+</c:if>
+<c:import> 标签可以视作<jsp:include>加强版，可以导非目前 Web 应用程序的网页，可以指定导入网页的 charEncoding
+<c:redirect url="test.jsp"> 重定向
+<c:url value="test.jsp"> 相当与 response 的 encodeURL() 方法,在用户关闭 Cookie 功能时,自动用 SessionID 作 URI 重写
+JSP 的 <jsp:setProperty> 功能有限,只能设置 JavaBean 的属性,如果想要在 page、request、session、application 等范围内设置属性,或者想要设置 Map 对象的键与值可以使用 <c:set> 标签
+<c:set var="key" value="value" scope="session"/>
+相当于 <% session.setAttribute("key","value"); %>
+也可以用 EL 表达式 <c:set var="key" value="${ EL 表达式}" scope="session"/>
+<c:set> 也可以设置 JavaBean 的属性或 Map 对象的键值 <c:set target="${user}" property="name" value="${param.name}" />
+<c:remove var="key" scope="session">
+<c:out> 输出指定的文本 <c:out value="${param.message}">
+为什么不直接用 EL 表达式写 ${param.message} 而要用 <c:out>
+param.message 中可能有 HTML 语句
+<c:out> 会自动将角括号、单引号、双引号等字符用代替字符取代。这个功能是由 <c:out> 的 escapeXml 属性来控制,默认是 true
+EL 表达式运算结果是 null 时,不会显示任何值,<c:out> 可以设置默认值 <c:out value="${param.message}" default="default_message">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 servlet dispatcher
 一.response header:
 1.include
