@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+
+    <!-- role -->
+    <security-role>
+        <description>Admin User</description>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <description>Manager</description>
+        <role-name>manager</role-name>
+    </security-role>
+
+    <!-- 拒绝未涵盖的 http 方法 注意是 http 方法不是 url -->
+    <deny-uncovered-http-methods/>
+
+    <!-- constraint -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Admin</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+            <http-method>GET</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Manager</web-resource-name>
+            <url-pattern>/manager/*</url-pattern>
+            <http-method>GET</http-method>
+        </web-resource-collection>
+        <auth-constraint/>
+    </security-constraint>
+</web-app>
