@@ -3,4 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>member</web-resource-name>
+            <url-pattern>/file.jsp</url-pattern>
+            <url-pattern>/upload</url-pattern>
+            <url-pattern>/download</url-pattern>
+            <url-pattern>/delete</url-pattern>
+            <url-pattern>/logout</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>member</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <deny-uncovered-http-methods/>
+
+    <security-role>
+        <role-name>member</role-name>
+    </security-role>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
 </web-app>
