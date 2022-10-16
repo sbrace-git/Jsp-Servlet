@@ -16,6 +16,6 @@
            userTable="t_account"
            userNameCol="name"
            userCredCol="password"
-           userRoleTale="t_account_role"
+           userRoleTable="t_account_role"
            roleNameCol="role"/>
 </Context>

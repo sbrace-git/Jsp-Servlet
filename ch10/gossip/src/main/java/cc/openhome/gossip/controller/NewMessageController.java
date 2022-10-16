@@ -3,6 +3,8 @@ package cc.openhome.gossip.controller;
 import cc.openhome.gossip.service.UserService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +18,9 @@ import java.nio.charset.StandardCharsets;
                 @WebInitParam(name = "LOGIN_PATH", value = "/gossip"),
                 @WebInitParam(name = "MEMBER_PATH", value = "member")
         })
+@ServletSecurity(
+        @HttpConstraint(rolesAllowed = "member")
+)
 public class NewMessageController extends HttpServlet {
     private String MEMBER_PATH;
 

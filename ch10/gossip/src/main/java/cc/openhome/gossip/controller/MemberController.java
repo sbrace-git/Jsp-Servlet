@@ -4,6 +4,8 @@ import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +18,9 @@ import java.util.List;
         initParams = {
                 @WebInitParam(name = "MEMBER_PATH", value = "/WEB-INF/jsp/member.jsp")
         })
+@ServletSecurity(
+        @HttpConstraint(rolesAllowed = "member")
+)
 public class MemberController extends HttpServlet {
     private static String MEMBER_PATH;
 

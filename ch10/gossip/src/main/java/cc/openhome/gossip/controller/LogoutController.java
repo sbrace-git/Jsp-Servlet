@@ -1,6 +1,8 @@
 package cc.openhome.gossip.controller;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,9 @@ import java.io.IOException;
         initParams = {
                 @WebInitParam(name = "LOGIN_PATH", value = "/gossip")
         }
+)
+@ServletSecurity(
+        @HttpConstraint(rolesAllowed = "member")
 )
 public class LogoutController extends HttpServlet {
     private static String LOGIN_PATH;
