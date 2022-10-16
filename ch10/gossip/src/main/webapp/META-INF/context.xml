@@ -10,4 +10,12 @@
               password="1111"
               driverClassName="org.h2.Driver"
               url="jdbc:h2:tcp://localhost:9092/D:/server/H2/data/gossip/gossip"/>
+    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+           localDataSource="true"
+           dataSourceName="jdbc/gossip/h2"
+           userTable="t_account"
+           userNameCol="name"
+           userCredCol="password"
+           userRoleTale="t_account_role"
+           roleNameCol="role"/>
 </Context>

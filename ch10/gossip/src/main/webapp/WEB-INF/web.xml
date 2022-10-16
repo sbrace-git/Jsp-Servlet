@@ -16,4 +16,13 @@
             <default-content-type>text/html</default-content-type>
         </jsp-property-group>
     </jsp-config>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/</form-login-page>
+            <form-error-page>/</form-error-page>
+        </form-login-config>
+    </login-config>
+
 </web-app>

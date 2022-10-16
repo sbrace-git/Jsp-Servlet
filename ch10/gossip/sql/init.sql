@@ -14,3 +14,10 @@ create table T_MESSAGE
     MILLIS   BIGINT                 not null,
     BLABLA   CHARACTER VARYING(512) not null
 );
+
+create table t_account_role
+(
+    name varchar(15) not null,
+    role varchar(15) not null,
+    primary key (name, role)
+);

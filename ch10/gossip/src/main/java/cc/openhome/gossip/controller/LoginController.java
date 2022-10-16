@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(urlPatterns = "/login",
         initParams = {
@@ -20,6 +23,8 @@ import java.util.List;
         }
 )
 public class LoginController extends HttpServlet {
+
+    private final Logger logger = Logger.getLogger(LoginController.class.getName());
 
     private static String SUCCESS_PATH;
     private static String LOGIN_PATH;
@@ -37,17 +42,28 @@ public class LoginController extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if (userService.login(username, password)) {
+        Optional<String> optionalPasswd = userService.encryptedPassword(username, password);
+
+        try {
+            if (!optionalPasswd.isPresent()) {
+                throw new RuntimeException("account error");
+            }
+            logger.log(Level.INFO, "username = {0}", username);
+            logger.log(Level.INFO, "passwd = {0}", optionalPasswd.get());
+            req.login(username, optionalPasswd.get());
             if (null != req.getSession(false)) {
                 req.changeSessionId();
             }
             req.getSession().setAttribute("login", username);
             resp.sendRedirect(SUCCESS_PATH);
-        } else {
+            logger.log(Level.INFO, "{0} login success", username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.log(Level.WARNING, "login error", e);
             List<Message> newMessageList = userService.newMessageList();
             req.setAttribute("newMessageList", newMessageList);
             ArrayList<String> errors = new ArrayList<>();
-            errors.add("用户名或密码错误");
+            errors.add("登录失败");
             req.setAttribute("errors", errors);
             req.getRequestDispatcher(LOGIN_PATH).forward(req, resp);
         }

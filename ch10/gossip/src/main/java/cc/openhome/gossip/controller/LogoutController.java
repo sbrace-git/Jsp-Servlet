@@ -1,5 +1,6 @@
 package cc.openhome.gossip.controller;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,8 +22,9 @@ public class LogoutController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.getSession().invalidate();
+        req.logout();
         resp.sendRedirect(LOGIN_PATH);
     }
 }

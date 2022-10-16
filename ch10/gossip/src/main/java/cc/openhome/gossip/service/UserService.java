@@ -52,6 +52,13 @@ public class UserService {
         return false;
     }
 
+    public Optional<String> encryptedPassword(String username, String password) {
+        return accountDao.getAccountByName(username)
+                .map(Account::getSalt)
+                .map(salt -> Integer.parseInt(salt) + password.hashCode())
+                .map(String::valueOf);
+    }
+
 
     public List<Message> messages(String username) {
         return messageDao.getMessageByUsername(username);
