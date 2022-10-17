@@ -1,0 +1,73 @@
+p404
+ch11
+11.1.2 发送多重内容邮件
+
+使用以下代码会有两种异常
+filePart.setContent(getBytes(file), file.getContentType());
+异常一.发送图片时:
+javax.activation.UnsupportedDataTypeException: no object DCH for MIME type image/jpeg
+	javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:885)
+	javax.activation.DataHandler.writeTo(DataHandler.java:316)
+	javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1694)
+	javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:996)
+	javax.mail.internet.MimeMultipart.writeTo(MimeMultipart.java:561)
+	com.sun.mail.handlers.multipart_mixed.writeTo(multipart_mixed.java:84)
+	javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:883)
+	javax.activation.DataHandler.writeTo(DataHandler.java:316)
+	javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1694)
+	javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1913)
+	com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1315)
+	javax.mail.Transport.send0(Transport.java:255)
+	javax.mail.Transport.send(Transport.java:124)
+	com.example.javamail.MultipartMail.doPost(MultipartMail.java:70)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+
+javax.mail-1.6.2.jar\META-INF\mailcap
+javax.mail 包的 mailcap 文件内容:
+#
+#
+# Default mailcap file for the JavaMail System.
+#
+# JavaMail content-handlers:
+#
+text/plain;;		x-java-content-handler=com.sun.mail.handlers.text_plain
+text/html;;		x-java-content-handler=com.sun.mail.handlers.text_html
+text/xml;;		x-java-content-handler=com.sun.mail.handlers.text_xml
+multipart/*;;		x-java-content-handler=com.sun.mail.handlers.multipart_mixed; x-java-fallback-entry=true
+message/rfc822;;	x-java-content-handler=com.sun.mail.handlers.message_rfc822
+#
+# can't support image types because java.awt.Toolkit doesn't work on servers
+#
+#image/gif;;		x-java-content-handler=com.sun.mail.handlers.image_gif
+#image/jpeg;;		x-java-content-handler=com.sun.mail.handlers.image_jpeg
+
+	
+异常二.发送文本时:
+java.io.IOException: "text/plain" DataContentHandler requires String object, was given object of type class [B
+	com.sun.mail.handlers.text_plain.writeTo(text_plain.java:133)
+	javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:883)
+	javax.activation.DataHandler.writeTo(DataHandler.java:316)
+	javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1694)
+	javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:996)
+	javax.mail.internet.MimeMultipart.writeTo(MimeMultipart.java:561)
+	com.sun.mail.handlers.multipart_mixed.writeTo(multipart_mixed.java:84)
+	javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:883)
+	javax.activation.DataHandler.writeTo(DataHandler.java:316)
+	javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1694)
+	javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1913)
+	com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1315)
+	javax.mail.Transport.send0(Transport.java:255)
+	javax.mail.Transport.send(Transport.java:124)
+	com.example.javamail.MultipartMail.doPost(MultipartMail.java:70)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	
+
+应使用如下代码
+filePart.setDataHandler(new DataHandler(new ByteArrayDataSource(file.getInputStream(), file.getContentType())));
+
+example:
+ch11/java-mail # com.example.javamail.MultipartMail
