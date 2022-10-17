@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 @WebServlet(urlPatterns = "/mail")
@@ -32,10 +31,9 @@ public class Mail extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        PrintWriter writer = resp.getWriter();
         String recipient = req.getParameter("recipient");
         if (recipient == null || recipient.length() == 0) {
-            writer.println("recipient is blank");
+            resp.getWriter().println("recipient is blank");
             return;
         }
 
