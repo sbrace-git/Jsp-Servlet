@@ -1,40 +1,48 @@
 package com.example.javamail;
 
-import javax.mail.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Properties;
 
 @WebServlet(urlPatterns = "/mail")
 public class Mail extends HttpServlet {
 
+    private Session session;
+
+    private String mailUsername;
+
+    @Override
+    public void init() {
+        ServletContext servletContext = getServletContext();
+        session = (Session) servletContext.getAttribute("mailSession");
+        mailUsername = (String) servletContext.getAttribute("mail.username");
+
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        InputStream resourceAsStream = getServletContext().getResourceAsStream("/WEB-INF/classes/mail.properties");
-        Properties properties = new Properties();
-        properties.load(resourceAsStream);
+        PrintWriter writer = resp.getWriter();
+        String recipient = req.getParameter("recipient");
+        if (recipient == null || recipient.length() == 0) {
+            writer.println("recipient is blank");
+            return;
+        }
 
-        String username = properties.getProperty("mail.username");
-        String password = properties.getProperty("mail.password");
-
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
         Message message = new MimeMessage(session);
         try {
-            message.setFrom(new InternetAddress(username));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(username));
+            message.setFrom(new InternetAddress(mailUsername));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("subject");
             message.setSentDate(new Date());
             message.setText("text");
