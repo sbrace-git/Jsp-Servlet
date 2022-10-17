@@ -4,10 +4,7 @@ import cc.openhome.gossip.template.JdbcTemplate;
 import cc.openhome.gossip.template.ResultSetExtractor;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +26,39 @@ public class JdbcTemplateImpl implements JdbcTemplate {
             return preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int[] updateBatchTransaction(String[] sqlArray, Object[][] params) {
+        try {
+            Connection connection = dataSource.getConnection();
+            boolean autoCommit = connection.getAutoCommit();
+            int[] resultArray = new int[sqlArray.length];
+            try {
+                connection.setAutoCommit(false);
+                for (int sqlIndex = 0; sqlIndex < sqlArray.length; sqlIndex++) {
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(sqlArray[sqlIndex])) {
+                        Object[] param = params[sqlIndex];
+                        for (int paramIndex = 0; paramIndex < param.length; paramIndex++) {
+                            preparedStatement.setObject(paramIndex + 1, param[paramIndex]);
+                        }
+                        int result = preparedStatement.executeUpdate();
+                        resultArray[sqlIndex] = result;
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                connection.commit();
+            } catch (Exception e) {
+                connection.rollback();
+                throw new RuntimeException(e);
+            } finally {
+                connection.setAutoCommit(autoCommit);
+                connection.close();
+            }
+            return resultArray;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

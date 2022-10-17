@@ -4,6 +4,7 @@ import cc.openhome.gossip.dao.AccountDao;
 import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.template.JdbcTemplate;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,10 +28,10 @@ public class AccountDaoImpl implements AccountDao {
         String email = account.getEmail();
         String password = account.getPassword();
         String salt = account.getSalt();
-        int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
-        int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, "member");
+        int[] updateBatchResult = jdbcTemplate.updateBatchTransaction(new String[]{INSERT_ACCOUNT_SQL, INSERT_ACCOUNT_ROLE_SQL},
+                new Object[][]{{name, email, password, salt}, {name, "member"}});
         logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
-                new int[]{insertAccount, insertAccountRole});
+                Arrays.stream(updateBatchResult).boxed().toArray());
     }
 
     private static final String SELECT_ACCOUNT_BY_NAME_SQL = "select name, email, password, salt from T_ACCOUNT where NAME = ? ";
