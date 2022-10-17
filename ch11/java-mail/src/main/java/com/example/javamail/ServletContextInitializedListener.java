@@ -39,11 +39,13 @@ public class ServletContextInitializedListener implements ServletContextListener
         String username = properties.getProperty("mail.username");
         String password = properties.getProperty("mail.password");
 
-        return Session.getInstance(properties, new Authenticator() {
+        Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
         });
+        session.setDebug(true);
+        return session;
     }
 }

@@ -1,10 +1,12 @@
 package com.example.javamail;
 
+import javax.activation.DataHandler;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -13,9 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -52,10 +52,8 @@ public class MultipartMail extends HttpServlet {
             mimeMultipart.addBodyPart(htmlPart);
             String submittedFileName = file.getSubmittedFileName();
             filePart.setFileName(MimeUtility.encodeText(submittedFileName, StandardCharsets.UTF_8.name(), "B"));
-            String contentType = file.getContentType();
-            System.out.println("contentType = " + contentType);
-            filePart.setContent(getBytes(file), file.getContentType());
-//            mimeMultipart.addBodyPart(filePart);
+            filePart.setDataHandler(new DataHandler(new ByteArrayDataSource(file.getInputStream(), file.getContentType())));
+            mimeMultipart.addBodyPart(filePart);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -71,19 +69,5 @@ public class MultipartMail extends HttpServlet {
             throw new RuntimeException(e);
         }
         resp.getWriter().println("send success");
-    }
-
-    private byte[] getBytes(Part part) {
-        try (InputStream inputStream = part.getInputStream();
-             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[2048];
-            int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, length);
-            }
-            return byteArrayOutputStream.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

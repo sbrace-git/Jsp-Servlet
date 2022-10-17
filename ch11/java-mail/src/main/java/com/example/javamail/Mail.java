@@ -32,10 +32,7 @@ public class Mail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String recipient = req.getParameter("recipient");
-        if (recipient == null || recipient.length() == 0) {
-            resp.getWriter().println("recipient is blank");
-            return;
-        }
+        String text = req.getParameter("text");
 
         Message message = new MimeMessage(session);
         try {
@@ -43,7 +40,7 @@ public class Mail extends HttpServlet {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("subject");
             message.setSentDate(new Date());
-            message.setText("text");
+            message.setText(text);
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
