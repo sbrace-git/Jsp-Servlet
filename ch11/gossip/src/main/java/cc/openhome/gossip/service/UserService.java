@@ -39,14 +39,16 @@ public class UserService {
         return accountDao.getAccountByName(username).isPresent();
     }
 
-    public void verify(String email, String token) {
+    public Optional<Account> verify(String email, String token) {
         Optional<Account> accountByEmail = accountDao.getAccountByEmail(email);
         if (accountByEmail.isPresent()) {
             Account account = accountByEmail.get();
             if (account.getPassword().equals(token)) {
                 accountDao.activateAccount(account);
+                return accountByEmail;
             }
         }
+        return Optional.empty();
     }
 
     private Optional<Account> createUser(String username, String email, String password) throws IOException {

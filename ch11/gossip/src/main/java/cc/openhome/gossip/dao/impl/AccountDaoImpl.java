@@ -69,7 +69,7 @@ public class AccountDaoImpl implements AccountDao {
         return Optional.ofNullable(account);
     }
 
-    private static final String UPDATE_ACCOUNT_ROLE_BY_NAME_SQL = "update T_ACCOUNT SET ROLE = ? where NAME = ? ";
+    private static final String UPDATE_ACCOUNT_ROLE_BY_NAME_SQL = "update T_ACCOUNT_ROLE SET ROLE = ? where NAME = ? and role = ?";
 
     @Override
     public void activateAccount(Account account) {
@@ -77,7 +77,7 @@ public class AccountDaoImpl implements AccountDao {
         if (null == name || name.length() == 0) {
             return;
         }
-        int update = jdbcTemplate.update(UPDATE_ACCOUNT_ROLE_BY_NAME_SQL, name, Role.member);
+        int update = jdbcTemplate.update(UPDATE_ACCOUNT_ROLE_BY_NAME_SQL, Role.member, name, Role.unverified);
         logger.log(Level.INFO, "update = {0}", update);
     }
 }
