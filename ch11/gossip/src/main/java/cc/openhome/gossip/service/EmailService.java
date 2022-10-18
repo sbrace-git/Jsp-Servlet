@@ -39,10 +39,10 @@ public class EmailService {
         }
     }
 
-    public void failedRegistration(Account account) {
-        String html = String.format(FAILED_REGISTRATION_FORMAT, account.getName(), account.getEmail());
+    public void failedRegistration(String username, String email) {
+        String html = String.format(FAILED_REGISTRATION_FORMAT, username, email);
         try {
-            Message message = createMessage(account.getEmail(), html);
+            Message message = createMessage(email, html);
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);

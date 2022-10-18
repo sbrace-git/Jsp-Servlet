@@ -90,7 +90,7 @@ public class RegisterController extends HttpServlet {
             if (account.isPresent()) {
                 emailService.validationLink(account.get());
             } else {
-                emailService.failedRegistration(account.get());
+                emailService.failedRegistration(username, email);
             }
         } else {
             path = FORM_PATH;
