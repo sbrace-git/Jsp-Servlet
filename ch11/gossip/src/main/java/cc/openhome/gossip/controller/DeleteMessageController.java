@@ -1,5 +1,6 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.constant.Role;
 import cc.openhome.gossip.service.UserService;
 
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ import java.io.IOException;
                 @WebInitParam(name = "MEMBER_PATH", value = "member")
         })
 @ServletSecurity(
-        @HttpConstraint(rolesAllowed = "member")
+        @HttpConstraint(rolesAllowed = Role.member)
 )
 public class DeleteMessageController extends HttpServlet {
 

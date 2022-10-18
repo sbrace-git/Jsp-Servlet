@@ -1,5 +1,6 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.constant.Role;
 import cc.openhome.gossip.service.UserService;
 
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.nio.charset.StandardCharsets;
                 @WebInitParam(name = "MEMBER_PATH", value = "member")
         })
 @ServletSecurity(
-        @HttpConstraint(rolesAllowed = "member")
+        @HttpConstraint(rolesAllowed = Role.member)
 )
 public class NewMessageController extends HttpServlet {
     private String MEMBER_PATH;

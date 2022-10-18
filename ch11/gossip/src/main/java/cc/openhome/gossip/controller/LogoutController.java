@@ -1,5 +1,7 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.constant.Role;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
@@ -16,7 +18,7 @@ import java.io.IOException;
         }
 )
 @ServletSecurity(
-        @HttpConstraint(rolesAllowed = "member")
+        @HttpConstraint(rolesAllowed = Role.member)
 )
 public class LogoutController extends HttpServlet {
     private static String LOGIN_PATH;

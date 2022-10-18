@@ -1,5 +1,6 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.constant.Role;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
 
@@ -19,7 +20,7 @@ import java.util.List;
                 @WebInitParam(name = "MEMBER_PATH", value = "/WEB-INF/jsp/member.jsp")
         })
 @ServletSecurity(
-        @HttpConstraint(rolesAllowed = "member")
+        @HttpConstraint(rolesAllowed = Role.member)
 )
 public class MemberController extends HttpServlet {
     private static String MEMBER_PATH;
