@@ -13,9 +13,15 @@ import java.util.List;
 
 @WebServlet("")
 public class IndexController extends HttpServlet {
+    private UserService userService;
+
+    @Override
+    public void init() throws ServletException {
+        userService = (UserService) getServletContext().getAttribute("userService");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserService userService = (UserService) getServletContext().getAttribute("userService");
         List<Message> newMessageList = userService.newMessageList();
         req.setAttribute("newMessageList", newMessageList);
         req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);

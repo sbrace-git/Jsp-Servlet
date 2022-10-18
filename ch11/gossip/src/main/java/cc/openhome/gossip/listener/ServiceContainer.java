@@ -5,7 +5,8 @@ import cc.openhome.gossip.dao.MessageDao;
 import cc.openhome.gossip.dao.impl.AccountDaoImpl;
 import cc.openhome.gossip.dao.impl.MessageDaoImpl;
 import cc.openhome.gossip.service.EmailService;
-import cc.openhome.gossip.service.UserService;
+import cc.openhome.gossip.service.impl.NetEaseMailServiceImpl;
+import cc.openhome.gossip.service.impl.UserServiceImpl;
 import cc.openhome.gossip.template.JdbcTemplate;
 import cc.openhome.gossip.template.impl.JdbcTemplateImpl;
 
@@ -42,11 +43,11 @@ public class ServiceContainer implements ServletContextListener {
         AccountDao accountDao = new AccountDaoImpl(jdbcTemplate);
         MessageDao messageDao = new MessageDaoImpl(jdbcTemplate);
 
-        servletContext.setAttribute("userService", new UserService(accountDao, messageDao));
+        servletContext.setAttribute("userService", new UserServiceImpl(accountDao, messageDao));
 
         Properties mailProperties = getMailProperties(servletContext);
         Session mailSession = getMailSession(mailProperties);
-        EmailService emailService = new EmailService(mailSession, mailProperties.getProperty("mail.username"));
+        EmailService emailService = new NetEaseMailServiceImpl(mailSession, mailProperties.getProperty("mail.username"));
         servletContext.setAttribute("emailService", emailService);
     }
 
