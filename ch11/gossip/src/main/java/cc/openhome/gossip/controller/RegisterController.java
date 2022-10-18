@@ -1,5 +1,6 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.constant.Regex;
 import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.service.EmailService;
 import cc.openhome.gossip.service.UserService;
@@ -28,8 +29,6 @@ public class RegisterController extends HttpServlet {
     private final static Pattern emailRegex = Pattern.compile(
             "^[_a-z0-9-]+([.][_a-z0-9-]+)*@[a-z0-9-]+([.][a-z0-9-]+)*$");
 
-    private final static Pattern passwdRegex = Pattern.compile("^\\w{8,16}$");
-
     private final static Pattern usernameRegex = Pattern.compile("^\\w{1,16}$");
 
     private static String SUCCESS_PATH;
@@ -56,7 +55,7 @@ public class RegisterController extends HttpServlet {
 
     private boolean validatePassword(String password, String password2) {
         return password != null &&
-                passwdRegex.matcher(password).find() &&
+                Regex.passwdRegex.matcher(password).find() &&
                 password.equals(password2);
     }
 

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @WebServlet("/verify")
-public class Verify extends HttpServlet {
+public class VerifyController extends HttpServlet {
 
     private UserService userService;
 

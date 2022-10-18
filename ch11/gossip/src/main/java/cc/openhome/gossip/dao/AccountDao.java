@@ -15,4 +15,8 @@ public interface AccountDao {
 
     void activateAccount(Account account);
 
+    Optional<Account> getAccountByNameEmail(String name, String email);
+
+    void resetPassword(String name, String encrypt,String salt);
+
 }

@@ -109,4 +109,16 @@ public class UserServiceImpl implements UserService {
     public List<Message> newMessageList() {
         return messageDao.newMessageList();
     }
+
+    @Override
+    public Optional<Account> getAccountByNameEmail(String name, String email) {
+        return accountDao.getAccountByNameEmail(name, email);
+    }
+
+    @Override
+    public void resetPassword(String name, String password) {
+        int salt = ThreadLocalRandom.current().nextInt();
+        String encrypt = String.valueOf(salt + password.hashCode());
+        accountDao.resetPassword(name, encrypt, String.valueOf(salt));
+    }
 }

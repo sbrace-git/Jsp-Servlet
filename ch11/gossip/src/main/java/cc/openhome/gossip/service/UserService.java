@@ -23,4 +23,8 @@ public interface UserService {
     void deleteMessage(String username, String millis);
 
     List<Message> newMessageList();
+
+    Optional<Account> getAccountByNameEmail(String name, String email);
+
+    void resetPassword(String name, String password);
 }

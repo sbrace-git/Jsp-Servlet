@@ -6,4 +6,6 @@ public interface EmailService {
     void validationLink(Account account);
 
     void failedRegistration(String username, String email);
+
+    void passwordResetLink(Account account);
 }
