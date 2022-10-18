@@ -1,11 +1,14 @@
-package com.example.javamailcid;
+package com.example.javamail;
 
 import javax.activation.DataHandler;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -45,15 +48,14 @@ public class MultipartMail extends HttpServlet {
         Part file = req.getPart("file");
 
         MimeMultipart mimeMultipart = new MimeMultipart();
+        MimeBodyPart pic = new MimeBodyPart();
         MimeBodyPart htmlPart = new MimeBodyPart();
-        MimeBodyPart filePart = new MimeBodyPart();
         try {
-            htmlPart.setContent(text, "text/html; charset=UTF-8");
+            pic.setDataHandler(new DataHandler(new ByteArrayDataSource(file.getInputStream(), file.getContentType())));
+            pic.setContentID("pic");
+            htmlPart.setContent(text + "<br/> <img src='cid:pic' />", "text/html; charset=UTF-8");
             mimeMultipart.addBodyPart(htmlPart);
-            String submittedFileName = file.getSubmittedFileName();
-            filePart.setFileName(MimeUtility.encodeText(submittedFileName, StandardCharsets.UTF_8.name(), "B"));
-            filePart.setDataHandler(new DataHandler(new ByteArrayDataSource(file.getInputStream(), file.getContentType())));
-            mimeMultipart.addBodyPart(filePart);
+            mimeMultipart.addBodyPart(pic);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
