@@ -42,16 +42,6 @@
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
-            <c:forEach var="message" items="${requestScope.messages}">
-                <tr>
-                    <td style="vertical-align: top;">
-                            ${message.username}<br>
-                            ${message.blabla}<br>
-                            ${message.localDateTime}
-                        <hr>
-                    </td>
-                </tr>
-            </c:forEach>
             </tbody>
         </table>
     </body>
