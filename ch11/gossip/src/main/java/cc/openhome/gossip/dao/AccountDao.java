@@ -11,4 +11,8 @@ public interface AccountDao {
 
     Optional<Account> getAccountByName(String name);
 
+    Optional<Account> getAccountByEmail(String email);
+
+    void activateAccount(Account account);
+
 }

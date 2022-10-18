@@ -25,7 +25,6 @@ public class JdbcTemplateImpl implements JdbcTemplate {
             }
             return preparedStatement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -79,7 +78,6 @@ public class JdbcTemplateImpl implements JdbcTemplate {
                 throw new RuntimeException(e);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -102,7 +100,6 @@ public class JdbcTemplateImpl implements JdbcTemplate {
                 throw new RuntimeException(e);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -122,7 +119,6 @@ public class JdbcTemplateImpl implements JdbcTemplate {
                 throw new RuntimeException(e);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

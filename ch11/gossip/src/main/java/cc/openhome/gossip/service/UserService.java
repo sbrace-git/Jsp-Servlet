@@ -25,8 +25,27 @@ public class UserService {
     }
 
     public void tryCreateUser(String email, String username, String password) throws IOException {
-        if (!accountDao.getAccountByName(username).isPresent()) {
-            createUser(username, email, password);
+        if (existEmail(email) || existUsername(username)) {
+            return;
+        }
+        createUser(username, email, password);
+    }
+
+    private boolean existEmail(String eamil) {
+        return accountDao.getAccountByEmail(eamil).isPresent();
+    }
+
+    private boolean existUsername(String username) {
+        return accountDao.getAccountByName(username).isPresent();
+    }
+
+    public void verify(String email, String token) {
+        Optional<Account> accountByEmail = accountDao.getAccountByEmail(email);
+        if (accountByEmail.isPresent()) {
+            Account account = accountByEmail.get();
+            if (account.getPassword().equals(token)) {
+                accountDao.activateAccount(account);
+            }
         }
     }
 
