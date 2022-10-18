@@ -5,6 +5,7 @@ import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.service.UserService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,14 +14,25 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 
-@WebServlet("/reset-password")
+@WebServlet(urlPatterns = "/reset-password",
+        initParams = {
+                @WebInitParam(name = "RESET_PASSWORD_PATH", value = "/WEB-INF/jsp/reset_password.jsp"),
+                @WebInitParam(name = "RESET_SUCCESS_PATH", value = "/WEB-INF/jsp/reset_success.jsp")
+        }
+
+)
 public class ResetPasswordController extends HttpServlet {
 
     private UserService userService;
 
+    private String RESET_PASSWORD_PATH;
+    private String RESET_SUCCESS_PATH;
+
     @Override
     public void init() throws ServletException {
         userService = (UserService) getServletContext().getAttribute("userService");
+        RESET_PASSWORD_PATH = getInitParameter("RESET_PASSWORD_PATH");
+        RESET_SUCCESS_PATH = getInitParameter("RESET_SUCCESS_PATH");
     }
 
     @Override
@@ -35,7 +47,7 @@ public class ResetPasswordController extends HttpServlet {
             if (account.getPassword().equals(token)) {
                 req.setAttribute("account", account);
                 req.getSession().setAttribute("token", token);
-                req.getRequestDispatcher("/WEB-INF/jsp/reset_password.jsp").forward(req, resp);
+                req.getRequestDispatcher(RESET_PASSWORD_PATH).forward(req, resp);
                 return;
             }
         }
@@ -60,13 +72,13 @@ public class ResetPasswordController extends HttpServlet {
                 || !Regex.passwdRegex.matcher(password).find()
                 || !password.equals(password2)) {
             req.setAttribute("errors", Collections.singletonList("请确认密码符合格式并再度确认密码"));
-            req.getRequestDispatcher("/WEB-INF/jsp/reset_password.jsp").forward(req, resp);
+            req.getRequestDispatcher(RESET_PASSWORD_PATH).forward(req, resp);
             return;
         }
 
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
         req.setAttribute("account", accountByNameEmail.get());
         userService.resetPassword(name, password);
-        req.getRequestDispatcher("/WEB-INF/jsp/reset_success.jsp").forward(req, resp);
+        req.getRequestDispatcher(RESET_SUCCESS_PATH).forward(req, resp);
     }
 }
