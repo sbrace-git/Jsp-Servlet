@@ -25,7 +25,7 @@ import java.util.List;
 public class MemberController extends HttpServlet {
     private static String MEMBER_PATH;
 
-    private static UserService userService;
+    private UserService userService;
 
     @Override
     public void init() {

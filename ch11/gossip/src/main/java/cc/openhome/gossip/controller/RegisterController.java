@@ -1,7 +1,10 @@
 package cc.openhome.gossip.controller;
 
+import cc.openhome.gossip.model.Account;
+import cc.openhome.gossip.service.EmailService;
 import cc.openhome.gossip.service.UserService;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @WebServlet(urlPatterns = "/register",
@@ -30,13 +34,16 @@ public class RegisterController extends HttpServlet {
 
     private static String SUCCESS_PATH;
     private static String FORM_PATH;
-    private static UserService userService;
+    private UserService userService;
+    private EmailService emailService;
 
     @Override
     public void init() throws ServletException {
         SUCCESS_PATH = getInitParameter("SUCCESS_PATH");
         FORM_PATH = getInitParameter("FORM_PATH");
-        userService = (UserService) getServletContext().getAttribute("userService");
+        ServletContext servletContext = getServletContext();
+        userService = (UserService) servletContext.getAttribute("userService");
+        emailService = (EmailService) servletContext.getAttribute("emailService");
     }
 
     private boolean validateEmail(String email) {
@@ -79,7 +86,12 @@ public class RegisterController extends HttpServlet {
         String path;
         if (errors.isEmpty()) {
             path = SUCCESS_PATH;
-            userService.tryCreateUser(email, username, password);
+            Optional<Account> account = userService.tryCreateUser(email, username, password);
+            if (account.isPresent()) {
+                emailService.validationLink(account.get());
+            } else {
+                emailService.failedRegistration(account.get());
+            }
         } else {
             path = FORM_PATH;
             req.setAttribute("errors", errors);

@@ -24,11 +24,11 @@ public class UserService {
         return accountDao.getAccountByName(username).isPresent();
     }
 
-    public void tryCreateUser(String email, String username, String password) throws IOException {
+    public Optional<Account> tryCreateUser(String email, String username, String password) throws IOException {
         if (existEmail(email) || existUsername(username)) {
-            return;
+            return Optional.empty();
         }
-        createUser(username, email, password);
+        return createUser(username, email, password);
     }
 
     private boolean existEmail(String eamil) {
@@ -49,7 +49,7 @@ public class UserService {
         }
     }
 
-    private void createUser(String username, String email, String password) throws IOException {
+    private Optional<Account> createUser(String username, String email, String password) throws IOException {
         int salt = ThreadLocalRandom.current().nextInt();
         String encrypt = String.valueOf(salt + password.hashCode());
         Account account = new Account();
@@ -58,6 +58,7 @@ public class UserService {
         account.setSalt(String.valueOf(salt));
         account.setPassword(encrypt);
         accountDao.createAccount(account);
+        return Optional.of(account);
     }
 
     public boolean login(String username, String password) throws IOException {

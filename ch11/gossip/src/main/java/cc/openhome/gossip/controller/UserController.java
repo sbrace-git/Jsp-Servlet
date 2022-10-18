@@ -18,7 +18,7 @@ public class UserController extends HttpServlet {
 
     private static String USER_PATH;
 
-    private static UserService userService;
+    private UserService userService;
 
     @Override
     public void init() {
