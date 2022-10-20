@@ -4,6 +4,7 @@ import com.example.dependencyinjection.dao.AccountDao;
 import com.example.dependencyinjection.dao.MessageDao;
 import com.example.dependencyinjection.dao.impl.AccountDaoImpl;
 import com.example.dependencyinjection.dao.impl.MessageDaoImpl;
+import com.example.dependencyinjection.service.UserService;
 import com.example.dependencyinjection.service.impl.UserServiceImpl;
 import com.example.dependencyinjection.template.JdbcTemplate;
 import com.example.dependencyinjection.template.impl.JdbcTemplateImpl;
@@ -20,7 +21,7 @@ public class Main {
         AccountDao accountDao = new AccountDaoImpl(jdbcTemplate);
         MessageDao messageDao = new MessageDaoImpl(jdbcTemplate);
 
-        UserServiceImpl userService = new UserServiceImpl(accountDao, messageDao);
+        UserService userService = new UserServiceImpl(accountDao, messageDao);
 
         final String BLABLA_FORMAT = "%s\t%s%n";
         userService.messages("test")
