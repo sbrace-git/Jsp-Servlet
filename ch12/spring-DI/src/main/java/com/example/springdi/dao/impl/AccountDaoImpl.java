@@ -20,11 +20,7 @@ public class AccountDaoImpl implements AccountDao {
     private final Logger logger = Logger.getLogger(AccountDaoImpl.class.getName());
 
     @Autowired
-    private final JdbcTemplate jdbcTemplate;
-
-    public AccountDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private JdbcTemplate jdbcTemplate;
 
     private static final String INSERT_ACCOUNT_SQL = "insert into T_ACCOUNT (name, email, password, salt) values ( ?,?,?,? ) ";
     private static final String INSERT_ACCOUNT_ROLE_SQL = "insert into T_ACCOUNT_ROLE (name, role) values ( ?,? ) ";

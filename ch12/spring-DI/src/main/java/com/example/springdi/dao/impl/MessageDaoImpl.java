@@ -13,11 +13,7 @@ import java.util.List;
 public class MessageDaoImpl implements MessageDao {
 
     @Autowired
-    private final JdbcTemplate jdbcTemplate;
-
-    public MessageDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_MESSAGE_LIST = "select username, millis, blabla from T_MESSAGE where USERNAME = ? order by millis desc ";
 

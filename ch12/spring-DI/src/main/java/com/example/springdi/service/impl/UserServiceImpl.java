@@ -17,15 +17,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private final AccountDao accountDao;
+    private AccountDao accountDao;
 
     @Autowired
-    private final MessageDao messageDao;
-
-    public UserServiceImpl(AccountDao accountDao, MessageDao messageDao) {
-        this.accountDao = accountDao;
-        this.messageDao = messageDao;
-    }
+    private MessageDao messageDao;
 
     @Override
     public boolean userExist(String username) {
