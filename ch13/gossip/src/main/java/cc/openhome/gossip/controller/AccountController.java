@@ -32,12 +32,12 @@ public class AccountController {
     @Autowired
     private EmailService emailService;
 
-    @Value("${member.path}")
-    private String MEMBER_PATH;
+    @Value("${redirect.member.path}")
+    private String REDIRECT_MEMBER_PATH;
     @Value("${login.view.path}")
     private String LOGIN_VIEW_PATH;
-    @Value("${login.path}")
-    private String LOGIN_PATH;
+    @Value("${redirect.login.path}")
+    private String REDIRECT_LOGIN_PATH;
     @Value("${forget.view.path}")
     private String FORGET_VIEW_PATH;
     @Value("${reset.password.view.path}")
@@ -52,9 +52,7 @@ public class AccountController {
     private String VERIFY_VIEW_PATH;
 
     @PostMapping("/login")
-    public void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+    public String login(String username, String password, HttpServletRequest req) {
 
         Optional<String> optionalPasswd = userService.encryptedPassword(username, password);
 
@@ -69,8 +67,8 @@ public class AccountController {
                 req.changeSessionId();
             }
             req.getSession().setAttribute("login", username);
-            resp.sendRedirect(MEMBER_PATH);
             logger.log(Level.INFO, "{0} login success", username);
+            return REDIRECT_MEMBER_PATH;
         } catch (Exception e) {
             logger.log(Level.WARNING, "login error", e);
             List<Message> newMessageList = userService.newMessageList();
@@ -78,29 +76,29 @@ public class AccountController {
             ArrayList<String> errors = new ArrayList<>();
             errors.add("登录失败");
             req.setAttribute("errors", errors);
-            req.getRequestDispatcher(LOGIN_VIEW_PATH).forward(req, resp);
+            return LOGIN_VIEW_PATH;
         }
     }
 
     @GetMapping("/logout")
-    public void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
         req.logout();
-        resp.sendRedirect(LOGIN_PATH);
+        return REDIRECT_LOGIN_PATH;
     }
 
     @PostMapping("/forgot")
-    public void forgot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String forgot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
         accountByNameEmail.ifPresent(emailService::passwordResetLink);
         req.setAttribute("email", email);
-        req.getRequestDispatcher(FORGET_VIEW_PATH).forward(req, resp);
+        return FORGET_VIEW_PATH;
     }
 
     @GetMapping("/reset-password")
-    public void resetPasswordForm(HttpServletRequest req, HttpServletResponse resp)
+    public String resetPasswordForm(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         String name = req.getParameter("name");
         String token = req.getParameter("token");
@@ -111,20 +109,18 @@ public class AccountController {
             if (account.getPassword().equals(token)) {
                 req.setAttribute("account", account);
                 req.getSession().setAttribute("token", token);
-                req.getRequestDispatcher(RESET_PASSWORD_VIEW_PATH).forward(req, resp);
-                return;
+                return RESET_PASSWORD_VIEW_PATH;
             }
         }
-        resp.sendRedirect(LOGIN_PATH);
+        return REDIRECT_LOGIN_PATH;
     }
 
     @PostMapping("/reset-password")
-    public void resetPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String resetPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String token = req.getParameter("token");
         String storedToken = (String) req.getSession().getAttribute("token");
         if (null == storedToken || !storedToken.equals(token)) {
-            resp.sendRedirect("/gossip");
-            return;
+            return REDIRECT_LOGIN_PATH;
         }
 
         String name = req.getParameter("name");
@@ -134,18 +130,16 @@ public class AccountController {
 
         if (null == password || !Regex.passwdRegex.matcher(password).find() || !password.equals(password2)) {
             req.setAttribute("errors", Collections.singletonList("请确认密码符合格式并再度确认密码"));
-            req.getRequestDispatcher(RESET_PASSWORD_VIEW_PATH).forward(req, resp);
-            return;
+            return RESET_PASSWORD_VIEW_PATH;
         }
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
         req.setAttribute("account", accountByNameEmail.get());
         userService.resetPassword(name, password);
-        req.getRequestDispatcher(RESET_SUCCESS_VIEW_PATH).forward(req, resp);
-
+        return RESET_SUCCESS_VIEW_PATH;
     }
 
     @PostMapping("/register")
-    public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String register(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String email = req.getParameter("email");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -175,13 +169,12 @@ public class AccountController {
             path = REGISTER_FORM_VIEW_PATH;
             req.setAttribute("errors", errors);
         }
-        req.getRequestDispatcher(path).forward(req, resp);
-
+        return path;
     }
 
     @GetMapping("/register")
-    public void registerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(REGISTER_FORM_VIEW_PATH).forward(req, resp);
+    public String registerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        return REGISTER_FORM_VIEW_PATH;
     }
 
     private boolean validateEmail(String email) {

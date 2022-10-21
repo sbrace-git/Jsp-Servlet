@@ -28,14 +28,14 @@ public class DisplayController {
     private String USER_VIEW_PATH;
 
     @RequestMapping("")
-    private void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private String index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Message> newMessageList = userService.newMessageList();
         req.setAttribute("newMessageList", newMessageList);
-        req.getRequestDispatcher(INDEX_VIEW_PATH).forward(req, resp);
+        return INDEX_VIEW_PATH;
     }
 
     @GetMapping("/user/{username}")
-    private void user(@PathVariable String username, HttpServletRequest req, HttpServletResponse resp)
+    private String user(@PathVariable String username, HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("username", username);
         if (userService.userExist(username)) {
@@ -44,6 +44,6 @@ public class DisplayController {
         } else {
             req.setAttribute("errors", Collections.singletonList(String.format("%s, 还没有发表信息", username)));
         }
-        req.getRequestDispatcher(USER_VIEW_PATH).forward(req, resp);
+        return USER_VIEW_PATH;
     }
 }

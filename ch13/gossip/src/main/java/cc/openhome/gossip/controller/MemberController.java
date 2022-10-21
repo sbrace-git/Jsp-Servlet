@@ -24,38 +24,37 @@ public class MemberController {
     @Value("${member.view.path}")
     private String MEMBER_VIEW_PATH;
 
-    @Value("${member.path}")
-    private String MEMBER_PATH;
+    @Value("${redirect.member.path}")
+    private String REDIRECT_MEMBER_PATH;
 
     @RequestMapping("/member")
-    public void member(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String member(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = (String) req.getSession().getAttribute("login");
         List<Message> messages = userService.messages(username);
         req.setAttribute("messages", messages);
-        req.getRequestDispatcher(MEMBER_VIEW_PATH).forward(req, resp);
+        return MEMBER_VIEW_PATH;
     }
 
     @RequestMapping(value = "/new_message", method = RequestMethod.POST)
-    public void newMessage(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String newMessage(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String username = (String) req.getSession().getAttribute("login");
         req.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String blabla = req.getParameter("blabla");
         if (null == blabla || blabla.length() > 140 || blabla.length() == 0) {
-            req.getRequestDispatcher(MEMBER_PATH).forward(req, resp);
-            return;
+            return MEMBER_VIEW_PATH;
         }
         userService.addMessage(username, blabla);
-        resp.sendRedirect(MEMBER_PATH);
+        return REDIRECT_MEMBER_PATH;
     }
 
     @RequestMapping(value = "/del_message", method = RequestMethod.POST)
-    public void delMessage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public String delMessage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String username = (String) req.getSession().getAttribute("login");
         String millis = req.getParameter("millis");
         if (null != millis) {
             userService.deleteMessage(username, millis);
         }
-        resp.sendRedirect(MEMBER_PATH);
+        return REDIRECT_MEMBER_PATH;
     }
 
 }
