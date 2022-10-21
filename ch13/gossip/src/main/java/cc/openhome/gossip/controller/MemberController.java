@@ -3,6 +3,7 @@ package cc.openhome.gossip.controller;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +21,11 @@ public class MemberController {
     @Autowired
     private UserService userService;
 
-    private static final String MEMBER_VIEW_PATH = "/WEB-INF/jsp/member.jsp";
-    private static final String MEMBER_PATH = "member";
+    @Value("${member.view.path}")
+    private String MEMBER_VIEW_PATH;
+
+    @Value("${member.path}")
+    private String MEMBER_PATH;
 
     @RequestMapping("/member")
     public void member(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

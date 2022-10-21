@@ -6,6 +6,7 @@ import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.EmailService;
 import cc.openhome.gossip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,15 +32,24 @@ public class AccountController {
     @Autowired
     private EmailService emailService;
 
-    private static final String MEMBER_PATH = "member";
-    private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/index.jsp";
-    private static final String LOGIN_PATH = "/gossip";
-    private static final String FORGET_VIEW_PATH = "/WEB-INF/jsp/forgot.jsp";
-    private static final String RESET_PASSWORD_VIEW_PATH = "/WEB-INF/jsp/reset_password.jsp";
-    private static final String RESET_SUCCESS_VIEW_PATH = "/WEB-INF/jsp/reset_success.jsp";
-    private static final String REGISTER_SUCCESS_VIEW_PATH = "/WEB-INF/jsp/register_success.jsp";
-    private static final String REGISTER_FORM_VIEW_PATH = "/WEB-INF/jsp/register.jsp";
-    private static final String VERIFY_VIEW_PATH = "/WEB-INF/jsp/verify.jsp";
+    @Value("${member.path}")
+    private String MEMBER_PATH;
+    @Value("${login.view.path}")
+    private String LOGIN_VIEW_PATH;
+    @Value("${login.path}")
+    private String LOGIN_PATH;
+    @Value("${forget.view.path}")
+    private String FORGET_VIEW_PATH;
+    @Value("${reset.password.view.path}")
+    private String RESET_PASSWORD_VIEW_PATH;
+    @Value("${reset.success.view.path}")
+    private String RESET_SUCCESS_VIEW_PATH;
+    @Value("${register.success.view.path}")
+    private String REGISTER_SUCCESS_VIEW_PATH;
+    @Value("${register.form.view.path}")
+    private String REGISTER_FORM_VIEW_PATH;
+    @Value("${verify.view.path}")
+    private String VERIFY_VIEW_PATH;
 
     @PostMapping("/login")
     public void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

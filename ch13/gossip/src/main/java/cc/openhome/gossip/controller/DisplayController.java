@@ -3,6 +3,7 @@ package cc.openhome.gossip.controller;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,10 @@ public class DisplayController {
     @Autowired
     private UserService userService;
 
-    private static final String INDEX_VIEW_PATH = "/WEB-INF/jsp/index.jsp";
-    private static final String USER_VIEW_PATH = "/WEB-INF/jsp/user.jsp";
+    @Value("${index.view.path}")
+    private String INDEX_VIEW_PATH;
+    @Value("${user.view.path}")
+    private String USER_VIEW_PATH;
 
     @RequestMapping("")
     private void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,7 +35,8 @@ public class DisplayController {
     }
 
     @GetMapping("/user/{username}")
-    private void user(@PathVariable String username,HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void user(@PathVariable String username, HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         req.setAttribute("username", username);
         if (userService.userExist(username)) {
             List<Message> messages = userService.messages(username);

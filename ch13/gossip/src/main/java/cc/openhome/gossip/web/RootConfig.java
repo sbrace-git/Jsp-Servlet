@@ -33,11 +33,6 @@ public class RootConfig {
     }
 
     @Bean
-    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
-    @Bean
     public Session getMailSession(@Value("${mail.username}") String username,
                                   @Value("${mail.password}") String password,
                                   @Value("${mail.smtp.host}") String host,
