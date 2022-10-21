@@ -30,6 +30,9 @@ public class AccountController {
     private static final String FORGET_VIEW_PATH = "/WEB-INF/jsp/forgot.jsp";
     private static final String RESET_PASSWORD_VIEW_PATH = "/WEB-INF/jsp/reset_password.jsp";
     private static final String RESET_SUCCESS_VIEW_PATH = "/WEB-INF/jsp/reset_success.jsp";
+    private static final String REGISTER_SUCCESS_VIEW_PATH = "/WEB-INF/jsp/register_success.jsp";
+    private static final String REGISTER_FORM_VIEW_PATH = "/WEB-INF/jsp/register.jsp";
+    private static final String VERIFY_VIEW_PATH = "/WEB-INF/jsp/verify.jsp";
 
     @PostMapping("/login")
     public void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -116,9 +119,7 @@ public class AccountController {
         String password = req.getParameter("password");
         String password2 = req.getParameter("password2");
 
-        if (null == password
-                || !Regex.passwdRegex.matcher(password).find()
-                || !password.equals(password2)) {
+        if (null == password || !Regex.passwdRegex.matcher(password).find() || !password.equals(password2)) {
             req.setAttribute("errors", Collections.singletonList("请确认密码符合格式并再度确认密码"));
             req.getRequestDispatcher(RESET_PASSWORD_VIEW_PATH).forward(req, resp);
             return;
@@ -129,5 +130,69 @@ public class AccountController {
         userService.resetPassword(name, password);
         req.getRequestDispatcher(RESET_SUCCESS_VIEW_PATH).forward(req, resp);
 
+    }
+
+    @PostMapping("/register")
+    public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String email = req.getParameter("email");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        String password2 = req.getParameter("password2");
+
+        List<String> errors = new ArrayList<>();
+        if (!validateEmail(email)) {
+            errors.add("未填写邮件或邮件格式不正确");
+        }
+        if (!validateUsername(username)) {
+            errors.add("未填写用户名或格式不正确");
+        }
+        if (!validatePassword(password, password2)) {
+            errors.add("请确认密码符合格式并再次确认密码");
+        }
+
+        String path;
+        if (errors.isEmpty()) {
+            path = REGISTER_SUCCESS_VIEW_PATH;
+            UserService userService = (UserService) req.getServletContext().getAttribute("userService");
+            Optional<Account> account = userService.tryCreateUser(email, username, password);
+            EmailService emailService = (EmailService) req.getServletContext().getAttribute("emailService");
+            if (account.isPresent()) {
+                emailService.validationLink(account.get());
+            } else {
+                emailService.failedRegistration(username, email);
+            }
+        } else {
+            path = REGISTER_FORM_VIEW_PATH;
+            req.setAttribute("errors", errors);
+        }
+        req.getRequestDispatcher(path).forward(req, resp);
+
+    }
+
+    @GetMapping("/register")
+    public void registerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher(REGISTER_FORM_VIEW_PATH).forward(req,resp);
+    }
+
+    private boolean validateEmail(String email) {
+        return email != null && Regex.emailRegex.matcher(email).find();
+    }
+
+    private boolean validateUsername(String username) {
+        return username != null && Regex.usernameRegex.matcher(username).find();
+    }
+
+    private boolean validatePassword(String password, String password2) {
+        return password != null && Regex.passwdRegex.matcher(password).find() && password.equals(password2);
+    }
+
+    @GetMapping("/verify")
+    public void verify(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String email = req.getParameter("email");
+        String token = req.getParameter("token");
+        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
+        Optional<Account> account = userService.verify(email, token);
+        req.setAttribute("account", account);
+        req.getRequestDispatcher(VERIFY_VIEW_PATH).forward(req, resp);
     }
 }
