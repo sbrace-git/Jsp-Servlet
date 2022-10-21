@@ -1,49 +1,24 @@
 package cc.openhome.gossip.controller;
 
-import cc.openhome.gossip.constant.Role;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.HttpConstraint;
-import javax.servlet.annotation.ServletSecurity;
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/member",
-        initParams = {
-                @WebInitParam(name = "MEMBER_PATH", value = "/WEB-INF/jsp/member.jsp")
-        })
-@ServletSecurity(
-        @HttpConstraint(rolesAllowed = Role.member)
-)
-public class MemberController extends HttpServlet {
-    private static String MEMBER_PATH;
+@Controller
+public class MemberController {
 
-    private UserService userService;
+    private static final String MEMBER_PATH = "/WEB-INF/jsp/member.jsp";
 
-    @Override
-    public void init() {
-        MEMBER_PATH = getInitParameter("MEMBER_PATH");
-        userService = (UserService) getServletContext().getAttribute("userService");
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    @RequestMapping("/member")
+    public void member(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         String username = (String) req.getSession().getAttribute("login");
         List<Message> messages = userService.messages(username);
         req.setAttribute("messages", messages);
