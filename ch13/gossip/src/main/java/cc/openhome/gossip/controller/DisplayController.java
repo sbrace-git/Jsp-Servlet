@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,15 +25,14 @@ public class DisplayController {
     private String USER_VIEW_PATH;
 
     @RequestMapping("")
-    private String index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private String index(HttpServletRequest req) {
         List<Message> newMessageList = userService.newMessageList();
         req.setAttribute("newMessageList", newMessageList);
         return INDEX_VIEW_PATH;
     }
 
     @GetMapping("/user/{username}")
-    private String user(@PathVariable String username, HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    private String user(@PathVariable String username, HttpServletRequest req) {
         req.setAttribute("username", username);
         if (userService.userExist(username)) {
             List<Message> messages = userService.messages(username);

@@ -60,14 +60,11 @@ public class AccountController {
             if (!optionalPasswd.isPresent()) {
                 throw new RuntimeException("account error");
             }
-            logger.log(Level.INFO, "username = {0}", username);
-            logger.log(Level.INFO, "passwd = {0}", optionalPasswd.get());
             req.login(username, optionalPasswd.get());
             if (null != req.getSession(false)) {
                 req.changeSessionId();
             }
             req.getSession().setAttribute("login", username);
-            logger.log(Level.INFO, "{0} login success", username);
             return REDIRECT_MEMBER_PATH;
         } catch (Exception e) {
             logger.log(Level.WARNING, "login error", e);
@@ -81,14 +78,14 @@ public class AccountController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String logout(HttpServletRequest req) throws ServletException {
         req.getSession().invalidate();
         req.logout();
         return REDIRECT_LOGIN_PATH;
     }
 
     @PostMapping("/forgot")
-    public String forgot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String forgot(HttpServletRequest req) {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
@@ -98,7 +95,7 @@ public class AccountController {
     }
 
     @GetMapping("/reset-password")
-    public String resetPasswordForm(HttpServletRequest req, HttpServletResponse resp)
+    public String resetPasswordForm(HttpServletRequest req)
             throws IOException, ServletException {
         String name = req.getParameter("name");
         String token = req.getParameter("token");
@@ -116,7 +113,7 @@ public class AccountController {
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String resetPassword(HttpServletRequest req) {
         String token = req.getParameter("token");
         String storedToken = (String) req.getSession().getAttribute("token");
         if (null == storedToken || !storedToken.equals(token)) {
@@ -139,7 +136,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public String register(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String register(HttpServletRequest req) throws IOException {
         String email = req.getParameter("email");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -173,7 +170,7 @@ public class AccountController {
     }
 
     @GetMapping("/register")
-    public String registerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String registerForm() {
         return REGISTER_FORM_VIEW_PATH;
     }
 
