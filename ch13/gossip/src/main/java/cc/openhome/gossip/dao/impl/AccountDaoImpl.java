@@ -5,21 +5,21 @@ import cc.openhome.gossip.dao.AccountDao;
 import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.template.JdbcTemplate;
 import cc.openhome.gossip.template.ResultSetExtractor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Component
 public class AccountDaoImpl implements AccountDao {
 
     private final Logger logger = Logger.getLogger(AccountDaoImpl.class.getName());
 
-    private final JdbcTemplate jdbcTemplate;
-
-    public AccountDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private static final String INSERT_ACCOUNT_SQL = "insert into T_ACCOUNT (name, email, password, salt) values ( ?,?,?,? ) ";
     private static final String INSERT_ACCOUNT_ROLE_SQL = "insert into T_ACCOUNT_ROLE (name, role) values ( ?,? ) ";

@@ -2,6 +2,7 @@ package cc.openhome.gossip.controller;
 
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +18,14 @@ import java.util.List;
 @Controller
 public class DisplayController {
 
+    @Autowired
+    private UserService userService;
+
     private static final String INDEX_VIEW_PATH = "/WEB-INF/jsp/index.jsp";
     private static final String USER_VIEW_PATH = "/WEB-INF/jsp/user.jsp";
 
     @RequestMapping("")
     private void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         List<Message> newMessageList = userService.newMessageList();
         req.setAttribute("newMessageList", newMessageList);
         req.getRequestDispatcher(INDEX_VIEW_PATH).forward(req, resp);
@@ -31,7 +34,6 @@ public class DisplayController {
     @GetMapping("/user/{username}")
     private void user(@PathVariable String username,HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("username", username);
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         if (userService.userExist(username)) {
             List<Message> messages = userService.messages(username);
             req.setAttribute("messages", messages);

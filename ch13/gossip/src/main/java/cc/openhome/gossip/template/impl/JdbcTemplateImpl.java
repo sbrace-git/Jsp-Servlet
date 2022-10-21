@@ -2,19 +2,19 @@ package cc.openhome.gossip.template.impl;
 
 import cc.openhome.gossip.template.JdbcTemplate;
 import cc.openhome.gossip.template.ResultSetExtractor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcTemplateImpl implements JdbcTemplate {
 
-    private final DataSource dataSource;
-
-    public JdbcTemplateImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public int update(String sql, Object... params) {

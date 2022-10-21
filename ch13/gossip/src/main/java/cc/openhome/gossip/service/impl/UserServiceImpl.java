@@ -5,21 +5,22 @@ import cc.openhome.gossip.dao.MessageDao;
 import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Component
 public class UserServiceImpl implements UserService {
 
-    private final AccountDao accountDao;
-    private final MessageDao messageDao;
+    @Autowired
+    private AccountDao accountDao;
 
-    public UserServiceImpl(AccountDao accountDao, MessageDao messageDao) {
-        this.accountDao = accountDao;
-        this.messageDao = messageDao;
-    }
+    @Autowired
+    private MessageDao messageDao;
 
     @Override
     public boolean userExist(String username) {

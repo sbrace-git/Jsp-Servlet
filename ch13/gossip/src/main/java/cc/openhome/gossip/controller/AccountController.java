@@ -5,6 +5,7 @@ import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.EmailService;
 import cc.openhome.gossip.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,12 @@ import java.util.logging.Logger;
 public class AccountController {
     private final Logger logger = Logger.getLogger(AccountController.class.getName());
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
+
     private static final String MEMBER_PATH = "member";
     private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/index.jsp";
     private static final String LOGIN_PATH = "/gossip";
@@ -39,7 +46,6 @@ public class AccountController {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         Optional<String> optionalPasswd = userService.encryptedPassword(username, password);
 
         try {
@@ -77,8 +83,6 @@ public class AccountController {
     public void forgot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
-        EmailService emailService = (EmailService) req.getServletContext().getAttribute("emailService");
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
         accountByNameEmail.ifPresent(emailService::passwordResetLink);
         req.setAttribute("email", email);
@@ -91,7 +95,6 @@ public class AccountController {
         String name = req.getParameter("name");
         String token = req.getParameter("token");
         String email = req.getParameter("email");
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         Optional<Account> accountByEmail = userService.getAccountByNameEmail(name, email);
         if (accountByEmail.isPresent()) {
             Account account = accountByEmail.get();
@@ -124,7 +127,6 @@ public class AccountController {
             req.getRequestDispatcher(RESET_PASSWORD_VIEW_PATH).forward(req, resp);
             return;
         }
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
         req.setAttribute("account", accountByNameEmail.get());
         userService.resetPassword(name, password);
@@ -153,9 +155,7 @@ public class AccountController {
         String path;
         if (errors.isEmpty()) {
             path = REGISTER_SUCCESS_VIEW_PATH;
-            UserService userService = (UserService) req.getServletContext().getAttribute("userService");
             Optional<Account> account = userService.tryCreateUser(email, username, password);
-            EmailService emailService = (EmailService) req.getServletContext().getAttribute("emailService");
             if (account.isPresent()) {
                 emailService.validationLink(account.get());
             } else {
@@ -171,7 +171,7 @@ public class AccountController {
 
     @GetMapping("/register")
     public void registerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(REGISTER_FORM_VIEW_PATH).forward(req,resp);
+        req.getRequestDispatcher(REGISTER_FORM_VIEW_PATH).forward(req, resp);
     }
 
     private boolean validateEmail(String email) {
@@ -190,7 +190,6 @@ public class AccountController {
     public void verify(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String token = req.getParameter("token");
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         Optional<Account> account = userService.verify(email, token);
         req.setAttribute("account", account);
         req.getRequestDispatcher(VERIFY_VIEW_PATH).forward(req, resp);

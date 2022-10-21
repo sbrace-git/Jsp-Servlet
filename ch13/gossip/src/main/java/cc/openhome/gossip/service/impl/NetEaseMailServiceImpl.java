@@ -2,6 +2,9 @@ package cc.openhome.gossip.service.impl;
 
 import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,14 +15,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+@Component
 public class NetEaseMailServiceImpl implements EmailService {
-    private final Session emailSession;
-    private final String emailUsername;
 
-    public NetEaseMailServiceImpl(Session emailSession, String emailUsername) {
-        this.emailSession = emailSession;
-        this.emailUsername = emailUsername;
-    }
+    @Autowired
+    private Session emailSession;
+
+    @Value("${mail.username}")
+    private String emailUsername;
 
     private static final String VALIDATION_LINK_FORMAT = "http://localhost:8080/gossip/verify?email=%s&token=%s";
     private static final String PASSWORD_RESET_LINK_FORMAT = "http://localhost:8080/gossip/reset-password?name=%s&email=%s&token=%s";

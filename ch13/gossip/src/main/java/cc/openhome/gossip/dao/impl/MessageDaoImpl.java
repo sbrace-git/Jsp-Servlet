@@ -3,16 +3,16 @@ package cc.openhome.gossip.dao.impl;
 import cc.openhome.gossip.dao.MessageDao;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.template.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class MessageDaoImpl implements MessageDao {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    public MessageDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private static final String SELECT_MESSAGE_LIST = "select username, millis, blabla from T_MESSAGE where USERNAME = ? order by millis desc ";
 
