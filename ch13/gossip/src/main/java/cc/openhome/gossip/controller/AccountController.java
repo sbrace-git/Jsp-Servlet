@@ -8,12 +8,15 @@ import cc.openhome.gossip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,60 +55,47 @@ public class AccountController {
     private String VERIFY_VIEW_PATH;
 
     @PostMapping("/login")
-    public String login(String username, String password, HttpServletRequest req) {
-
+    public String login(String username, String password, HttpServletRequest req, HttpSession httpSession, RedirectAttributes redirectAttributes) {
         Optional<String> optionalPasswd = userService.encryptedPassword(username, password);
-
         try {
             if (!optionalPasswd.isPresent()) {
                 throw new RuntimeException("account error");
             }
             req.login(username, optionalPasswd.get());
-            if (null != req.getSession(false)) {
-                req.changeSessionId();
-            }
-            req.getSession().setAttribute("login", username);
+            httpSession.setAttribute("login", username);
             return REDIRECT_MEMBER_PATH;
         } catch (Exception e) {
             logger.log(Level.WARNING, "login error", e);
             List<Message> newMessageList = userService.newMessageList();
-            req.setAttribute("newMessageList", newMessageList);
-            ArrayList<String> errors = new ArrayList<>();
-            errors.add("登录失败");
-            req.setAttribute("errors", errors);
-            return LOGIN_VIEW_PATH;
+            redirectAttributes.addFlashAttribute("newMessageList", newMessageList);
+            List<String> errors = Collections.singletonList("登录失败");
+            redirectAttributes.addFlashAttribute("errors", errors);
+            return REDIRECT_LOGIN_PATH;
         }
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest req) throws ServletException {
-        req.getSession().invalidate();
         req.logout();
         return REDIRECT_LOGIN_PATH;
     }
 
     @PostMapping("/forgot")
-    public String forgot(HttpServletRequest req) {
-        String name = req.getParameter("name");
-        String email = req.getParameter("email");
+    public String forgot(String name, String email, Model model) {
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
         accountByNameEmail.ifPresent(emailService::passwordResetLink);
-        req.setAttribute("email", email);
+        model.addAttribute("email", email);
         return FORGET_VIEW_PATH;
     }
 
     @GetMapping("/reset-password")
-    public String resetPasswordForm(HttpServletRequest req)
-            throws IOException, ServletException {
-        String name = req.getParameter("name");
-        String token = req.getParameter("token");
-        String email = req.getParameter("email");
+    public String resetPasswordForm(String name, String email, String token, HttpSession httpSession, Model model) {
         Optional<Account> accountByEmail = userService.getAccountByNameEmail(name, email);
         if (accountByEmail.isPresent()) {
             Account account = accountByEmail.get();
             if (account.getPassword().equals(token)) {
-                req.setAttribute("account", account);
-                req.getSession().setAttribute("token", token);
+                model.addAttribute("account", account);
+                httpSession.setAttribute("token", token);
                 return RESET_PASSWORD_VIEW_PATH;
             }
         }
@@ -113,34 +103,25 @@ public class AccountController {
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(HttpServletRequest req) {
-        String token = req.getParameter("token");
-        String storedToken = (String) req.getSession().getAttribute("token");
+    public String resetPassword(String token, @SessionAttribute("token") String storedToken, String name,
+                                String email, String password, String password2, Model model) {
         if (null == storedToken || !storedToken.equals(token)) {
             return REDIRECT_LOGIN_PATH;
         }
 
-        String name = req.getParameter("name");
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String password2 = req.getParameter("password2");
-
         if (null == password || !Regex.passwdRegex.matcher(password).find() || !password.equals(password2)) {
-            req.setAttribute("errors", Collections.singletonList("请确认密码符合格式并再度确认密码"));
+            model.addAttribute("errors", Collections.singletonList("请确认密码符合格式并再度确认密码"));
             return RESET_PASSWORD_VIEW_PATH;
         }
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
-        req.setAttribute("account", accountByNameEmail.get());
+        model.addAttribute("account", accountByNameEmail.get());
         userService.resetPassword(name, password);
         return RESET_SUCCESS_VIEW_PATH;
     }
 
     @PostMapping("/register")
-    public String register(HttpServletRequest req) throws IOException {
-        String email = req.getParameter("email");
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        String password2 = req.getParameter("password2");
+    public String register(String email, String username, String password, String password2, Model model)
+            throws IOException {
 
         List<String> errors = new ArrayList<>();
         if (!validateEmail(email)) {
@@ -164,7 +145,7 @@ public class AccountController {
             }
         } else {
             path = REGISTER_FORM_VIEW_PATH;
-            req.setAttribute("errors", errors);
+            model.addAttribute("errors", errors);
         }
         return path;
     }
@@ -187,11 +168,9 @@ public class AccountController {
     }
 
     @GetMapping("/verify")
-    public void verify(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = req.getParameter("email");
-        String token = req.getParameter("token");
+    public String verify(String email, String token, Model model) {
         Optional<Account> account = userService.verify(email, token);
-        req.setAttribute("account", account);
-        req.getRequestDispatcher(VERIFY_VIEW_PATH).forward(req, resp);
+        model.addAttribute("account", account);
+        return VERIFY_VIEW_PATH;
     }
 }

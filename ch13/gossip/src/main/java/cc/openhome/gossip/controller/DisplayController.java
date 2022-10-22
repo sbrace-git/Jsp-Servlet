@@ -5,11 +5,11 @@ import cc.openhome.gossip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,20 +25,20 @@ public class DisplayController {
     private String USER_VIEW_PATH;
 
     @RequestMapping("")
-    private String index(HttpServletRequest req) {
+    private String index(Model model) {
         List<Message> newMessageList = userService.newMessageList();
-        req.setAttribute("newMessageList", newMessageList);
+        model.addAttribute("newMessageList", newMessageList);
         return INDEX_VIEW_PATH;
     }
 
     @GetMapping("/user/{username}")
-    private String user(@PathVariable String username, HttpServletRequest req) {
-        req.setAttribute("username", username);
+    private String user(@PathVariable String username, Model model) {
+        model.addAttribute("username", username);
         if (userService.userExist(username)) {
             List<Message> messages = userService.messages(username);
-            req.setAttribute("messages", messages);
+            model.addAttribute("messages", messages);
         } else {
-            req.setAttribute("errors", Collections.singletonList(String.format("%s, 还没有发表信息", username)));
+            model.addAttribute("errors", Collections.singletonList(String.format("%s, 还没有发表信息", username)));
         }
         return USER_VIEW_PATH;
     }
