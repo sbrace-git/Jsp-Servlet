@@ -1,10 +1,12 @@
 package cc.openhome.gossip.web;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -29,6 +31,11 @@ public class RootConfig {
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Bean
+    public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean
