@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -36,6 +38,16 @@ public class RootConfig {
     @Bean
     public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public DataSourceTransactionManager getDataSourceTransactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    public TransactionTemplate getTransactionTemplate(DataSourceTransactionManager dataSourceTransactionManager) {
+        return new TransactionTemplate(dataSourceTransactionManager);
     }
 
     @Bean

@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Optional;
 import java.util.logging.Level;
@@ -19,6 +22,9 @@ public class AccountDaoImpl implements AccountDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     private static final String INSERT_ACCOUNT_SQL = "insert into T_ACCOUNT (name, email, password, salt) values ( ?,?,?,? ) ";
     private static final String INSERT_ACCOUNT_ROLE_SQL = "insert into T_ACCOUNT_ROLE (name, role) values ( ?,? ) ";
@@ -39,11 +45,21 @@ public class AccountDaoImpl implements AccountDao {
         String email = account.getEmail();
         String password = account.getPassword();
         String salt = account.getSalt();
-        // TODO: 2022/10/22 tx
-        int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
-        int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, Role.unverified);
-        logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
-                new Object[]{insertAccount, insertAccountRole});
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
+                    int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, Role.unverified);
+                    logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
+                            new Object[]{insertAccount, insertAccountRole});
+                } catch (Exception e) {
+                    status.setRollbackOnly();
+                    logger.log(Level.WARNING, "createAccount error", e);
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     private static final String SELECT_ACCOUNT_BY_NAME_SQL = "select name, email, password, salt from T_ACCOUNT where NAME = ? ";
