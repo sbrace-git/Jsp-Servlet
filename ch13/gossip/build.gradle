@@ -40,6 +40,8 @@ dependencies {
     implementation 'org.springframework:spring-webmvc:5.3.23'
     // https://mvnrepository.com/artifact/org.springframework/spring-jdbc
     implementation 'org.springframework:spring-jdbc:5.3.23'
+    // https://mvnrepository.com/artifact/org.springframework/spring-context-support
+    implementation 'org.springframework:spring-context-support:5.3.23'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

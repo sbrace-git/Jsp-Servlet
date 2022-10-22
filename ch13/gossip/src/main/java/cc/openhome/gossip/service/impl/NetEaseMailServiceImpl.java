@@ -4,12 +4,11 @@ import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -19,7 +18,7 @@ import javax.mail.internet.MimeMultipart;
 public class NetEaseMailServiceImpl implements EmailService {
 
     @Autowired
-    private Session emailSession;
+    private JavaMailSender javaMailSender;
 
     @Value("${mail.username}")
     private String emailUsername;
@@ -39,8 +38,8 @@ public class NetEaseMailServiceImpl implements EmailService {
         String anchor = String.format(REGISTRATION_RESULT_ANCHOR_FORMAT, link);
         String html = String.format(HTML_FORMAT, anchor, link);
         try {
-            Message message = createMessage(account.getEmail(), html, REGISTRATION_RESULT_SUBJECT);
-            Transport.send(message);
+            MimeMessage message = createMessage(account.getEmail(), html, REGISTRATION_RESULT_SUBJECT);
+            javaMailSender.send(message);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -49,12 +48,8 @@ public class NetEaseMailServiceImpl implements EmailService {
     @Override
     public void failedRegistration(String username, String email) {
         String html = String.format(FAILED_REGISTRATION_FORMAT, username, email);
-        try {
-            Message message = createMessage(email, html, REGISTRATION_RESULT_SUBJECT);
-            Transport.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        MimeMessage message = createMessage(email, html, REGISTRATION_RESULT_SUBJECT);
+        javaMailSender.send(message);
     }
 
 
@@ -64,21 +59,17 @@ public class NetEaseMailServiceImpl implements EmailService {
                 account.getName(), account.getEmail(), account.getPassword());
         String anchor = String.format(RESET_PASSWORD_ANCHOR_FORMAT, link);
         String html = String.format(HTML_FORMAT, anchor, link);
-        Message message = createMessage(account.getEmail(), html, RESET_PASSWORD_SUBJECT);
-        try {
-            Transport.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        MimeMessage message = createMessage(account.getEmail(), html, RESET_PASSWORD_SUBJECT);
+        javaMailSender.send(message);
     }
 
-    private Message createMessage(String to, String text, String subject) {
+    private MimeMessage createMessage(String to, String text, String subject) {
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
         try {
             mimeBodyPart.setContent(text, "text/html; charset=UTF-8");
             MimeMultipart mimeMultipart = new MimeMultipart();
             mimeMultipart.addBodyPart(mimeBodyPart);
-            MimeMessage mimeMessage = new MimeMessage(emailSession);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             mimeMessage.setFrom(new InternetAddress(emailUsername));
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             mimeMessage.setSubject(subject);
