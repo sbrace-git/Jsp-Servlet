@@ -1,9 +1,8 @@
 package cc.openhome.gossip.web;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -12,12 +11,23 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
+@EnableAspectJAutoProxy
 @PropertySource("classpath:path.properties")
-@ComponentScan("cc.openhome.gossip.controller")
+@ComponentScan(basePackages = {"cc.openhome.gossip.controller", "cc.openhome.gossip.aspect"})
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    @Bean
+    public PolicyFactory getPolicyFactory() {
+        return new HtmlPolicyBuilder()
+                .allowElements("a", "b", "i", "del", "pre", "code", "big", "small")
+                .allowUrlProtocols("http", "https")
+                .allowAttributes("href").onElements("a")
+                .requireRelNofollowOnLinks()
+                .toFactory();
     }
 
     @Bean

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -33,7 +32,7 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/new_message", method = RequestMethod.POST)
-    public String newMessage(@SessionAttribute("login") String username, String blabla, Model model) {
+    public String newMessage(String blabla, @SessionAttribute("login") String username, Model model) {
         if (blabla.length() > 140 || blabla.length() == 0) {
             List<Message> messages = userService.messages(username);
             model.addAttribute("messages", messages);
