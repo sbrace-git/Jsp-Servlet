@@ -19,17 +19,4 @@ public class UserServiceImpl implements UserService {
         return messageDao.getMessageByUsername(username);
     }
 
-    @Override
-    public void addMessage(String username, String blabla) {
-        Message message = new Message();
-        message.setUsername(username);
-        message.setBlabla(blabla);
-        messageDao.createMessage(message);
-    }
-
-    @Override
-    public void deleteMessage(String username, String millis) {
-        messageDao.deleteMessage(username, Long.valueOf(millis));
-    }
-
 }

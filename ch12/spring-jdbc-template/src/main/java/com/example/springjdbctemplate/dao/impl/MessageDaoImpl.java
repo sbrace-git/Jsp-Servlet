@@ -31,20 +31,4 @@ public class MessageDaoImpl implements MessageDao {
             return messageList;
         }, paramUsername);
     }
-
-    private static final String INSERT_MESSAGE_SQL = "insert into T_MESSAGE (USERNAME, MILLIS, BLABLA) values ( ?,?,? )";
-
-    @Override
-    public void createMessage(Message message) {
-        String username = message.getUsername();
-        String blabla = message.getBlabla();
-        jdbcTemplate.update(INSERT_MESSAGE_SQL, username, System.currentTimeMillis(), blabla);
-    }
-
-    private static final String DELETE_MESSAGE_SQL = "delete from T_MESSAGE where USERNAME = ? and MILLIS = ?";
-
-    @Override
-    public void deleteMessage(String username, Long millis) {
-        jdbcTemplate.update(DELETE_MESSAGE_SQL, username, millis);
-    }
 }
