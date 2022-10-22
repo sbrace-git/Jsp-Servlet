@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Optional;
@@ -39,28 +38,34 @@ public class AccountDaoImpl implements AccountDao {
         return null;
     };
 
-    // TODO: 2022/10/22 @Transactional
     @Override
+    @Transactional
     public void createAccount(Account account) {
         String name = account.getName();
         String email = account.getEmail();
         String password = account.getPassword();
         String salt = account.getSalt();
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                try {
-                    int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
-                    int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, Role.unverified);
-                    logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
-                            new Object[]{insertAccount, insertAccountRole});
-                } catch (Exception e) {
-                    status.setRollbackOnly();
-                    logger.log(Level.WARNING, "createAccount error", e);
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
+        int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, Role.unverified);
+        logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
+                new Object[]{insertAccount, insertAccountRole});
+        // 如果不用 @Transactional 注解，可以用下面这种编程式事务
+        // 注意要在配置类 RootConfig 上加 @EnableTransactionManagement 后 @Transactional 才生效
+//        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//            @Override
+//            protected void doInTransactionWithoutResult(TransactionStatus status) {
+//                try {
+//                    int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
+//                    int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, Role.unverified);
+//                    logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
+//                            new Object[]{insertAccount, insertAccountRole});
+//                } catch (Exception e) {
+//                    status.setRollbackOnly();
+//                    logger.log(Level.WARNING, "createAccount error", e);
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
     }
 
     private static final String SELECT_ACCOUNT_BY_NAME_SQL = "select name, email, password, salt from T_ACCOUNT where NAME = ? ";
