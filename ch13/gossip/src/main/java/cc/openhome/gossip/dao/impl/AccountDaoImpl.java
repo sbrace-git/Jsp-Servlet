@@ -39,6 +39,7 @@ public class AccountDaoImpl implements AccountDao {
         return null;
     };
 
+    // TODO: 2022/10/22 @Transactional
     @Override
     public void createAccount(Account account) {
         String name = account.getName();
