@@ -1,14 +1,17 @@
 package cc.openhome.gossip.controller;
 
-import cc.openhome.gossip.constant.Regex;
 import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.EmailService;
 import cc.openhome.gossip.service.UserService;
+import cc.openhome.gossip.validator.RegisterForm;
+import cc.openhome.gossip.validator.ResetPasswordForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -17,13 +20,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Controller
 public class AccountController {
@@ -103,68 +107,59 @@ public class AccountController {
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(String token, @SessionAttribute("token") String storedToken, String name,
-                                String email, String password, String password2, Model model) {
+    public String resetPassword(@Valid ResetPasswordForm resetPasswordForm,
+                                BindingResult bindingResult,
+                                @SessionAttribute("token") String storedToken,
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+            model.addAttribute("errors", errors);
+            return RESET_PASSWORD_VIEW_PATH;
+        }
+
+        String token = resetPasswordForm.getToken();
         if (null == storedToken || !storedToken.equals(token)) {
             return REDIRECT_LOGIN_PATH;
         }
-
-        if (null == password || !Regex.passwdRegex.matcher(password).find() || !password.equals(password2)) {
-            model.addAttribute("errors", Collections.singletonList("请确认密码符合格式并再度确认密码"));
-            return RESET_PASSWORD_VIEW_PATH;
-        }
+        String name = resetPasswordForm.getName();
+        String email = resetPasswordForm.getEmail();
+        String password = resetPasswordForm.getPassword();
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);
+        if (!accountByNameEmail.isPresent()) {
+            return REDIRECT_LOGIN_PATH;
+        }
         model.addAttribute("account", accountByNameEmail.get());
         userService.resetPassword(name, password);
         return RESET_SUCCESS_VIEW_PATH;
     }
 
     @PostMapping("/register")
-    public String register(String email, String username, String password, String password2, Model model)
+    public String register(@Valid RegisterForm registerForm, BindingResult bindingResult, Model model)
             throws IOException {
-
-        List<String> errors = new ArrayList<>();
-        if (!validateEmail(email)) {
-            errors.add("未填写邮件或邮件格式不正确");
-        }
-        if (!validateUsername(username)) {
-            errors.add("未填写用户名或格式不正确");
-        }
-        if (!validatePassword(password, password2)) {
-            errors.add("请确认密码符合格式并再次确认密码");
-        }
-
-        String path;
-        if (errors.isEmpty()) {
-            path = REGISTER_SUCCESS_VIEW_PATH;
-            Optional<Account> account = userService.tryCreateUser(email, username, password);
-            if (account.isPresent()) {
-                emailService.validationLink(account.get());
-            } else {
-                emailService.failedRegistration(username, email);
-            }
-        } else {
-            path = REGISTER_FORM_VIEW_PATH;
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
             model.addAttribute("errors", errors);
+            return REGISTER_FORM_VIEW_PATH;
         }
-        return path;
+        String email = registerForm.getEmail();
+        String username = registerForm.getUsername();
+        String password = registerForm.getPassword();
+
+        Optional<Account> account = userService.tryCreateUser(email, username, password);
+        if (account.isPresent()) {
+            emailService.validationLink(account.get());
+        } else {
+            emailService.failedRegistration(username, email);
+        }
+        return REGISTER_SUCCESS_VIEW_PATH;
     }
 
     @GetMapping("/register")
     public String registerForm() {
         return REGISTER_FORM_VIEW_PATH;
-    }
-
-    private boolean validateEmail(String email) {
-        return email != null && Regex.emailRegex.matcher(email).find();
-    }
-
-    private boolean validateUsername(String username) {
-        return username != null && Regex.usernameRegex.matcher(username).find();
-    }
-
-    private boolean validatePassword(String password, String password2) {
-        return password != null && Regex.passwdRegex.matcher(password).find() && password.equals(password2);
     }
 
     @GetMapping("/verify")

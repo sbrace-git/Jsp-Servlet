@@ -32,7 +32,8 @@ dependencies {
     implementation 'com.h2database:h2:2.1.214'
     // https://mvnrepository.com/artifact/com.sun.mail/javax.mail
     implementation 'com.sun.mail:javax.mail:1.6.2'
-
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
+    implementation 'org.hibernate:hibernate-validator:6.2.0.Final'
     // https://mvnrepository.com/artifact/org.springframework/spring-context
     implementation group: 'org.springframework', name: 'spring-context', version: '5.3.23'
     // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
