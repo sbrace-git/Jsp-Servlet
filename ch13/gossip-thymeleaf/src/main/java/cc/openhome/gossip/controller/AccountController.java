@@ -137,15 +137,17 @@ public class AccountController {
     @PostMapping("/register")
     public String register(@Valid RegisterForm registerForm, BindingResult bindingResult, Model model)
             throws IOException {
+        String email = registerForm.getEmail();
+        String username = registerForm.getUsername();
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
             model.addAttribute("errors", errors);
+            model.addAttribute("username", username);
+            model.addAttribute("email", email);
             return REGISTER_FORM_VIEW_PATH;
         }
-        String email = registerForm.getEmail();
-        String username = registerForm.getUsername();
         String password = registerForm.getPassword();
 
         Optional<Account> account = userService.tryCreateUser(email, username, password);
