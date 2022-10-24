@@ -6,6 +6,7 @@ import cc.openhome.gossip.model.Account;
 import cc.openhome.gossip.model.Message;
 import cc.openhome.gossip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MessageDao messageDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public boolean userExist(String username) {
@@ -63,7 +67,7 @@ public class UserServiceImpl implements UserService {
         account.setName(username);
         account.setEmail(email);
         account.setSalt(String.valueOf(salt));
-        account.setPassword(encrypt);
+        account.setPassword(passwordEncoder.encode(encrypt));
         accountDao.createAccount(account);
         return Optional.of(account);
     }
