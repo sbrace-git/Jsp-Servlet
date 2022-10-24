@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Gossip 微博</title>
+        <link rel='stylesheet' href='css/member.css' type='text/css'/>
+    </head>
+    <body>
+        <div class='leftPanel'>
+            <img src='image/caterpillar.jpg' alt='Gossip 微博'/> <br/>
+            <a href='logout'>注销 <span th:text="${session.login}">user</span>
+            </a>
+        </div>
+        <form method='post' action='new_message'>
+            分享新鲜事...<br/>
+            <span th:if="${param.blabla != null}">
+                讯息要在140字内<br>
+            </span>
+            <textarea cols='60' rows='4' name='blabla' th:text="${param.blabla}"></textarea>
+            <br/>
+            <button type='submit'>发送</button>
+        </form>
+        <div th:switch="${#lists.isEmpty(messages)}">
+            <div th:case="${true}">
+                <p>写点什么吧...</p>
+            </div>
+            <div th:case="*">
+                <table border='0' cellpadding='2' cellspacing='2'>
+                    <thead>
+                    <tr>
+                        <th>
+                            <hr>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="message : ${messages}">
+                        <td style="vertical-align: top;">
+                            <span th:text="${message.username}">username</span><br>
+                            <span th:text="${message.blabla}">blabla</span><br>
+                            <span th:text="${message.localDateTime}">time here</span>
+                            <form action="del_message" method="post">
+                                <input type="hidden" name="millis" th:value="${message.millis}">
+                                <button type="submit">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

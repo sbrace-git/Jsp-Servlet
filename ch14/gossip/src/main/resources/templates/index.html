@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Gossip 微博</title>
+        <link href="css/gossip.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="login">
+            <div>
+                <img src="image/caterpillar.jpg" alt="gossip">
+            </div>
+            <a href="register">还不是会员？</a>
+            <p><span th:unless="${errors == null}" th:text='登录失败'
+                     style='color: rgb(255, 0, 0);'>登录失败</span></p>
+            <form action="login" method="post">
+                <table>
+                    <tr>
+                        <td colspan="2">会员登录</td>
+                    </tr>
+                    <tr>
+                        <td>名称：</td>
+                        <td><input type="text" name="username" /></td>
+                    </tr>
+                    <tr>
+                        <td>密码：</td>
+                        <td><input type="password" name="password"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" value="登录"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><a href="forgot.html">忘记密码？</a></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div>
+            <h1>Gossip ... XD</h1>
+            <ul>
+                <li>谈天说地不奇怪</li>
+                <li>分享信息也可以</li>
+                <li>随意谢谢表心情</li>
+            </ul>
+        </div>
+        <table style="background-color: #ffffff">
+            <thead>
+            <tr>
+                <th>
+                    <hr>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="message : ${newMessageList}">
+                <td style="vertical-align: top;">
+                    <span th:text="${message.username}">user name</span><br>
+                    <span th:utext="${message.blabla}">blabla</span><br>
+                    <span th:text="${message.localDateTime}">time here</span><br>
+                    <hr>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

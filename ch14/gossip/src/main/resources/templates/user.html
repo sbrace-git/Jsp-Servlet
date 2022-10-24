@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>user</title>
+        <link rel="stylesheet" href="../css/member.css" type="text/css">
+    </head>
+    <body>
+        <div class='leftPanel'>
+            <img src='../image/caterpillar.jpg' alt='Gossip 微博'/> <br/>
+            <br><span th:text="${username}"></span>的微博
+        </div>
+
+        <div th:switch="${#lists.isEmpty(errors)}">
+            <div th:case="${true}">
+                <table border="0" cellpadding="2" cellspacing="2">
+                    <thead>
+                    <tr>
+                        <th>
+                            <hr>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="message : ${messages}">
+                            <td style="vertical-align: top;">
+                                <span th:text="${message.username}">username</span><br>
+                                <span th:text="${message.blabla}">blabla</span><br>
+                                <span th:text="${message.localDateTime}">time here</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <tr th:case="*">
+                <li th:each="error : ${errors}" th:text="${error}">error message</li>
+            </tr>
+        </div>
+    </body>
+</html>
