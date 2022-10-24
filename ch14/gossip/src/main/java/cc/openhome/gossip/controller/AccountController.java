@@ -58,6 +58,7 @@ public class AccountController {
     @Value("${verify.view.path}")
     private String VERIFY_VIEW_PATH;
 
+    // TODO: 2022/10/24 login spring-security
     @PostMapping("/login")
     public String login(String username, String password, HttpServletRequest req, HttpSession httpSession, RedirectAttributes redirectAttributes) {
         Optional<String> optionalPasswd = userService.encryptedPassword(username, password);
