@@ -7,22 +7,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter  {
-    @Autowired
-    private DataSource dataSource;
+@EnableWebSecurity
+public class SecurityConfig{
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
             .antMatchers("/member", "/new_message", "/del_message", "/logout").hasRole("MEMBER")
@@ -34,18 +33,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
                     .failureUrl("/?error")
                     .defaultSuccessUrl("/member")
             .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/?logout")
-            .and()
-                .csrf().disable();
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/?logout");
+        return http.build();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-            .passwordEncoder(passwordEncoder)
-            .dataSource(dataSource)
-            .usersByUsernameQuery("select name, password, 1 from t_account where name=?")
-            .authoritiesByUsernameQuery("select name, role from t_account_role where name=?");
+    @Bean
+    UserDetailsService userDetailsService(DataSource dataSource) {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        jdbcUserDetailsManager.setUsersByUsernameQuery("select name, password, enable from t_account where name=?");
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select name, role from t_account_role where name=?");
+        return jdbcUserDetailsManager;
     }
 
     @Bean

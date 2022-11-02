@@ -13,7 +13,7 @@
             <a href="register">还不是会员？</a>
             <p><span th:unless="${errors == null}" th:text='登录失败'
                      style='color: rgb(255, 0, 0);'>登录失败</span></p>
-            <form action="login" method="post">
+            <form th:action="@{/login}" method="post">
                 <table>
                     <tr>
                         <td colspan="2">会员登录</td>
@@ -30,7 +30,7 @@
                         <td colspan="2"><input type="submit" value="登录"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><a href="forgot.html">忘记密码？</a></td>
+                        <td colspan="2"><a href="forgot_form">忘记密码？</a></td>
                     </tr>
                 </table>
             </form>
