@@ -11,8 +11,7 @@
                 <img src="image/caterpillar.jpg" alt="gossip">
             </div>
             <a href="register">还不是会员？</a>
-            <p><span th:unless="${errors == null}" th:text='登录失败'
-                     style='color: rgb(255, 0, 0);'>登录失败</span></p>
+            <p><span th:unless="${param.error == null}" th:text='登入失敗' style='color: rgb(255, 0, 0);'>登入失敗</span></p>
             <form th:action="@{/login}" method="post">
                 <table>
                     <tr>
