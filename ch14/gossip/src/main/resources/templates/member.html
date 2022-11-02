@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head>
         <meta charset="UTF-8">
         <title>Gossip 微博</title>
@@ -9,7 +10,7 @@
         <div class='leftPanel'>
             <img src='image/caterpillar.jpg' alt='Gossip 微博'/> <br/>
             <form th:action="@{/logout}" method="post">
-                <input type="submit" value="注销"> <span th:text="${session.login}">user</span></input>
+                <input type="submit" value="注销"> <span sec:authentication="name">user</span></input>
             </form>
         </div>
         <form method='post' th:action='@{/new_message}'>
