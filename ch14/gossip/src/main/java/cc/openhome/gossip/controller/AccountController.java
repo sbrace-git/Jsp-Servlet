@@ -58,33 +58,6 @@ public class AccountController {
     @Value("${verify.view.path}")
     private String VERIFY_VIEW_PATH;
 
-    // TODO: 2022/10/24 login spring-security
-    @PostMapping("/login")
-    public String login(String username, String password, HttpServletRequest req, HttpSession httpSession, RedirectAttributes redirectAttributes) {
-        Optional<String> optionalPasswd = userService.encryptedPassword(username, password);
-        try {
-            if (!optionalPasswd.isPresent()) {
-                throw new RuntimeException("account error");
-            }
-            req.login(username, optionalPasswd.get());
-            httpSession.setAttribute("login", username);
-            return REDIRECT_MEMBER_PATH;
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "login error", e);
-            List<Message> newMessageList = userService.newMessageList();
-            redirectAttributes.addFlashAttribute("newMessageList", newMessageList);
-            List<String> errors = Collections.singletonList("登录失败");
-            redirectAttributes.addFlashAttribute("errors", errors);
-            return REDIRECT_LOGIN_PATH;
-        }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest req) throws ServletException {
-        req.logout();
-        return REDIRECT_LOGIN_PATH;
-    }
-
     @PostMapping("/forgot")
     public String forgot(String name, String email, Model model) {
         Optional<Account> accountByNameEmail = userService.getAccountByNameEmail(name, email);

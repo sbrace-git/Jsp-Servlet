@@ -14,8 +14,6 @@ public interface UserService {
 
     Optional<Account> verify(String email, String token);
 
-    Optional<String> encryptedPassword(String username, String password);
-
     List<Message> messages(String username);
 
     void addMessage(String username, String blabla);

@@ -3,8 +3,8 @@ create table T_ACCOUNT
     NAME     CHARACTER VARYING(15)  not null
         primary key,
     EMAIL    CHARACTER VARYING(128) not null,
-    PASSWORD CHARACTER VARYING(225)  not null,
-    SALT     CHARACTER VARYING(256) not null
+    PASSWORD CHARACTER VARYING(225)  not null
+    enable boolean
 );
 
 create table T_MESSAGE

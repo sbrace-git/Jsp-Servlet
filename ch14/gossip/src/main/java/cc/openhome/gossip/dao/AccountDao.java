@@ -17,6 +17,6 @@ public interface AccountDao {
 
     Optional<Account> getAccountByNameEmail(String name, String email);
 
-    void resetPassword(String name, String encrypt,String salt);
+    void resetPassword(String name, String encrypt);
 
 }

@@ -29,15 +29,15 @@ public class AccountDaoImpl implements AccountDao {
     @Autowired
     private DataSourceTransactionManager transactionManager;
 
-    private static final String INSERT_ACCOUNT_SQL = "insert into T_ACCOUNT (name, email, password, salt) values ( ?,?,?,? ) ";
+    private static final String INSERT_ACCOUNT_SQL = "insert into T_ACCOUNT (name, email, password, enable) values ( ?,?,?,? ) ";
     private static final String INSERT_ACCOUNT_ROLE_SQL = "insert into T_ACCOUNT_ROLE (name, role) values ( ?,? ) ";
     private static final ResultSetExtractor<Account> ACCOUNT_RESULT_SET_EXTRACTOR = resultSet -> {
         if (resultSet.next()) {
             String name = resultSet.getString("name");
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
-            String salt = resultSet.getString("salt");
-            return new Account(name, email, password, salt);
+            boolean enable = resultSet.getBoolean("enable");
+            return new Account(name, email, password, enable);
         }
         return null;
     };
@@ -48,8 +48,7 @@ public class AccountDaoImpl implements AccountDao {
         String name = account.getName();
         String email = account.getEmail();
         String password = account.getPassword();
-        String salt = account.getSalt();
-        int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, salt);
+        int insertAccount = jdbcTemplate.update(INSERT_ACCOUNT_SQL, name, email, password, false);
         int insertAccountRole = jdbcTemplate.update(INSERT_ACCOUNT_ROLE_SQL, name, Role.unverified);
         logger.log(Level.INFO, "AccountDaoJdbcImpl createAccount insertAccount = {0}, insertAccountRole = {1}",
                 new Object[]{insertAccount, insertAccountRole});
@@ -91,7 +90,7 @@ public class AccountDaoImpl implements AccountDao {
 //        });
     }
 
-    private static final String SELECT_ACCOUNT_BY_NAME_SQL = "select name, email, password, salt from T_ACCOUNT where NAME = ? ";
+    private static final String SELECT_ACCOUNT_BY_NAME_SQL = "select name, email, password, enable from T_ACCOUNT where NAME = ? ";
 
     @Override
     public Optional<Account> getAccountByName(String paramName) {
@@ -102,7 +101,7 @@ public class AccountDaoImpl implements AccountDao {
         return Optional.ofNullable(account);
     }
 
-    private static final String SELECT_ACCOUNT_BY_EMAIL_SQL = "select name, email, password, salt from T_ACCOUNT where EMAIL = ? ";
+    private static final String SELECT_ACCOUNT_BY_EMAIL_SQL = "select name, email, password, enable from T_ACCOUNT where EMAIL = ? ";
 
     @Override
     public Optional<Account> getAccountByEmail(String emailParam) {
@@ -115,19 +114,29 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     private static final String UPDATE_ACCOUNT_ROLE_BY_NAME_SQL = "update T_ACCOUNT_ROLE SET ROLE = ? where NAME = ? and role = ?";
+    private static final String UPDATE_ACCOUNT_ENABLE_BY_NAME_SQL = "update T_ACCOUNT SET enable = ? where NAME = ? and enable = ?";
 
     @Override
+    @Transactional
     public void activateAccount(Account account) {
         String name = account.getName();
         if (null == name || name.length() == 0) {
             return;
         }
         int update = jdbcTemplate.update(UPDATE_ACCOUNT_ROLE_BY_NAME_SQL, Role.member, name, Role.unverified);
-        logger.log(Level.INFO, "update = {0}", update);
+        logger.log(Level.INFO, "update role = {0}", update);
+        if (update != 1) {
+            throw new RuntimeException("activateAccount account role error");
+        }
+        int updateAccount = jdbcTemplate.update(UPDATE_ACCOUNT_ENABLE_BY_NAME_SQL, true, name, false);
+        logger.log(Level.INFO, "updateAccount = {0}", updateAccount);
+        if (updateAccount != 1) {
+            throw new RuntimeException("activateAccount account error");
+        }
     }
 
 
-    private static final String SELECT_ACCOUNT_BY_NAME_EMAIL_SQL = "select name, email, password, salt from T_ACCOUNT where NAME = ? AND EMAIL = ?";
+    private static final String SELECT_ACCOUNT_BY_NAME_EMAIL_SQL = "select name, email, password, enable from T_ACCOUNT where NAME = ? AND EMAIL = ?";
 
     @Override
     public Optional<Account> getAccountByNameEmail(String nameParam, String emailParam) {
@@ -136,11 +145,11 @@ public class AccountDaoImpl implements AccountDao {
         return Optional.ofNullable(account);
     }
 
-    public static final String UPDATE_ACCOUNT_PASSWORD_SQL = "update T_ACCOUNT set password = ?, salt = ? where name = ? ";
+    public static final String UPDATE_ACCOUNT_PASSWORD_SQL = "update T_ACCOUNT set password = ? where name = ? ";
 
     @Override
-    public void resetPassword(String name, String password, String salt) {
-        int update = jdbcTemplate.update(UPDATE_ACCOUNT_PASSWORD_SQL, password, salt, name);
+    public void resetPassword(String name, String password) {
+        int update = jdbcTemplate.update(UPDATE_ACCOUNT_PASSWORD_SQL, password, name);
         logger.log(Level.INFO, "update = {0}", update);
     }
 }

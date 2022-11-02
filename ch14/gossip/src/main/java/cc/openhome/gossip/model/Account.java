@@ -4,24 +4,16 @@ public class Account {
     private String name;
     private String email;
     private String password;
-    private String salt;
+    private Boolean enable;
 
     public Account() {
     }
 
-    public Account(String name, String email, String password, String salt) {
+    public Account(String name, String email, String password, Boolean enable) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.salt = salt;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
+        this.enable = enable;
     }
 
     public String getName() {
@@ -46,5 +38,13 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 }

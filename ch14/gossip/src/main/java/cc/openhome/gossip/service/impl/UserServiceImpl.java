@@ -61,35 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private Optional<Account> createUser(String username, String email, String password) throws IOException {
-        int salt = ThreadLocalRandom.current().nextInt();
-        String encrypt = String.valueOf(salt + password.hashCode());
         Account account = new Account();
         account.setName(username);
         account.setEmail(email);
-        account.setSalt(String.valueOf(salt));
-        account.setPassword(passwordEncoder.encode(encrypt));
+        account.setPassword(passwordEncoder.encode(password));
         accountDao.createAccount(account);
         return Optional.of(account);
-    }
-
-    @Deprecated
-    public boolean login(String username, String password) throws IOException {
-        Optional<Account> accountByName = accountDao.getAccountByName(username);
-        if (accountByName.isPresent()) {
-            Account account = accountByName.get();
-            int encrypt = Integer.parseInt(account.getPassword());
-            int salt = Integer.parseInt(account.getSalt());
-            return password.hashCode() + salt == encrypt;
-        }
-        return false;
-    }
-
-    @Override
-    public Optional<String> encryptedPassword(String username, String password) {
-        return accountDao.getAccountByName(username)
-                .map(Account::getSalt)
-                .map(salt -> Integer.parseInt(salt) + password.hashCode())
-                .map(String::valueOf);
     }
 
     @Override
@@ -122,8 +99,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(String name, String password) {
-        int salt = ThreadLocalRandom.current().nextInt();
-        String encrypt = String.valueOf(salt + password.hashCode());
-        accountDao.resetPassword(name, encrypt, String.valueOf(salt));
+        accountDao.resetPassword(name, passwordEncoder.encode(password));
     }
 }
