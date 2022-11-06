@@ -6,4 +6,5 @@ ISBN: 9787302522454
 - Java 1.8.0_202  
 - Maven 3.8.4  
 - Apache Tomcat 9.0.58
-- Postman 9.13.2
+- Postman 9.13.2 [workspace](https://www.postman.com/sbrace-postman/workspace/jsp-servlet)
+- Gradle 6.9.3
